@@ -41,8 +41,13 @@ export default function LiveSensorChart({ dataPoint }) {
             times.push(new Date(curr.timestamp * 1000).getTime());
           }
 
-          history.current = deltas;
-          timestamps.current = times;
+          history.current = [...deltas];
+          timestamps.current = [...times];
+
+          if (data.length > 0) {
+            const last = data[data.length - 1];
+            prev.current = { x: last.x, y: last.y, z: last.z };
+          }
 
           const avgVal = deltas.reduce((a, b) => a + b, 0) / deltas.length;
           const maxVal = Math.max(...deltas);
@@ -132,7 +137,7 @@ export default function LiveSensorChart({ dataPoint }) {
       x: {
         ticks: {
           autoSkip: true,
-          maxTicksLimit: 15,
+          maxTicksLimit: 10,
         },
         title: {
           display: true,
