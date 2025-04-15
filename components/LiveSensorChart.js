@@ -19,6 +19,7 @@ export default function LiveSensorChart({ dataPoint }) {
   const prev = useRef(null);
   const [avg, setAvg] = useState(0);
   const [max, setMax] = useState(0);
+  const [ready, setReady] = useState(false);
 
   // ✅ โหลดย้อนหลัง 10 นาที
   useEffect(() => {
@@ -47,13 +48,14 @@ export default function LiveSensorChart({ dataPoint }) {
           const maxVal = Math.max(...deltas);
           setAvg(avgVal.toFixed(2));
           setMax(maxVal.toFixed(2));
+          setReady(true);
         }
       });
   }, []);
 
   // ✅ รับข้อมูล real-time จาก dataPoint
   useEffect(() => {
-    if (!dataPoint) return;
+    if (!dataPoint || !ready) return;
 
     const { x, y, z } = dataPoint;
     if (typeof x !== 'number' || typeof y !== 'number' || typeof z !== 'number') return;
@@ -82,7 +84,7 @@ export default function LiveSensorChart({ dataPoint }) {
     const maxVal = Math.max(...values);
     setAvg(avgVal.toFixed(2));
     setMax(maxVal.toFixed(2));
-  }, [dataPoint]);
+  }, [dataPoint, ready]);
 
   const timeLabels = timestamps.current.map(t => {
     const d = new Date(t);
@@ -129,11 +131,8 @@ export default function LiveSensorChart({ dataPoint }) {
     scales: {
       x: {
         ticks: {
-          callback: function (val, index) {
-            const label = timeLabels[index];
-            const prevLabel = index > 0 ? timeLabels[index - 1] : '';
-            return label !== prevLabel ? label : '';
-          },
+          autoSkip: true,
+          maxTicksLimit: 15,
         },
         title: {
           display: true,
