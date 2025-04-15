@@ -26,12 +26,25 @@ export default function LiveSensorChart({ dataPoint }) {
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
-          history.current = data.map(item => parseFloat(item.magnitude));
-          timestamps.current = data.map(item => new Date(item.quake_time).getTime());
+          const deltas = [];
+          const times = [];
 
-          // สถิติ
-          const avgVal = history.current.reduce((a, b) => a + b, 0) / history.current.length;
-          const maxVal = Math.max(...history.current);
+          for (let i = 1; i < data.length; i++) {
+            const prev = data[i - 1];
+            const curr = data[i];
+            const dx = curr.x - prev.x;
+            const dy = curr.y - prev.y;
+            const dz = curr.z - prev.z;
+            const delta = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            deltas.push(delta);
+            times.push(new Date(curr.timestamp * 1000).getTime());
+          }
+
+          history.current = deltas;
+          timestamps.current = times;
+
+          const avgVal = deltas.reduce((a, b) => a + b, 0) / deltas.length;
+          const maxVal = Math.max(...deltas);
           setAvg(avgVal.toFixed(2));
           setMax(maxVal.toFixed(2));
         }
@@ -58,7 +71,6 @@ export default function LiveSensorChart({ dataPoint }) {
     history.current.push(delta);
     timestamps.current.push(now);
 
-    // เก็บแค่ 10 นาที
     const cutoff = now - 10 * 60 * 1000;
     while (timestamps.current.length && timestamps.current[0] < cutoff) {
       timestamps.current.shift();
@@ -76,7 +88,8 @@ export default function LiveSensorChart({ dataPoint }) {
     const d = new Date(t);
     const h = d.getHours().toString().padStart(2, '0');
     const m = d.getMinutes().toString().padStart(2, '0');
-    return `${h}:${m}`;
+    const s = d.getSeconds().toString().padStart(2, '0');
+    return `${h}:${m}:${s}`;
   });
 
   const data = {
@@ -124,7 +137,7 @@ export default function LiveSensorChart({ dataPoint }) {
         },
         title: {
           display: true,
-          text: 'Time (HH:MM)',
+          text: 'Time (HH:MM:SS)',
         },
       },
       y: {
