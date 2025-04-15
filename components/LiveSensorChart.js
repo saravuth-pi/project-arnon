@@ -41,8 +41,8 @@ export default function LiveSensorChart({ dataPoint }) {
             times.push(new Date(curr.timestamp * 1000).getTime());
           }
 
-          history.current = [...deltas];
-          timestamps.current = [...times];
+          history.current = deltas;
+          timestamps.current = times;
 
           if (data.length > 0) {
             const last = data[data.length - 1];
@@ -91,12 +91,12 @@ export default function LiveSensorChart({ dataPoint }) {
     setMax(maxVal.toFixed(2));
   }, [dataPoint, ready]);
 
-  const timeLabels = timestamps.current.map(t => {
+  const timeLabels = timestamps.current.map((t, i) => {
     const d = new Date(t);
     const h = d.getHours().toString().padStart(2, '0');
     const m = d.getMinutes().toString().padStart(2, '0');
     const s = d.getSeconds().toString().padStart(2, '0');
-    return `${h}:${m}:${s}`;
+    return i % 10 === 0 ? `${h}:${m}:${s}` : ''; // Show every 10th tick
   });
 
   const data = {
@@ -136,8 +136,9 @@ export default function LiveSensorChart({ dataPoint }) {
     scales: {
       x: {
         ticks: {
-          autoSkip: true,
-          maxTicksLimit: 10,
+          autoSkip: false,
+          maxRotation: 0,
+          minRotation: 0,
         },
         title: {
           display: true,
