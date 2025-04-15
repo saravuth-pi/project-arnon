@@ -42,8 +42,8 @@ export default function LiveSensorChart({ dataPoint }) {
             times.push(new Date(curr.timestamp * 1000).getTime());
           }
 
-          history.current = deltas;
-          timestamps.current = times;
+          history.current = [...deltas];
+          timestamps.current = [...times];
 
           if (data.length > 0) {
             const last = data[data.length - 1];
@@ -98,7 +98,7 @@ export default function LiveSensorChart({ dataPoint }) {
     const h = d.getHours().toString().padStart(2, '0');
     const m = d.getMinutes().toString().padStart(2, '0');
     const s = d.getSeconds().toString().padStart(2, '0');
-    return i % Math.floor(timestamps.current.length / 10) === 0 ? `${h}:${m}:${s}` : '';
+    return `${h}:${m}:${s}`;
   });
 
   const data = {
@@ -138,7 +138,8 @@ export default function LiveSensorChart({ dataPoint }) {
     scales: {
       x: {
         ticks: {
-          autoSkip: false,
+          autoSkip: true,
+          maxTicksLimit: 10,
           maxRotation: 0,
           minRotation: 0,
         },
