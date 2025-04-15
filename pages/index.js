@@ -46,9 +46,9 @@ export default function Home() {
           <>
             <LiveSensorChart dataPoint={dataPoint} />
               <ul>
-                X: {typeof dataPoint?.x === 'number' ? dataPoint.x.toFixed(2) : '-'} g –{' '}
-                Y: {typeof dataPoint?.y === 'number' ? dataPoint.y.toFixed(2) : '-'} g –{' '}
-                Z: {typeof dataPoint?.z === 'number' ? dataPoint.z.toFixed(2) : '-'} g –{' '}
+                X: {Number.isFinite(dataPoint?.x) ? dataPoint.x.toFixed(2) : '-'} g –{' '}
+                Y: {Number.isFinite(dataPoint?.y) ? dataPoint.y.toFixed(2) : '-'} g –{' '}
+                Z: {Number.isFinite(dataPoint?.z) ? dataPoint.z.toFixed(2) : '-'} g –{' '}
                 Timestamp: {dataPoint?.ts || '-'}
               </ul>
           </>
