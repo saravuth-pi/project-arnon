@@ -1,96 +1,147 @@
-import React, { useEffect, useState, useRef } from 'react';
+// components/LiveSensorChart.js
+import { useEffect, useRef, useState } from 'react';
 import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
+  Chart as ChartJS,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
   Legend,
-  ResponsiveContainer,
-  ReferenceLine
-} from 'recharts';
-import Ably from 'ably';
+  Tooltip,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
 
-function LiveSensorChart() {
-  const [data, setData] = useState([]);
-  const [latest, setLatest] = useState(null);
-  const prev = useRef({ x: 0, y: 0, z: 0 });
+ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Legend, Tooltip);
 
+export default function LiveSensorChart({ dataPoint }) {
+  const history = useRef([]); // delta
+  const timestamps = useRef([]); // ms timestamp
+  const prev = useRef(null);
+  const [avg, setAvg] = useState(0);
+  const [max, setMax] = useState(0);
+
+  // ✅ โหลดย้อนหลัง 10 นาที
   useEffect(() => {
-    // Load 10-minute history on initial render
     fetch('https://arnon.dgbkp.in.th/api/pat1_last_10min.php')
       .then(res => res.json())
-      .then(items => {
-        const magnitudes = [];
-        items.forEach((item, idx) => {
-          const dx = item.x - prev.current.x;
-          const dy = item.y - prev.current.y;
-          const dz = item.z - prev.current.z;
-          const magnitude = Math.sqrt(dx * dx + dy * dy + dz * dz);
-          magnitudes.push({
-            ts: new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-            magnitude: magnitude
-          });
-          prev.current = item;
-        });
-        setData(magnitudes);
-      });
+      .then(data => {
+        if (Array.isArray(data)) {
+          history.current = data.map(item => parseFloat(item.magnitude));
+          timestamps.current = data.map(item => new Date(item.quake_time).getTime());
 
-    const ably = new Ably.Realtime('DYt11Q.G9DtiQ:TgnTC0ItL_AzsD4puAdytIVYMeArsFSn-qyAAuHbQLQ');
-    const channel = ably.channels.get('earthquake:raw');
-    channel.subscribe((msg) => {
-      const { x, y, z, ts } = msg.data;
+          // สถิติ
+          const avgVal = history.current.reduce((a, b) => a + b, 0) / history.current.length;
+          const maxVal = Math.max(...history.current);
+          setAvg(avgVal.toFixed(2));
+          setMax(maxVal.toFixed(2));
+        }
+      });
+  }, []);
+
+  // ✅ รับข้อมูล real-time จาก dataPoint
+  useEffect(() => {
+    if (!dataPoint) return;
+
+    const { x, y, z } = dataPoint;
+    if (typeof x !== 'number' || typeof y !== 'number' || typeof z !== 'number') return;
+
+    let delta = 0;
+    if (prev.current) {
       const dx = x - prev.current.x;
       const dy = y - prev.current.y;
       const dz = z - prev.current.z;
-      const magnitude = Math.sqrt(dx * dx + dy * dy + dz * dz);
-      prev.current = { x, y, z };
+      delta = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    }
+    prev.current = { x, y, z };
 
-      const point = {
-        ts: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        magnitude
-      };
-      setLatest({ x, y, z, ts });
-      setData(prevData => [...prevData.slice(-599), point]);
-    });
+    const now = Date.now();
+    history.current.push(delta);
+    timestamps.current.push(now);
 
-    return () => channel.unsubscribe();
-  }, []);
+    // เก็บแค่ 10 นาที
+    const cutoff = now - 10 * 60 * 1000;
+    while (timestamps.current.length && timestamps.current[0] < cutoff) {
+      timestamps.current.shift();
+      history.current.shift();
+    }
 
-  const max = Math.max(...data.map(d => d.magnitude), 0);
-  const avg = data.length ? (data.reduce((sum, d) => sum + d.magnitude, 0) / data.length).toFixed(2) : 0;
+    const values = history.current;
+    const avgVal = values.reduce((a, b) => a + b, 0) / values.length;
+    const maxVal = Math.max(...values);
+    setAvg(avgVal.toFixed(2));
+    setMax(maxVal.toFixed(2));
+  }, [dataPoint]);
+
+  const timeLabels = timestamps.current.map(t => {
+    const d = new Date(t);
+    const h = d.getHours().toString().padStart(2, '0');
+    const m = d.getMinutes().toString().padStart(2, '0');
+    return `${h}:${m}`;
+  });
+
+  const data = {
+    labels: timeLabels,
+    datasets: [
+      {
+        label: `Magnitude (Δ) — Avg: ${avg}, Max: ${max}`,
+        data: history.current,
+        borderColor: 'purple',
+        fill: false,
+        tension: 0.4,
+        pointRadius: 0,
+        borderWidth: 2,
+      },
+      {
+        label: 'Threshold 3.5',
+        data: Array(history.current.length).fill(3.5),
+        borderColor: 'red',
+        borderDash: [5, 5],
+        pointRadius: 0,
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    animation: false,
+    plugins: {
+      legend: { position: 'top' },
+      tooltip: {
+        callbacks: {
+          label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y?.toFixed(2) ?? '-'}`,
+        },
+      },
+    },
+    scales: {
+      x: {
+        ticks: {
+          callback: function (val, index) {
+            const label = timeLabels[index];
+            const prevLabel = index > 0 ? timeLabels[index - 1] : '';
+            return label !== prevLabel ? label : '';
+          },
+        },
+        title: {
+          display: true,
+          text: 'Time (HH:MM)',
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: 'Magnitude (Delta g)',
+        },
+        ticks: {
+          precision: 2,
+        },
+      },
+    },
+  };
 
   return (
-    <div>
-      <h3>PAT1 Detector (Magnitude)</h3>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart data={data}>
-          <XAxis
-            dataKey="ts"
-            tickFormatter={(value, index) => (index % 60 === 0 ? value : '')}
-            interval={0}
-            minTickGap={20}
-            label={{ value: 'Time (HH:MM)', position: 'bottom', offset: 10 }}
-          />
-          <YAxis
-            type="number"
-            domain={['auto', 'auto']}
-            label={{ value: 'Magnitude (Delta g)', angle: -90, position: 'insideLeft' }}
-          />
-          <Tooltip />
-          <Legend formatter={() => `Magnitude (∆) — Avg: ${avg}, Max: ${max}`} />
-          <ReferenceLine y={3.5} stroke="red" strokeDasharray="5 5" label="Threshold 3.5" />
-          <Line type="monotone" dataKey="magnitude" stroke="purple" strokeWidth={2} dot={false} />
-        </LineChart>
-      </ResponsiveContainer>
-      {latest && (
-        <p>
-          <strong>X:</strong> {latest.x.toFixed(2)} g — <strong>Y:</strong> {latest.y.toFixed(2)} g —{' '}
-          <strong>Z:</strong> {latest.z.toFixed(2)} g — <strong>Timestamp:</strong> {latest.ts}
-        </p>
-      )}
+    <div style={{ marginTop: 20 }}>
+      <Line data={data} options={options} />
     </div>
   );
 }
-
-export default LiveSensorChart;
