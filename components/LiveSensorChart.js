@@ -42,8 +42,8 @@ export default function LiveSensorChart({ dataPoint }) {
             times.push(new Date(curr.timestamp * 1000).getTime());
           }
 
-          history.current = [...deltas];
-          timestamps.current = [...times];
+          history.current = deltas;
+          timestamps.current = times;
 
           if (data.length > 0) {
             const last = data[data.length - 1];
