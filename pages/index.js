@@ -45,12 +45,12 @@ export default function Home() {
         {dataPoint ? (
           <>
             <LiveSensorChart dataPoint={dataPoint} />
-            <ul>
-              X: {dataPoint?.x?.toFixed(2)} g –{' '}
-              Y: {dataPoint?.y?.toFixed(2)} g –{' '}
-              Z: {dataPoint?.z?.toFixed(2)} g –{' '}
-              Timestamp: {dataPoint?.ts}
-            </ul>
+              <ul>
+                X: {typeof dataPoint?.x === 'number' ? dataPoint.x.toFixed(2) : '-'} g –{' '}
+                Y: {typeof dataPoint?.y === 'number' ? dataPoint.y.toFixed(2) : '-'} g –{' '}
+                Z: {typeof dataPoint?.z === 'number' ? dataPoint.z.toFixed(2) : '-'} g –{' '}
+                Timestamp: {dataPoint?.ts || '-'}
+              </ul>
           </>
         ) : (
           <p>Waiting for data...</p>
