@@ -22,9 +22,19 @@ export default function Home() {
         const raw = typeof msg.data === 'string'
           ? msg.data
           : new TextDecoder().decode(msg.data);
-          console.log('📥 Raw payload from Ably:', raw); // 👉 เพิ่มบรรทัดนี้
+        console.log('📥 Raw payload from Ably:', raw);
         const data = JSON.parse(raw);
-        setDataPoint(data);
+
+        // ตรวจสอบความถูกต้องก่อน set
+        if (
+          Number.isFinite(data.x) &&
+          Number.isFinite(data.y) &&
+          Number.isFinite(data.z)
+        ) {
+          setDataPoint(data);
+        } else {
+          console.warn('⚠️ Invalid sensor data:', data);
+        }
       } catch (e) {
         console.error('Parse error:', e);
       }
@@ -45,12 +55,12 @@ export default function Home() {
         {dataPoint ? (
           <>
             <LiveSensorChart dataPoint={dataPoint} />
-              <ul>
-                X: {Number.isFinite(dataPoint?.x) ? dataPoint.x.toFixed(2) : '-'} g –{' '}
-                Y: {Number.isFinite(dataPoint?.y) ? dataPoint.y.toFixed(2) : '-'} g –{' '}
-                Z: {Number.isFinite(dataPoint?.z) ? dataPoint.z.toFixed(2) : '-'} g –{' '}
-                Timestamp: {dataPoint?.ts || '-'}
-              </ul>
+            <ul>
+              X: {dataPoint.x.toFixed(2)} g –{' '}
+              Y: {dataPoint.y.toFixed(2)} g –{' '}
+              Z: {dataPoint.z.toFixed(2)} g –{' '}
+              Timestamp: {dataPoint.ts ?? '-'}
+            </ul>
           </>
         ) : (
           <p>Waiting for data...</p>
