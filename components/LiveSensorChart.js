@@ -20,6 +20,7 @@ export default function LiveSensorChart({ dataPoint }) {
   const [avg, setAvg] = useState(0);
   const [max, setMax] = useState(0);
   const [ready, setReady] = useState(false);
+  const [initialLoaded, setInitialLoaded] = useState(false);
 
   // ✅ โหลดย้อนหลัง 10 นาที
   useEffect(() => {
@@ -54,13 +55,14 @@ export default function LiveSensorChart({ dataPoint }) {
           setAvg(avgVal.toFixed(2));
           setMax(maxVal.toFixed(2));
           setReady(true);
+          setInitialLoaded(true);
         }
       });
   }, []);
 
   // ✅ รับข้อมูล real-time จาก dataPoint
   useEffect(() => {
-    if (!dataPoint || !ready) return;
+    if (!dataPoint || !ready || !initialLoaded) return;
 
     const { x, y, z } = dataPoint;
     if (typeof x !== 'number' || typeof y !== 'number' || typeof z !== 'number') return;
@@ -89,14 +91,14 @@ export default function LiveSensorChart({ dataPoint }) {
     const maxVal = Math.max(...values);
     setAvg(avgVal.toFixed(2));
     setMax(maxVal.toFixed(2));
-  }, [dataPoint, ready]);
+  }, [dataPoint, ready, initialLoaded]);
 
   const timeLabels = timestamps.current.map((t, i) => {
     const d = new Date(t);
     const h = d.getHours().toString().padStart(2, '0');
     const m = d.getMinutes().toString().padStart(2, '0');
     const s = d.getSeconds().toString().padStart(2, '0');
-    return i % 10 === 0 ? `${h}:${m}:${s}` : ''; // Show every 10th tick
+    return i % Math.floor(timestamps.current.length / 10) === 0 ? `${h}:${m}:${s}` : '';
   });
 
   const data = {
