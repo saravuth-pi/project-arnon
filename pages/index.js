@@ -29,16 +29,8 @@ useEffect(() => {
       console.error('Parse error:', e);
     }
   });
-<<<<<<< HEAD
-
   return () => channel.unsubscribe();
 }, []);
-
-=======
-  
-  return () => channel.unsubscribe();
-}, []);
->>>>>>> f1b3208527d1112c7e819c1af7905c111b597eb5
 
   return (
     <div style={{ padding: 5 }}>
