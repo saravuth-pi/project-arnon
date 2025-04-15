@@ -1,4 +1,4 @@
-// pages/index.js
+// /pages/index.js
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import Ably from 'ably';
@@ -13,24 +13,25 @@ const Map = dynamic(() => import('../components/Map'), { ssr: false });
 export default function Home() {
   const [dataPoint, setDataPoint] = useState(null);
 
-useEffect(() => {
-  const realtime = new Ably.Realtime({ key: 'DYt11Q.G9DtiQ:TgnTC0ItL_AzsD4puAdytIVYMeArsFSn-qyAAuHbQLQ' });
-  const channel = realtime.channels.get('earthquake:raw');
+  useEffect(() => {
+    const realtime = new Ably.Realtime({ key: 'DYt11Q.G9DtiQ:TgnTC0ItL_AzsD4puAdytIVYMeArsFSn-qyAAuHbQLQ' });
+    const channel = realtime.channels.get('earthquake:raw');
 
-  channel.subscribe((msg) => {
-    try {
-      const raw = typeof msg.data === 'string'
-        ? msg.data
-        : new TextDecoder().decode(msg.data);
+    channel.subscribe((msg) => {
+      try {
+        const raw = typeof msg.data === 'string'
+          ? msg.data
+          : new TextDecoder().decode(msg.data);
 
-      const data = JSON.parse(raw);
-      setDataPoint(data);
-    } catch (e) {
-      console.error('Parse error:', e);
-    }
-  });
-  return () => channel.unsubscribe();
-}, []);
+        const data = JSON.parse(raw);
+        setDataPoint(data);
+      } catch (e) {
+        console.error('Parse error:', e);
+      }
+    });
+
+    return () => channel.unsubscribe();
+  }, []);
 
   return (
     <div style={{ padding: 5 }}>
@@ -43,19 +44,18 @@ useEffect(() => {
         <h2>PAT1 Detector (Magnitude)</h2>
         {dataPoint ? (
           <>
-          <LiveSensorChart dataPoint={dataPoint} />
-           <ul>
-               X: {dataPoint.x.toFixed(2)} g - 
-               Y: {dataPoint.y.toFixed(2)} g - 
-               Z: {dataPoint.z.toFixed(2)} g - 
-               Timestamp: {dataPoint.ts}
-             </ul>
+            <LiveSensorChart dataPoint={dataPoint} />
+            <ul>
+              X: {dataPoint?.x?.toFixed(2)} g –{' '}
+              Y: {dataPoint?.y?.toFixed(2)} g –{' '}
+              Z: {dataPoint?.z?.toFixed(2)} g –{' '}
+              Timestamp: {dataPoint?.ts}
+            </ul>
           </>
         ) : (
           <p>Waiting for data...</p>
         )}
       </div>
-
     </div>
   );
 }
