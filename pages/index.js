@@ -22,7 +22,7 @@ export default function Home() {
         const raw = typeof msg.data === 'string'
           ? msg.data
           : new TextDecoder().decode(msg.data);
-
+          console.log('📥 Raw payload from Ably:', raw); // 👉 เพิ่มบรรทัดนี้
         const data = JSON.parse(raw);
         setDataPoint(data);
       } catch (e) {
