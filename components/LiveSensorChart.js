@@ -21,6 +21,7 @@ export default function LiveSensorChart({ dataPoint }) {
   const [max, setMax] = useState(0);
   const [ready, setReady] = useState(false);
   const [initialLoaded, setInitialLoaded] = useState(false);
+  const [hasRealtimeStarted, setHasRealtimeStarted] = useState(false);
 
   // ✅ โหลดย้อนหลัง 10 นาที
   useEffect(() => {
@@ -67,6 +68,10 @@ export default function LiveSensorChart({ dataPoint }) {
     const { x, y, z } = dataPoint;
     if (typeof x !== 'number' || typeof y !== 'number' || typeof z !== 'number') return;
 
+    if (!hasRealtimeStarted) {
+      setHasRealtimeStarted(true);
+    }
+
     let delta = 0;
     if (prev.current) {
       const dx = x - prev.current.x;
@@ -80,6 +85,7 @@ export default function LiveSensorChart({ dataPoint }) {
     history.current.push(delta);
     timestamps.current.push(now);
 
+    // เก็บไว้ 10 นาที
     const cutoff = now - 10 * 60 * 1000;
     while (timestamps.current.length && timestamps.current[0] < cutoff) {
       timestamps.current.shift();
@@ -93,7 +99,7 @@ export default function LiveSensorChart({ dataPoint }) {
     setMax(maxVal.toFixed(2));
   }, [dataPoint, ready, initialLoaded]);
 
-  const timeLabels = timestamps.current.map((t, i) => {
+  const timeLabels = timestamps.current.map(t => {
     const d = new Date(t);
     const h = d.getHours().toString().padStart(2, '0');
     const m = d.getMinutes().toString().padStart(2, '0');
