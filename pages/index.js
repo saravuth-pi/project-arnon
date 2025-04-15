@@ -27,9 +27,9 @@ export default function Home() {
 
         // ตรวจสอบความถูกต้องก่อน set
         if (
-          Number.isFinite(data.x) &&
-          Number.isFinite(data.y) &&
-          Number.isFinite(data.z)
+          typeof data.x === 'number' &&
+          typeof data.y === 'number' &&
+          typeof data.z === 'number'
         ) {
           setDataPoint(data);
         } else {
@@ -42,6 +42,8 @@ export default function Home() {
 
     return () => channel.unsubscribe();
   }, []);
+
+  const safeToFixed = (val) => (typeof val === 'number' ? val.toFixed(2) : '-');
 
   return (
     <div style={{ padding: 5 }}>
@@ -56,9 +58,9 @@ export default function Home() {
           <>
             <LiveSensorChart dataPoint={dataPoint} />
             <ul>
-              X: {dataPoint.x.toFixed(2)} g –{' '}
-              Y: {dataPoint.y.toFixed(2)} g –{' '}
-              Z: {dataPoint.z.toFixed(2)} g –{' '}
+              X: {safeToFixed(dataPoint.x)} g –{' '}
+              Y: {safeToFixed(dataPoint.y)} g –{' '}
+              Z: {safeToFixed(dataPoint.z)} g –{' '}
               Timestamp: {dataPoint.ts ?? '-'}
             </ul>
           </>
