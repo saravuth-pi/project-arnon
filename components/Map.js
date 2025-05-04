@@ -1,4 +1,5 @@
-// V0.8500 - Add TMD point
+// components/Map.js
+// V0.8502 - Remove TMD client-fetch, expect tmdQuakes from props instead
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -41,7 +42,7 @@ function toBangkokTimeString(dateInput) {
 export default function Map({ latest, tmdQuakes = [] }) {
   const [quakes, setQuakes] = useState([]);
   const prev = useRef(null);
-  const history = useRef([]); // [{ mag, ts }]
+  const history = useRef([]);
   const [pat1Mag, setPat1Mag] = useState(0);
   const sentUSGSIds = useRef(new Set());
 
@@ -60,7 +61,6 @@ export default function Map({ latest, tmdQuakes = [] }) {
           const distance = haversine(PAT1_LAT, PAT1_LNG, lat, lon);
           const id = f.id;
 
-          // ส่งเฉพาะ event ใหม่
           if (!sentUSGSIds.current.has(id)) {
             sentUSGSIds.current.add(id);
 
@@ -100,8 +100,6 @@ export default function Map({ latest, tmdQuakes = [] }) {
 
       const now = Date.now();
       history.current.push({ mag: magnitude, ts: now });
-
-      // เก็บ 5 วินาทีล่าสุด
       history.current = history.current.filter(d => now - d.ts <= 5000);
 
       const values = history.current.map(d => d.mag);
