@@ -1,5 +1,5 @@
 // /pages/api/fetch-tmd.js
-// Proxy endpoint to fetch and parse RSS from TMD
+// Proxy endpoint to fetch and parse RSS from TMD แ้ำแา
 import { XMLParser } from 'fast-xml-parser';
 
 export default async function handler(req, res) {
