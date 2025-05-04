@@ -11,6 +11,7 @@
     "ably": "^2.6.5",
     "chart.js": "^4.4.1",
     "chartjs-adapter-date-fns": "^3.0.0",
+    "fast-xml-parser": "^5.2.1",
     "leaflet": "^1.9.4",
     "next": "13.4.12",
     "react": "18.2.0",
