@@ -1,5 +1,5 @@
 // /pages/api/fetch-tmd.js
-// V0.1002 - Fixed: parse TMD XML using geo/magnitude fields
+// V0.1003 - Add place + keep timestamp from Bangkok directly
 import { XMLParser } from 'fast-xml-parser';
 
 export default async function handler(req, res) {
@@ -20,16 +20,17 @@ export default async function handler(req, res) {
       const lat = parseFloat(item['geo:lat']) || null;
       const lon = parseFloat(item['geo:long']) || null;
       const timeStr = item['tmd:time'];
-      let timestamp = null;
+      const comments = item.comments || '';
+      const timestamp = timeStr?.replace(' UTC', '+07:00') || null;
 
-      if (timeStr) {
-        // timeStr: "2025-05-04 12:30:01 UTC" -> convert to ISO Bangkok
-        const dt = new Date(timeStr.replace(' UTC', 'Z'));
-        const bangkok = new Date(dt.getTime() + 7 * 60 * 60 * 1000);
-        timestamp = bangkok.toISOString();
-      }
-
-      return { title, mag, lat, lon, timestamp };
+      return {
+        title,
+        mag,
+        lat,
+        lon,
+        place: comments,
+        timestamp
+      };
     }).filter(d => d.mag && d.lat && d.lon && d.timestamp);
 
     res.status(200).json(results);
