@@ -1,5 +1,5 @@
 // components/Map.js
-// V0.8602 - Add TMD quake popup fields with distance and Bangkok time (no conversion)
+// V0.8603 - Fix TMD timestamp (convert from UTC to Bangkok time)
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -191,6 +191,7 @@ export default function Map({ latest, tmdQuakes = [] }) {
       {/* จุด TMD */}
       {Array.isArray(tmdQuakes) && tmdQuakes.map((q, i) => {
         const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
+        const timeInBangkok = new Date(new Date(q.timestamp).getTime() + 7 * 60 * 60 * 1000);
         return (
           <Marker
             key={`tmd-${i}`}
@@ -215,7 +216,7 @@ export default function Map({ latest, tmdQuakes = [] }) {
               <strong>Magnitude:</strong> {q.mag}<br />
               <strong>Title:</strong> {q.title}<br />
               <strong>Distance:</strong> {distance.toFixed(0)} km<br />
-              <strong>Time:</strong> {new Date(q.timestamp).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })}
+              <strong>Time:</strong> {timeInBangkok.toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })}
             </Popup>
           </Marker>
         );
