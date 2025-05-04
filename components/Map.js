@@ -1,5 +1,5 @@
 // components/Map.js
-// V0.8502 - Remove TMD client-fetch, expect tmdQuakes from props instead
+// V0.8602 - Add TMD quake popup fields with distance and Bangkok time (no conversion)
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -46,7 +46,6 @@ export default function Map({ latest, tmdQuakes = [] }) {
   const [pat1Mag, setPat1Mag] = useState(0);
   const sentUSGSIds = useRef(new Set());
 
-  // ---------- ดึงข้อมูล USGS ----------
   useEffect(() => {
     fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson')
       .then(res => res.json())
@@ -85,7 +84,6 @@ export default function Map({ latest, tmdQuakes = [] }) {
       });
   }, []);
 
-  // ---------- Sensor PAT1 ----------
   useEffect(() => {
     if (!latest) return;
 
@@ -191,34 +189,37 @@ export default function Map({ latest, tmdQuakes = [] }) {
       ))}
 
       {/* จุด TMD */}
-      {Array.isArray(tmdQuakes) && tmdQuakes.map((q, i) => (
-        <Marker
-          key={`tmd-${i}`}
-          position={[q.lat, q.lon]}
-          icon={L.divIcon({
-            className: 'tmd-marker',
-            html: `<div style="
-              background-color: ${getColor(q.mag)};
-              width: 28px; height: 28px;
-              border-radius: 50%;
-              color: white;
-              font-size: 11px;
-              font-weight: bold;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              border: 2px solid white;
-            ">${q.mag.toFixed(1)}</div>`
-          })}
-        >
-          <Popup>
-            <strong>TMD Earthquake</strong><br />
-            Magnitude: {q.mag}<br />
-            Location: {q.place}<br />
-            Time: {new Date(q.time).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })}
-          </Popup>
-        </Marker>
-      ))}
+      {Array.isArray(tmdQuakes) && tmdQuakes.map((q, i) => {
+        const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
+        return (
+          <Marker
+            key={`tmd-${i}`}
+            position={[q.lat, q.lon]}
+            icon={L.divIcon({
+              className: 'tmd-marker',
+              html: `<div style="
+                background-color: ${getColor(q.mag)};
+                width: 28px; height: 28px;
+                border-radius: 50%;
+                color: white;
+                font-size: 11px;
+                font-weight: bold;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 2px solid white;
+              ">${q.mag.toFixed(1)}</div>`
+            })}
+          >
+            <Popup>
+              <strong>Magnitude:</strong> {q.mag}<br />
+              <strong>Title:</strong> {q.title}<br />
+              <strong>Distance:</strong> {distance.toFixed(0)} km<br />
+              <strong>Time:</strong> {new Date(q.timestamp).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })}
+            </Popup>
+          </Marker>
+        );
+      })}
     </MapContainer>
   );
 }
