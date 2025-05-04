@@ -1,5 +1,5 @@
 // components/Map.js
-// V0.8603 - Fix TMD timestamp (convert from UTC to Bangkok time)
+// V0.8603 - Fix TMD timestamp (convert from UTC to Bangkok time) Adjust
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -167,10 +167,10 @@ export default function Map({ latest, tmdQuakes = [] }) {
             className: 'custom-marker',
             html: `<div style="
               background-color: ${getColor(q.mag)};
-              width: 28px; height: 28px;
+              width: 18px; height: 18px;
               border-radius: 50%;
               color: black;
-              font-size: 12px;
+              font-size: 10px;
               font-weight: bold;
               display: flex;
               justify-content: center;
@@ -200,15 +200,15 @@ export default function Map({ latest, tmdQuakes = [] }) {
               className: 'tmd-marker',
               html: `<div style="
                 background-color: ${getColor(q.mag)};
-                width: 28px; height: 28px;
+                width: 18px; height: 18px;
                 border-radius: 50%;
-                color: white;
-                font-size: 11px;
+                color: black;
+                font-size: 10px;
                 font-weight: bold;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                border: 2px solid white;
+                border: 0px solid white;
               ">${q.mag.toFixed(1)}</div>`
             })}
           >
