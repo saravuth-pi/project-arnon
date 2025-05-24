@@ -11,7 +11,7 @@ export default function AQIPanel() {
   useEffect(() => {
     async function fetchAQI() {
       try {
-        const res = await fetch('https://api.waqi.info/feed/bangkok/?token=demo'); // Replace with your actual token
+        const res = await fetch('https://api.waqi.info/feed/bangkok/?token=0272d7ffbc1e1ebe1e004bb5b0eba196d0757fbe');
         const json = await res.json();
         if (json.status === 'ok') {
           const value = json.data.aqi;
