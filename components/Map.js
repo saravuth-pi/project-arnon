@@ -138,15 +138,14 @@ export default function Map({ latest, tmdQuakes = [] }) {
           className: 'sensor-marker',
           html: `<div style="
             background-color: ${getColor(pat1Mag)};
-            width: 36px; height: 36px;
+            width: 18px; height: 18px;
             border-radius: 50%;
             color: black;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 2px solid white;
             animation: ${pat1Mag > 4.5 ? 'pulse 1s infinite' : 'none'};
           ">${pat1Mag.toFixed(1)}</div>`
         })}
