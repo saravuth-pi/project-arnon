@@ -114,7 +114,7 @@ export default function Home() {
 
         <div>
           <h3>ข้อมูลแผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
-          <div style={{ height: '40vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes} /></div>
+          <div style={{ height: '30vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes} /></div>
           <LatestQuakes tmdQuakes={tmdQuakes} />
         </div>
       </div>
