@@ -94,7 +94,7 @@ export default function Home() {
     <div style={{ fontFamily: 'sans-serif', padding: 10 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }}>
         <img src="https://arnon.dgbkp.in.th/logo.jpg" height="100" style={{ verticalAlign: 'middle' }} /> <h1 style={{margin: 0, textAlign: 'left' }}> Project Ar-non: dashboard</h1>
-        <div style={{ background: '#bde6ee', textAlign: 'right' }}>
+        <div style={{ margin: 20 ,background: '#bde6ee', textAlign: 'right', , padding: 20, borderRadius: 8 }}>
           <div>{now.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
           <div style={{ fontSize: 36 }}>{now.toLocaleTimeString('th-TH')}</div>
         </div>
@@ -102,9 +102,9 @@ export default function Home() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
         <div>
-          <h3>ข้อมูลแรงสั่นสะเทือนในพื้นที่ nnn (Real-time)</h3>
+          <h2>ข้อมูลแรงสั่นสะเทือนในพื้นที่ กทท. (Real-time)</h2>
           <div style={{ height: '30vh' }}><MapPATOnly latest={dataPoint} /></div>
-          <h3>ข้อมูลแผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
+          <h2>ข้อมูลแผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h2>
           <div style={{ height: '30vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes} /></div>
         </div>
 
