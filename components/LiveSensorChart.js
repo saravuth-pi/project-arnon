@@ -83,8 +83,7 @@ const LiveSensorChart = ({ initialData, newData, onStatsChange }) => {
     labels: history.current.map((d) => new Date(d.t)),
     datasets: [
       {
-        //label: 'Magnitude (Δ)',
-        label: none,
+        label: 'Magnitude (Δ)',
         data: history.current.map((d) => d.magnitude),
         borderColor: 'purple',
         backgroundColor: 'rgba(128,0,128,0.2)',
