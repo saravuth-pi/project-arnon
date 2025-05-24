@@ -83,7 +83,8 @@ const LiveSensorChart = ({ initialData, newData, onStatsChange }) => {
     labels: history.current.map((d) => new Date(d.t)),
     datasets: [
       {
-        label: 'Magnitude (Δ)',
+        // label: 'Magnitude (Δ)',
+        label: false,
         data: history.current.map((d) => d.magnitude),
         borderColor: 'purple',
         backgroundColor: 'rgba(128,0,128,0.2)',
@@ -98,8 +99,8 @@ const LiveSensorChart = ({ initialData, newData, onStatsChange }) => {
     scales: {
       x: {
         type: 'time',
-        time: { unit: 'minute', displayFormats: { minute: 'HH:mm:ss' } },
-        title: { display: true, text: 'Time (HH:MM:SS)' },
+        time: { unit: 'minute', displayFormats: { minute: 'HH:mm' } },
+        title: { display: true, text: 'Time (HH:MM)' },
       },
       y: {
         min: 0,
@@ -114,10 +115,6 @@ const LiveSensorChart = ({ initialData, newData, onStatsChange }) => {
 
   return (
     <div>
-      <div style={{ marginBottom: '5px' }}>
-        <strong>Average:</strong> {stats.avg} &nbsp; | &nbsp;
-        <strong>Max:</strong> {stats.max}
-      </div>
       <Line ref={chartRef} data={data} options={options} />
     </div>
   );
