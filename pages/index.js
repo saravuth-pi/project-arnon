@@ -87,8 +87,8 @@ export default function Home() {
     fetchTMD();
   }, []);
 
-  // const avgMag = initialData.reduce((a, b) => a + (b.magnitude || 0), 0) / (initialData.length || 1);
-  // const maxMag = Math.max(...initialData.map(d => d.magnitude || 0));
+  const avgMag = initialData.reduce((a, b) => a + (b.magnitude || 0), 0) / (initialData.length || 1);
+  const maxMag = Math.max(...initialData.map(d => d.magnitude || 0));
  
   const [stats, setStats] = useState({ avg: '-', max: '-' });
 
