@@ -1,5 +1,5 @@
 // /pages/index.js
-// V0.8600 - 
+// V0.8601 - Add MapPATOnly zoom view around PAT1
 import dynamic from 'next/dynamic';
 import { useEffect, useState, useRef } from 'react';
 import Ably from 'ably';
@@ -10,6 +10,8 @@ import LiveSensorChart from '../components/LiveSensorChart';
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
 
 const Map = dynamic(() => import('../components/Map'), { ssr: false });
+const MapPATOnly = dynamic(() => import('../components/MapPATOnly'), { ssr: false });
+
 
 
 export default function Home() {
@@ -122,7 +124,12 @@ export default function Home() {
       <div style={{ height: '40vh' }}>
         <Map latest={dataPoint} tmdQuakes={tmdQuakes} />
       </div>
-
+  
+      <div style={{ height: '40vh', marginTop: 20 }}>
+        <h2>Zoom View - PAT1 Area</h2>
+        <MapPATOnly latest={dataPoint} />
+      </div>
+        
       <div style={{ marginTop: 5 }}>
         <h2>PAT1 Detector</h2>
         <LiveSensorChart dataPoint={dataPoint} initialData={initialData} />
