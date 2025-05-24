@@ -6,11 +6,6 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState } from 'react';
 
-import iconUrl from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-let DefaultIcon = L.icon({ iconUrl, shadowUrl: iconShadow });
-L.Marker.prototype.options.icon = DefaultIcon;
-
 const PAT1_LAT = 13.713306;
 const PAT1_LNG = 100.563899;
 
@@ -52,13 +47,11 @@ export default function MapPATOnly({ latest }) {
   }, [latest]);
 
   return (
-    <MapContainer center={[PAT1_LAT, PAT1_LNG]} zoom={16} style={{ height: '100%', width: '100%' }}>
+    <MapContainer center={[PAT1_LAT, PAT1_LNG]} zoom={15} style={{ height: '100%', width: '100%' }}>
       <TileLayer
         attribution='&copy; OpenStreetMap contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
       />
-
-      {/* จุด PAT1 */}
       <Marker
         position={[PAT1_LAT, PAT1_LNG]}
         icon={L.divIcon({
