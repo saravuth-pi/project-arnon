@@ -103,7 +103,7 @@ export default function Home() {
         <div>
           <h3>แรงสั่นสะเทือนในพื้นที่ กทท. (Real-time)</h3>
           <div style={{ height: '30vh' }}><MapPATOnly latest={dataPoint} /></div>
-          <h3>ขแผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
+          <h3>แผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
           <div style={{ height: '30vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes} /></div>
         </div>
 
@@ -119,6 +119,7 @@ export default function Home() {
           <LatestQuakes tmdQuakes={tmdQuakes} />
         </div>
       </div>
+  <br><br>
 
       <div style={{ marginTop: 20 }}>
         <h3>คุณภาพอากาศที่ท่าเรือกรุงเทพ (BETA)</h3>
