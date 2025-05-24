@@ -1,9 +1,9 @@
 // components/Map.js
-// V0.8603 - Fix TMD timestamp (convert from UTC to Bangkok time) Adjust
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+// V0.8700 - Add second zoomed-in map showing only PAT1 within 3km radius
+import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, Fragment } from 'react';
 
 import iconUrl from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -124,103 +124,113 @@ export default function Map({ latest, tmdQuakes = [] }) {
     prev.current = { x, y, z };
   }, [latest]);
 
+  const pat1Marker = (
+    <Marker
+      position={[PAT1_LAT, PAT1_LNG]}
+      icon={L.divIcon({
+        className: 'sensor-marker',
+        html: `<div style="
+          background-color: ${getColor(pat1Mag)};
+          width: 36px; height: 36px;
+          border-radius: 50%;
+          color: black;
+          font-size: 11px;
+          font-weight: bold;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: 2px solid white;
+          animation: ${pat1Mag > 4.5 ? 'pulse 1s infinite' : 'none'};
+        ">${pat1Mag.toFixed(1)}</div>`
+      })}
+    >
+      <Popup>
+        <strong>Local Sensor Node: PAT1</strong><br />
+        Lat: {PAT1_LAT}, Lng: {PAT1_LNG}<br />
+        Magnitude: {pat1Mag.toFixed(1)}
+      </Popup>
+    </Marker>
+  );
+
   return (
-    <MapContainer center={[PAT1_LAT, PAT1_LNG]} zoom={3} style={{ height: '100%', width: '100%' }}>
-      <TileLayer
-        attribution='&copy; OpenStreetMap contributors'
-        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-      />
-
-      {/* จุด PAT1 */}
-      <Marker
-        position={[PAT1_LAT, PAT1_LNG]}
-        icon={L.divIcon({
-          className: 'sensor-marker',
-          html: `<div style="
-            background-color: ${getColor(pat1Mag)};
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            color: black;
-            font-size: 11px;
-            font-weight: bold;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 2px solid white;
-            animation: ${pat1Mag > 4.5 ? 'pulse 1s infinite' : 'none'};
-          ">${pat1Mag.toFixed(1)}</div>`
-        })}
-      >
-        <Popup>
-          <strong>Local Sensor Node: PAT1</strong><br />
-          Lat: {PAT1_LAT}, Lng: {PAT1_LNG}<br />
-          Magnitude: {pat1Mag.toFixed(1)}
-        </Popup>
-      </Marker>
-
-      {/* จุด USGS */}
-      {quakes.map((q, i) => (
-        <Marker
-          key={i}
-          position={[q.lat, q.lon]}
-          icon={L.divIcon({
-            className: 'custom-marker',
-            html: `<div style="
-              background-color: ${getColor(q.mag)};
-              width: 18px; height: 18px;
-              border-radius: 50%;
-              color: black;
-              font-size: 10px;
-              font-weight: bold;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              animation: ${q.mag > 4.5 ? 'pulse 1s infinite' : 'none'};
-            ">${q.mag.toFixed(1)}</div>`
-          })}
-        >
-          <Popup>
-            <strong>Magnitude:</strong> {q.mag}<br />
-            <strong>Location:</strong> {q.place}<br />
-            <strong>Distance:</strong> {q.distance.toFixed(0)} km<br />
-            <strong>Time:</strong> {new Date(q.time).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })}
-          </Popup>
-        </Marker>
-      ))}
-
-      {/* จุด TMD */}
-      {Array.isArray(tmdQuakes) && tmdQuakes.map((q, i) => {
-        const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
-        const timeInBangkok = new Date(new Date(q.timestamp).getTime() + 7 * 60 * 60 * 1000);
-        return (
+    <Fragment>
+      {/* Global Map */}
+      <MapContainer center={[PAT1_LAT, PAT1_LNG]} zoom={3} style={{ height: '50vh', width: '100%' }}>
+        <TileLayer
+          attribution='&copy; OpenStreetMap contributors'
+          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        />
+        {pat1Marker}
+        {quakes.map((q, i) => (
           <Marker
-            key={`tmd-${i}`}
+            key={i}
             position={[q.lat, q.lon]}
             icon={L.divIcon({
-              className: 'tmd-marker',
+              className: 'custom-marker',
               html: `<div style="
                 background-color: ${getColor(q.mag)};
-                width: 18px; height: 18px;
+                width: 28px; height: 28px;
                 border-radius: 50%;
                 color: black;
-                font-size: 10px;
+                font-size: 12px;
                 font-weight: bold;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                border: 0px solid white;
+                animation: ${q.mag > 4.5 ? 'pulse 1s infinite' : 'none'};
               ">${q.mag.toFixed(1)}</div>`
             })}
           >
             <Popup>
               <strong>Magnitude:</strong> {q.mag}<br />
-              <strong>Title:</strong> {q.title}<br />
-              <strong>Distance:</strong> {distance.toFixed(0)} km<br />
-              <strong>Time:</strong> {timeInBangkok.toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })}
+              <strong>Location:</strong> {q.place}<br />
+              <strong>Distance:</strong> {q.distance.toFixed(0)} km<br />
+              <strong>Time:</strong> {new Date(q.time).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })}
             </Popup>
           </Marker>
-        );
-      })}
-    </MapContainer>
+        ))}
+        {Array.isArray(tmdQuakes) && tmdQuakes.map((q, i) => {
+          const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
+          return (
+            <Marker
+              key={`tmd-${i}`}
+              position={[q.lat, q.lon]}
+              icon={L.divIcon({
+                className: 'tmd-marker',
+                html: `<div style="
+                  background-color: ${getColor(q.mag)};
+                  width: 28px; height: 28px;
+                  border-radius: 50%;
+                  color: white;
+                  font-size: 11px;
+                  font-weight: bold;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  border: 2px solid white;
+                ">${q.mag.toFixed(1)}</div>`
+              })}
+            >
+              <Popup>
+                <strong>Magnitude:</strong> {q.mag}<br />
+                <strong>Title:</strong> {q.title}<br />
+                <strong>Distance:</strong> {distance.toFixed(0)} km<br />
+                <strong>Time:</strong> {new Date(q.timestamp).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })}
+              </Popup>
+            </Marker>
+          );
+        })}
+      </MapContainer>
+
+      {/* Zoomed-in Map */}
+      <MapContainer center={[PAT1_LAT, PAT1_LNG]} zoom={16} style={{ height: '35vh', width: '100%', marginTop: 10 }}>
+        <TileLayer
+          attribution='&copy; OpenStreetMap contributors'
+          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        />
+        {pat1Marker}
+        <Circle center={[PAT1_LAT, PAT1_LNG]} radius={30} pathOptions={{ color: 'purple', fillOpacity: 0.1 }} />
+      </MapContainer>
+    </Fragment>
   );
 }
