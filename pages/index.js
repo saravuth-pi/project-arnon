@@ -119,7 +119,6 @@ export default function Home() {
           <LatestQuakes tmdQuakes={tmdQuakes} />
         </div>
       </div>
-  <br><br>
 
       <div style={{ marginTop: 20 }}>
         <h3>คุณภาพอากาศที่ท่าเรือกรุงเทพ (BETA)</h3>
