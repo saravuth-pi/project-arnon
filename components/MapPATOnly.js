@@ -47,7 +47,7 @@ export default function MapPATOnly({ latest }) {
   }, [latest]);
 
   return (
-    <MapContainer center={[PAT1_LAT, PAT1_LNG]} zoom={15} style={{ height: '100%', width: '100%' }}>
+    <MapContainer center={[PAT1_LAT, PAT1_LNG]} zoom={14} style={{ height: '100%', width: '100%' }}>
       <TileLayer
         attribution='&copy; OpenStreetMap contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -58,15 +58,15 @@ export default function MapPATOnly({ latest }) {
           className: 'sensor-marker',
           html: `<div style="
             background-color: ${getColor(pat1Mag)};
-            width: 36px; height: 36px;
-            border-radius: 50%;
+            width: 15px; height: 10px;
+            border-radius: 10%;
             color: black;
             font-size: 11px;
             font-weight: bold;
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 2px solid white;
+            border: 1px solid white;
             animation: ${pat1Mag > 4.5 ? 'pulse 1s infinite' : 'none'};
           ">${pat1Mag.toFixed(1)}</div>`
         })}
