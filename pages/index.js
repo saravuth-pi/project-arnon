@@ -1,138 +1,126 @@
-// /pages/index.js
-// V0.8601 - Add MapPATOnly zoom view around PAT1
+// pages/index.js
+// V1.000 - Full Dashboard Template Based on User Design
 import dynamic from 'next/dynamic';
 import { useEffect, useState, useRef } from 'react';
 import Ably from 'ably';
-import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js';
-import { Line } from 'react-chartjs-2';
 import LiveSensorChart from '../components/LiveSensorChart';
-
-ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
+import LatestQuakes from '../components/LatestQuakes';
+import AQIPanel from '../components/AQIPanel';
 
 const Map = dynamic(() => import('../components/Map'), { ssr: false });
 const MapPATOnly = dynamic(() => import('../components/MapPATOnly'), { ssr: false });
-
-
 
 export default function Home() {
   const [dataPoint, setDataPoint] = useState(null);
   const [initialData, setInitialData] = useState([]);
   const [tmdQuakes, setTmdQuakes] = useState([]);
+  const [now, setNow] = useState(new Date());
   const dataRef = useRef([]);
   const lastAblyTimestamp = useRef(0);
   const lastDataPoint = useRef(null);
 
   useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
     async function fetchInitialData() {
-      try {
-        const res = await fetch('https://arnon.dgbkp.in.th/api/pat1_last_10min.php');
-        const json = await res.json();
-        if (Array.isArray(json)) {
-          json.forEach((d) => {
-            if (typeof d.ts === 'undefined' && typeof d.timestamp === 'string') {
-              d.ts = Math.floor(new Date(d.timestamp.replace(' ', 'T')).getTime() / 1000);
-            }
-            d.dateObj = new Date(d.ts * 1000);
-          });
-          dataRef.current = json;
-          if (json.length > 0) {
-            lastAblyTimestamp.current = json[json.length - 1].ts;
-            lastDataPoint.current = json[json.length - 1];
-          }
-          setInitialData([...dataRef.current]);
-        }
-      } catch (error) {
-        console.error('❌ Error fetching initial data from API:', error);
+      const res = await fetch('https://arnon.dgbkp.in.th/api/pat1_last_10min.php');
+      const json = await res.json();
+      if (Array.isArray(json)) {
+        json.forEach((d) => {
+          if (!d.ts && d.timestamp) d.ts = Math.floor(new Date(d.timestamp.replace(' ', 'T')).getTime() / 1000);
+          d.dateObj = new Date(d.ts * 1000);
+        });
+        dataRef.current = json;
+        if (json.length > 0) lastDataPoint.current = json[json.length - 1];
+        setInitialData([...dataRef.current]);
       }
     }
     fetchInitialData();
   }, []);
 
   useEffect(() => {
-    const realtime = new Ably.Realtime({ key: 'DYt11Q.G9DtiQ:TgnTC0ItL_AzsD4puAdytIVYMeArsFSn-qyAAuHbQLQ' });
+    const realtime = new Ably.Realtime({ key: 'YOUR_ABLY_KEY' });
     const channel = realtime.channels.get('earthquake:raw');
-
     channel.subscribe((msg) => {
-      try {
-        const raw = typeof msg.data === 'string' ? msg.data : new TextDecoder().decode(msg.data);
-        const data = JSON.parse(raw);
+      const raw = typeof msg.data === 'string' ? msg.data : new TextDecoder().decode(msg.data);
+      const data = JSON.parse(raw);
 
-        const nowUtc = new Date();
-        const nowBangkok = new Date(nowUtc.getTime() + 7 * 60 * 60 * 1000); // force +7h to UTC
-        data.dateObj = nowBangkok;
-        data.ts = Math.floor(nowBangkok.getTime() / 1000);
-        data.timestamp = nowBangkok.toISOString().replace('T', ' ').substring(0, 19); // "YYYY-MM-DD HH:mm:ss"
+      const nowBangkok = new Date(Date.now() + 7 * 3600 * 1000);
+      data.dateObj = nowBangkok;
+      data.ts = Math.floor(nowBangkok.getTime() / 1000);
+      data.timestamp = nowBangkok.toISOString().replace('T', ' ').substring(0, 19);
 
-        if (typeof data.x === 'number' && typeof data.y === 'number' && typeof data.z === 'number') {
-          const existingIndex = dataRef.current.findIndex(d => d.ts === data.ts);
-
-          if (existingIndex !== -1) {
-            dataRef.current[existingIndex] = data;
-          } else {
-            if (lastDataPoint.current) {
-              const dx = data.x - lastDataPoint.current.x;
-              const dy = data.y - lastDataPoint.current.y;
-              const dz = data.z - lastDataPoint.current.z;
-              const delta = Math.sqrt(dx * dx + dy * dy + dz * dz);
-              data.magnitude = Math.min(10, delta * 5);
-            } else {
-              data.magnitude = 0;
-            }
-            lastAblyTimestamp.current = data.ts;
-            lastDataPoint.current = data;
-
-            dataRef.current.push(data);
-
-            if (dataRef.current.length > 300) {
-              dataRef.current.shift();
-            }
-          }
-
-          setDataPoint(data);
-          setInitialData([...dataRef.current]);
+      if (typeof data.x === 'number' && typeof data.y === 'number' && typeof data.z === 'number') {
+        const existingIndex = dataRef.current.findIndex(d => d.ts === data.ts);
+        if (existingIndex !== -1) {
+          dataRef.current[existingIndex] = data;
         } else {
-          console.warn('⚠️ Invalid or outdated sensor data:', data);
+          if (lastDataPoint.current) {
+            const dx = data.x - lastDataPoint.current.x;
+            const dy = data.y - lastDataPoint.current.y;
+            const dz = data.z - lastDataPoint.current.z;
+            const delta = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            data.magnitude = Math.min(10, delta * 5);
+          } else {
+            data.magnitude = 0;
+          }
+          lastDataPoint.current = data;
+          dataRef.current.push(data);
+          if (dataRef.current.length > 300) dataRef.current.shift();
         }
-      } catch (e) {
-        console.error('Parse error:', e);
+        setDataPoint(data);
+        setInitialData([...dataRef.current]);
       }
     });
-
     return () => channel.unsubscribe();
   }, []);
 
   useEffect(() => {
     async function fetchTMD() {
-      try {
-        const res = await fetch('/api/fetch-tmd');
-        const json = await res.json();
-        if (Array.isArray(json)) {
-          setTmdQuakes(json);
-        }
-      } catch (err) {
-        console.error('❌ Failed to fetch TMD data', err);
-      }
+      const res = await fetch('/api/fetch-tmd');
+      const json = await res.json();
+      if (Array.isArray(json)) setTmdQuakes(json);
     }
     fetchTMD();
   }, []);
 
-  const safeToFixed = (val) => (typeof val === 'number' ? val.toFixed(2) : '-');
+  const avgMag = initialData.reduce((a, b) => a + (b.magnitude || 0), 0) / (initialData.length || 1);
+  const maxMag = Math.max(...initialData.map(d => d.magnitude || 0));
 
   return (
-    <div style={{ padding: 5 }}>
-      <h1 style={{ color: 'darkred' }}><img src="https://upload.wikimedia.org/wikipedia/commons/8/88/Emblem_of_the_Port_Authority_of_Thailand.svg" height="50"/> Project Arnon - Dashboard</h1>
-      <div style={{ height: '40vh' }}>
-        <Map latest={dataPoint} tmdQuakes={tmdQuakes} />
+    <div style={{ fontFamily: 'sans-serif', padding: 10 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#bde6ee', padding: 10 }}>
+        <h1 style={{ margin: 0 }}><img src="/logo.png" height="40" style={{ verticalAlign: 'middle' }} /> Project Ar-non: dashboard</h1>
+        <div style={{ textAlign: 'right' }}>
+          <div>{now.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+          <div style={{ fontSize: 36 }}>{now.toLocaleTimeString('th-TH')}</div>
+        </div>
       </div>
-  
-      <div style={{ height: '40vh', marginTop: 20 }}>
-        <h2>Zoom View - PAT1 Area</h2>
-        <MapPATOnly latest={dataPoint} />
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
+        <div>
+          <h3>ข้อมูลแรงสั่นสะเทือนในพื้นที่ nnn (Real-time)</h3>
+          <div style={{ height: '30vh' }}><MapPATOnly latest={dataPoint} /></div>
+          <LiveSensorChart dataPoint={dataPoint} initialData={initialData} />
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 10 }}>
+            <div style={{ backgroundColor: 'green', color: 'white', padding: 10, borderRadius: 8 }}>เฉลี่ย : {avgMag.toFixed(2)}</div>
+            <div style={{ backgroundColor: 'orange', color: 'white', padding: 10, borderRadius: 8 }}>สูงสุด : {maxMag.toFixed(2)}</div>
+          </div>
+        </div>
+
+        <div>
+          <h3>ข้อมูลแผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
+          <div style={{ height: '40vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes} /></div>
+          <LatestQuakes tmdQuakes={tmdQuakes} />
+        </div>
       </div>
-        
-      <div style={{ marginTop: 5 }}>
-        <h2>PAT1 Detector</h2>
-        <LiveSensorChart dataPoint={dataPoint} initialData={initialData} />
+
+      <div style={{ marginTop: 20 }}>
+        <h3>คุณภาพอากาศที่ท่าเรือกรุงเทพ (BETA)</h3>
+        <AQIPanel />
       </div>
     </div>
   );
