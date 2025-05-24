@@ -108,7 +108,7 @@ const LiveSensorChart = ({ initialData, newData, onStatsChange }) => {
       },
     },
     plugins: {
-      legend: { display: true },
+      legend: { display: false },
     },
   };
 
