@@ -58,7 +58,7 @@ export default function MapPATOnly({ latest }) {
           className: 'sensor-marker',
           html: `<div style="
             background-color: ${getColor(pat1Mag)};
-            width: 15px; height: 10px;
+            width: 25px; height: 25px;
             border-radius: 100%;
             color: black;
             font-size: 11px;
