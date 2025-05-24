@@ -1,5 +1,5 @@
 // /pages/index.js
-// V0.8600 - Add TMD earthquake data on map (past 24h)
+// V0.8601 - Add MapPATOnly 
 import dynamic from 'next/dynamic';
 import { useEffect, useState, useRef } from 'react';
 import Ably from 'ably';
@@ -10,6 +10,10 @@ import LiveSensorChart from '../components/LiveSensorChart';
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement);
 
 const Map = dynamic(() => import('../components/Map'), { ssr: false });
+
+import MapPATOnly from '../components/MapPATOnly';
+<MapPATOnly latest={dataPoint} />
+
 
 export default function Home() {
   const [dataPoint, setDataPoint] = useState(null);
