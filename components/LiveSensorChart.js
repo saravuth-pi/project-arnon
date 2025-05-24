@@ -84,9 +84,8 @@ const LiveSensorChart = ({ initialData, newData, onStatsChange }) => {
     datasets: [
       {
         // label: 'Magnitude (Δ)',
-        label: false,
         data: history.current.map((d) => d.magnitude),
-        borderColor: 'purple',
+        //borderColor: 'purple',
         backgroundColor: 'rgba(128,0,128,0.2)',
         fill: true,
         pointRadius: 1,
@@ -104,7 +103,7 @@ const LiveSensorChart = ({ initialData, newData, onStatsChange }) => {
       },
       y: {
         min: 0,
-        max: 11,
+        max: 9,
         title: { display: true, text: 'Magnitude (Delta g)' },
       },
     },
