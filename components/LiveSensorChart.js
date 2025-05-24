@@ -1,6 +1,5 @@
 // components/LiveSensorChart.js
-// Updated version: V0.9354
-// This version adds average and max magnitude display alongside the chart.
+// Updated version: V0.9355 - fix stats
 
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -18,7 +17,7 @@ import { Line } from 'react-chartjs-2';
 
 ChartJS.register(LineElement, PointElement, LinearScale, TimeScale, Tooltip, Legend, Filler);
 
-const LiveSensorChart = ({ initialData, newData }) => {
+const LiveSensorChart = ({ initialData, newData, onStatsChange }) => {
   const chartRef = useRef(null);
   const history = useRef([]);
   const [stats, setStats] = useState({ avg: 0, max: 0 });
@@ -75,7 +74,9 @@ const LiveSensorChart = ({ initialData, newData }) => {
     if (values.length === 0) return;
     const avg = values.reduce((a, b) => a + b, 0) / values.length;
     const max = Math.max(...values);
-    setStats({ avg: avg.toFixed(2), max: max.toFixed(2) });
+    const newStats = { avg: avg.toFixed(2), max: max.toFixed(2) };
+    setStats(newStats);
+    if (onStatsChange) onStatsChange(newStats); 
   };
 
   const data = {
