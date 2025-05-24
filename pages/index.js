@@ -101,20 +101,21 @@ export default function Home() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
         <div>
-          <h2>ข้อมูลแรงสั่นสะเทือนในพื้นที่ กทท. (Real-time)</h2>
+          <h3>แรงสั่นสะเทือนในพื้นที่ กทท. (Real-time)</h3>
           <div style={{ height: '30vh' }}><MapPATOnly latest={dataPoint} /></div>
-          <h2>ข้อมูลแผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h2>
+          <h3>ขแผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
           <div style={{ height: '30vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes} /></div>
         </div>
 
         <div>
-           <h2>แรงสั่นสะเทือนย้อนหลัง 10 นาที</h2>
+          <h3>แรงสั่นสะเทือนย้อนหลัง 10 นาที</h3>
           <LiveSensorChart dataPoint={dataPoint} initialData={initialData} newData={dataPoint} onStatsChange={setStats} />
           <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 10 }}>
-            <div style={{ backgroundColor: 'green', color: 'white', padding: 10, borderRadius: 8 }}><h1>เฉลี่ย : {stats.avg}</h1></div>
-            <div style={{ backgroundColor: 'orange', color: 'white', padding: 10, borderRadius: 8 }}><h1>สูงสุด : {stats.max}</h1></div>
+            <div style={{ backgroundColor: 'green', color: 'white', padding: 10, borderRadius: 8 }}><h2>เฉลี่ย : {stats.avg}</h2></div>
+            <div style={{ backgroundColor: 'orange', color: 'white', padding: 10, borderRadius: 8 }}><h2>สูงสุด : {stats.max}</h2></div>
           </div>
-          
+  
+          <h3>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3>
           <LatestQuakes tmdQuakes={tmdQuakes} />
         </div>
       </div>
