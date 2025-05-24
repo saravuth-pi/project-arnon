@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 export default function AQIPanel() {
   const [aqi, setAqi] = useState(null);
   const [status, setStatus] = useState('');
+  const json = await res.json();
 
   useEffect(() => {
     async function fetchAQI() {
