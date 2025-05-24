@@ -104,17 +104,18 @@ export default function Home() {
         <div>
           <h3>ข้อมูลแรงสั่นสะเทือนในพื้นที่ nnn (Real-time)</h3>
           <div style={{ height: '30vh' }}><MapPATOnly latest={dataPoint} /></div>
-          <h2>แรงสั่นสะเทือนย้อนหลัง 10 นาที</h2>
+          <h3>ข้อมูลแผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
+          <div style={{ height: '30vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes} /></div>
+        </div>
+
+        <div>
+           <h2>แรงสั่นสะเทือนย้อนหลัง 10 นาที</h2>
           <LiveSensorChart dataPoint={dataPoint} initialData={initialData} />
           <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 10 }}>
             <div style={{ backgroundColor: 'green', color: 'white', padding: 10, borderRadius: 8 }}>เฉลี่ย : {avgMag.toFixed(2)}</div>
             <div style={{ backgroundColor: 'orange', color: 'white', padding: 10, borderRadius: 8 }}>สูงสุด : {maxMag.toFixed(2)}</div>
           </div>
-        </div>
-
-        <div>
-          <h3>ข้อมูลแผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
-          <div style={{ height: '30vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes} /></div>
+          
           <LatestQuakes tmdQuakes={tmdQuakes} />
         </div>
       </div>
