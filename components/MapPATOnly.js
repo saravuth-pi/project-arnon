@@ -59,7 +59,7 @@ export default function MapPATOnly({ latest }) {
           html: `<div style="
             background-color: ${getColor(pat1Mag)};
             width: 15px; height: 10px;
-            border-radius: 10%;
+            border-radius: 100%;
             color: black;
             font-size: 11px;
             font-weight: bold;
