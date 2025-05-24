@@ -1,9 +1,8 @@
 // components/LiveSensorChart.js
-// Updated version: V0.9353
-// This version removes API vs Graph table,
-// and merges realtime Ably data from index.js context (already subscribed) into the graph (via props).
+// Updated version: V0.9354
+// This version adds average and max magnitude display alongside the chart.
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Chart as ChartJS,
   LineElement,
@@ -22,16 +21,14 @@ ChartJS.register(LineElement, PointElement, LinearScale, TimeScale, Tooltip, Leg
 const LiveSensorChart = ({ initialData, newData }) => {
   const chartRef = useRef(null);
   const history = useRef([]);
+  const [stats, setStats] = useState({ avg: 0, max: 0 });
 
   // Append new realtime data
   useEffect(() => {
     if (!newData) return;
 
-    // Extract current values
     const { x, y, z, timestamp } = newData;
     const t = new Date(timestamp).getTime();
-
-    // Use previous values to calculate delta
     const prev = history.current[history.current.length - 1];
     if (prev) {
       const dx = x - prev.x;
@@ -44,9 +41,10 @@ const LiveSensorChart = ({ initialData, newData }) => {
       history.current.push({ x, y, z, t, magnitude: 0 });
     }
 
-    // Trim to last 10 minutes
     const tenMinAgo = Date.now() - 10 * 60 * 1000;
     history.current = history.current.filter((d) => d.t >= tenMinAgo);
+
+    updateStats();
   }, [newData]);
 
   // Initialize with API data
@@ -69,7 +67,16 @@ const LiveSensorChart = ({ initialData, newData }) => {
       prev = { x, y, z };
     });
     history.current = formatted;
+    updateStats();
   }, [initialData]);
+
+  const updateStats = () => {
+    const values = history.current.map(d => d.magnitude);
+    if (values.length === 0) return;
+    const avg = values.reduce((a, b) => a + b, 0) / values.length;
+    const max = Math.max(...values);
+    setStats({ avg: avg.toFixed(2), max: max.toFixed(2) });
+  };
 
   const data = {
     labels: history.current.map((d) => new Date(d.t)),
@@ -104,7 +111,15 @@ const LiveSensorChart = ({ initialData, newData }) => {
     },
   };
 
-  return <Line ref={chartRef} data={data} options={options} />;
+  return (
+    <div>
+      <div style={{ marginBottom: '5px' }}>
+        <strong>Average:</strong> {stats.avg} &nbsp; | &nbsp;
+        <strong>Max:</strong> {stats.max}
+      </div>
+      <Line ref={chartRef} data={data} options={options} />
+    </div>
+  );
 };
 
 export default LiveSensorChart;
