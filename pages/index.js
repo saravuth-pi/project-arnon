@@ -116,7 +116,7 @@ export default function Home() {
           </div>
   
           <h3>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3>
-          <LatestQuakes usgsQuakes={quakes} tmdQuakes={tmdQuakes} />
+          <LatestQuakes usgsQuakes={dataPoint} tmdQuakes={tmdQuakes} />
         </div>
       </div>
 
