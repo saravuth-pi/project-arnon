@@ -4,8 +4,7 @@ import React from 'react';
 
 export default function LatestQuakes({ quakes = [] }) {
   return (
-    <div style={{ marginTop: '10px' }}>
-      <h3>แสดงเหตุแผ่นดินไหวต่างๆ</h3>
+    <div style={{ marginTop: '0px' }}>
       <ul style={{ paddingLeft: '20px' }}>
         {quakes.length === 0 && <li>ไม่พบเหตุ</li>}
         {quakes.map((q, i) => (
