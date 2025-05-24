@@ -86,9 +86,6 @@ export default function Home() {
     }
     fetchTMD();
   }, []);
-
-  const avgMag = initialData.reduce((a, b) => a + (b.magnitude || 0), 0) / (initialData.length || 1);
-  const maxMag = Math.max(...initialData.map(d => d.magnitude || 0));
  
   const [stats, setStats] = useState({ avg: '-', max: '-' });
 
@@ -114,8 +111,6 @@ export default function Home() {
            <h2>แรงสั่นสะเทือนย้อนหลัง 10 นาที</h2>
           <LiveSensorChart dataPoint={dataPoint} initialData={initialData} newData={dataPoint} onStatsChange={setStats} />
           <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 10 }}>
-            <div style={{ backgroundColor: 'green', color: 'white', padding: 10, borderRadius: 8 }}>เฉลี่ย : {avgMag.toFixed(2)}</div>
-            <div style={{ backgroundColor: 'orange', color: 'white', padding: 10, borderRadius: 8 }}>สูงสุด : {maxMag.toFixed(2)}</div>
             <div style={{ backgroundColor: 'green', color: 'white', padding: 10, borderRadius: 8 }}>เฉลี่ย : {stats.avg}</div>
             <div style={{ backgroundColor: 'orange', color: 'white', padding: 10, borderRadius: 8 }}>สูงสุด : {stats.max}</div>
           </div>
