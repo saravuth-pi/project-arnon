@@ -92,8 +92,8 @@ export default function Home() {
 
   return (
     <div style={{ fontFamily: 'sans-serif', padding: 10 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#bde6ee', padding: 10 }}>
-        <h1 style={{ margin: 0 }}><img src="/logo.png" height="40" style={{ verticalAlign: 'middle' }} /> Project Ar-non: dashboard</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 10 }}>
+        <img src="https://arnon.dgbkp.in.th/logo.jpg" height="100" style={{ verticalAlign: 'middle' }} /> <h1 style={{  background: '#bde6ee', margin: 0 }}> Project Ar-non: dashboard</h1>
         <div style={{ textAlign: 'right' }}>
           <div>{now.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
           <div style={{ fontSize: 36 }}>{now.toLocaleTimeString('th-TH')}</div>
