@@ -14,6 +14,7 @@ export default function Home() {
   const [dataPoint, setDataPoint] = useState(null);
   const [initialData, setInitialData] = useState([]);
   const [tmdQuakes, setTmdQuakes] = useState([]);
+  const [usgsQuakes, setUsgsQuakes] = useState([]);
   const [now, setNow] = useState(new Date());
   const dataRef = useRef([]);
   const lastAblyTimestamp = useRef(0);
