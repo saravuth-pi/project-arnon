@@ -1,9 +1,10 @@
 // components/Map.js
-// V0.8700 - Add second zoomed-in map showing only PAT1 within 3km radius
+// V0.8701 - Add second zoomed-in map showing only PAT1 within 3km radius and restore LiveSensorChart
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState, Fragment } from 'react';
+import LiveSensorChart from './LiveSensorChart';
 
 import iconUrl from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -39,7 +40,7 @@ function toBangkokTimeString(dateInput) {
   }).replace('T', ' ');
 }
 
-export default function Map({ latest, tmdQuakes = [] }) {
+export default function Map({ latest, tmdQuakes = [], initialData }) {
   const [quakes, setQuakes] = useState([]);
   const prev = useRef(null);
   const history = useRef([]);
@@ -154,7 +155,6 @@ export default function Map({ latest, tmdQuakes = [] }) {
 
   return (
     <Fragment>
-      {/* Global Map */}
       <MapContainer center={[PAT1_LAT, PAT1_LNG]} zoom={3} style={{ height: '50vh', width: '100%' }}>
         <TileLayer
           attribution='&copy; OpenStreetMap contributors'
@@ -222,8 +222,7 @@ export default function Map({ latest, tmdQuakes = [] }) {
         })}
       </MapContainer>
 
-      {/* Zoomed-in Map */}
-      <MapContainer center={[PAT1_LAT, PAT1_LNG]} zoom={16} style={{ height: '35vh', width: '100%', marginTop: 10 }}>
+      <MapContainer center={[PAT1_LAT, PAT1_LNG]} zoom={17} style={{ height: '35vh', width: '100%', marginTop: 10 }}>
         <TileLayer
           attribution='&copy; OpenStreetMap contributors'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
@@ -231,6 +230,11 @@ export default function Map({ latest, tmdQuakes = [] }) {
         {pat1Marker}
         <Circle center={[PAT1_LAT, PAT1_LNG]} radius={30} pathOptions={{ color: 'purple', fillOpacity: 0.1 }} />
       </MapContainer>
+
+      <div style={{ marginTop: 10 }}>
+        <h2>PAT1 Detector</h2>
+        <LiveSensorChart dataPoint={latest} initialData={initialData} />
+      </div>
     </Fragment>
   );
 }
