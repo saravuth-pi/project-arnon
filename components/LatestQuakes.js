@@ -1,5 +1,5 @@
 // components/LatestQuakes.js
-// V0.1100 - Show latest 10 nearby events from USGS + TMD (M>=2.0, 24h, <10,000km)
+// V0.1100 - Show last 10 USGS+TMD quakes within 10,000km and M>=2.0 (last 24h)
 import React from 'react';
 
 const PAT1_LAT = 13.713306;
@@ -16,33 +16,59 @@ function haversine(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+function formatTime(timeStr) {
+  const date = new Date(timeStr);
+  return date.toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' });
+}
+
 export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
   const now = Date.now();
-  const filtered = [...usgsQuakes, ...tmdQuakes].filter(q => {
-    const t = new Date(q.time || q.timestamp).getTime();
-    const age = now - t;
-    const dist = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
-    return q.mag >= 2 && age < 24 * 60 * 60 * 1000 && dist <= 10000;
-  });
+  const cutoff = now - 24 * 60 * 60 * 1000;
 
-  const sorted = filtered.sort((a, b) => {
-    const ta = new Date(a.time || a.timestamp).getTime();
-    const tb = new Date(b.time || b.timestamp).getTime();
-    return tb - ta;
-  }).slice(0, 10);
+  const normalized = [
+    ...usgsQuakes.map(q => ({
+      source: 'USGS',
+      mag: q.mag,
+      lat: q.lat,
+      lon: q.lon,
+      place: q.place,
+      time: new Date(q.time).getTime()
+    })),
+    ...tmdQuakes.map(q => ({
+      source: 'TMD',
+      mag: q.mag,
+      lat: q.lat,
+      lon: q.lon,
+      place: q.place || q.title,
+      time: new Date(q.timestamp).getTime()
+    }))
+  ].filter(q => q.mag >= 2.0 && q.time >= cutoff && haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon) <= 10000);
+
+  const sorted = normalized.sort((a, b) => b.time - a.time).slice(0, 10);
 
   return (
-    <div>
-      <h3>แสดงเหตุแผ่นดินไหว 10 ครั้งสุด</h3>
-      <ul style={{ paddingLeft: 20 }}>
-        {sorted.length === 0 && <li>ไม่พบเหตุใดใน 24 ชั่วโมง</li>}
-        {sorted.map((q, i) => (
-          <li key={i}>
-            <strong>{q.mag.toFixed(1)}</strong> | {q.place || q.title || 'Unknown'}<br />
-            เวลา: {new Date(q.time || q.timestamp).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' })}
-          </li>
-        ))}
-      </ul>
+    <div style={{ marginTop: 10 }}>
+      <h2>Latest Earthquakes (M≥2.0, ≤10,000km, last 24h)</h2>
+      <table style={{ width: '100%', fontSize: '0.9em' }}>
+        <thead>
+          <tr style={{ background: '#ddd' }}>
+            <th>Time</th>
+            <th>Mag</th>
+            <th>Location</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sorted.map((q, i) => (
+            <tr key={i}>
+              <td>{formatTime(q.time)}</td>
+              <td>{q.mag.toFixed(1)}</td>
+              <td>{q.place}</td>
+              <td>{q.source}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
