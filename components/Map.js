@@ -1,5 +1,5 @@
 // components/Map.js
-// V0.8603 - Fix TMD timestamp (convert from UTC to Bangkok time) Adjust
+// V0.8604 - Add save_quake.php POST for new TMD events
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -45,6 +45,7 @@ export default function Map({ latest, tmdQuakes = [] }) {
   const history = useRef([]);
   const [pat1Mag, setPat1Mag] = useState(0);
   const sentUSGSIds = useRef(new Set());
+  const sentTMDKeys = useRef(new Set());
 
   useEffect(() => {
     fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson')
@@ -190,6 +191,25 @@ export default function Map({ latest, tmdQuakes = [] }) {
       {/* จุด TMD */}
       {Array.isArray(tmdQuakes) && tmdQuakes.map((q, i) => {
         const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
+        const key = `${q.lat}-${q.lon}-${q.timestamp}`;
+
+        if (!sentTMDKeys.current.has(key)) {
+          sentTMDKeys.current.add(key);
+
+          fetch("https://arnon.dgbkp.in.th/save_quake.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+              magnitude: q.mag,
+              place: q.place || q.title,
+              latitude: q.lat,
+              longitude: q.lon,
+              distance,
+              quake_time: toBangkokTimeString(q.timestamp)
+            })
+          });
+        }
+
         const timeInBangkok = new Date(new Date(q.timestamp).getTime() + 7 * 60 * 60 * 1000);
         return (
           <Marker
