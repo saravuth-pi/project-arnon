@@ -42,7 +42,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    const realtime = new Ably.Realtime({ key: 'YOUR_ABLY_KEY' });
+    const realtime = new Ably.Realtime({ key: 'DYt11Q.G9DtiQ:TgnTC0ItL_AzsD4puAdytIVYMeArsFSn-qyAAuHbQLQ' });
     const channel = realtime.channels.get('earthquake:raw');
     channel.subscribe((msg) => {
       const raw = typeof msg.data === 'string' ? msg.data : new TextDecoder().decode(msg.data);
