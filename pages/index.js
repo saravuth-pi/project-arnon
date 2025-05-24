@@ -92,7 +92,7 @@ export default function Home() {
   return (
     <div style={{ fontFamily: 'sans-serif', padding: 10 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }}>
-        <img src="https://arnon.dgbkp.in.th/logo.jpg" height="100" style={{ verticalAlign: 'middle' }} /> <h1 style={{margin: 0, textAlign: 'left' }}> Project Ar-non: dashboard</h1>
+        <img src="https://arnon.dgbkp.in.th/logo.jpg" height="120" style={{ verticalAlign: 'middle' }} /> <h1 style={{margin: 0, textAlign: 'left' }}> Project Ar-non: dashboard</h1>
         <div style={{ margin: 20 ,background: '#bde6ee', textAlign: 'right', padding: 20, borderRadius: 8 }}>
           <div>{now.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
           <div style={{ fontSize: 36 }}>{now.toLocaleTimeString('th-TH')}</div>
@@ -111,8 +111,8 @@ export default function Home() {
            <h2>แรงสั่นสะเทือนย้อนหลัง 10 นาที</h2>
           <LiveSensorChart dataPoint={dataPoint} initialData={initialData} newData={dataPoint} onStatsChange={setStats} />
           <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 10 }}>
-            <div style={{ backgroundColor: 'green', color: 'white', padding: 10, borderRadius: 8 }}>เฉลี่ย : {stats.avg}</div>
-            <div style={{ backgroundColor: 'orange', color: 'white', padding: 10, borderRadius: 8 }}>สูงสุด : {stats.max}</div>
+            <div style={{ backgroundColor: 'green', color: 'white', padding: 10, borderRadius: 8, font-size: 40px }}>เฉลี่ย : {stats.avg}</div>
+            <div style={{ backgroundColor: 'orange', color: 'white', padding: 10, borderRadius: 8, font-size: 40px }}>สูงสุด : {stats.max}</div>
           </div>
           
           <LatestQuakes tmdQuakes={tmdQuakes} />
