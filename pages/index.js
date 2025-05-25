@@ -104,7 +104,7 @@ export default function Home() {
   }, []);
  
   const [stats, setStats] = useState({ avg: '-', max: '-' });
-// <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
+
   return (
     <div style={{ fontFamily: 'sans-serif', padding: 10 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }}>
@@ -115,10 +115,10 @@ export default function Home() {
         </div>
       </div>
 
-     <div>
-        <div>
+  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, marginTop: 1 }}>
+        <div style={{ height: '30vh', width: '50vw' }}>
           <h3>แรงสั่นสะเทือนในพื้นที่ กทท. (Real-time)</h3>
-          <div style={{ height: '30vh', width: '50vw' }}><MapPATOnly latest={dataPoint} /></div>
+          <div><MapPATOnly latest={dataPoint} /></div>
         </div>
   
         <div style={{ height: '30vh', width: '50vw' }}>
