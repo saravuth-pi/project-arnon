@@ -41,7 +41,7 @@ tmdQuakes.forEach((q) => {
   const quakeTime = new Date(q.timestamp);
   const age = now - quakeTime.getTime();
   const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
-  
+  console.log('[TMD]', { mag: q.mag,timestamp: q.timestamp, quakeTime, age, ageHour: age / (1000 * 3600), distance, });
   if (distance <= 3000 && q.mag >= 2 && age <= 24 * 3600 * 1000) {
     quakes.push({
       source: 'TMD',
@@ -51,8 +51,6 @@ tmdQuakes.forEach((q) => {
       distance,
     });
   }
- // console.log('[TMD]', { mag: q.mag,timestamp: q.timestamp, quakeTime, age, ageHour: age / (1000 * 3600), distance, });
-  console.log(quakes);
 });
 
 
