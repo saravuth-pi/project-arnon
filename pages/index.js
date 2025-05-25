@@ -1,5 +1,5 @@
 // pages/index.js
-// V1.001 - Full Dashboard Template with Dynamic Box Colors
+// V1.001 - Full Dashboard Template with Dynamic Box Colors -debug
 import dynamic from 'next/dynamic';
 import { useEffect, useState, useRef } from 'react';
 import Ably from 'ably';
