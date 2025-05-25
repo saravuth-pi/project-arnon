@@ -1,5 +1,5 @@
 // pages/index.js
-// V1.000 - Full Dashboard Template Based on User Design
+// V1.001 - Full Dashboard Template with Dynamic Box Colors
 import dynamic from 'next/dynamic';
 import { useEffect, useState, useRef } from 'react';
 import Ably from 'ably';
@@ -9,6 +9,15 @@ import AQIPanel from '../components/AQIPanel';
 
 const Map = dynamic(() => import('../components/Map'), { ssr: false });
 const MapPATOnly = dynamic(() => import('../components/MapPATOnly'), { ssr: false });
+
+// Utility to pick color based on magnitude
+function getColor(mag) {
+  if (mag >= 6) return 'darkred';
+  if (mag >= 5) return 'orangered';
+  if (mag >= 4.5) return 'orange';
+  if (mag >= 3) return 'yellow';
+  return 'green';
+}
 
 export default function Home() {
   const [dataPoint, setDataPoint] = useState(null);
@@ -77,6 +86,12 @@ export default function Home() {
       }
     });
     return () => channel.unsubscribe();
+  }, []);
+
+ useEffect(() => {
+    const onUsgsLoaded = (list) => setUsgsQuakes(list);
+    // pass callback to Map component
+    return onUsgsLoaded;
   }, []);
 
   useEffect(() => {
