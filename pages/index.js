@@ -118,10 +118,10 @@ export default function Home() {
   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, marginTop: 1 }}>
         <div>
           <h3>แรงสั่นสะเทือนในพื้นที่ กทท. (Real-time)</h3>
-          <div style={{ height: '40vh', width: '50vw' }}><MapPATOnly latest={dataPoint} /></div>
+          <div style={{ height: '30vh', width: '47vw' }}><MapPATOnly latest={dataPoint} /></div>
         </div>
   
-        <div style={{ height: '30vh', width: '50vw' }}>
+        <div style={{ height: '30vh', width: '47vw' }}>
           <h3>แรงสั่นสะเทือนย้อนหลัง 10 นาที</h3>
                <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 1 }}>
                   <div style={{ backgroundColor: getColor(+stats.avg), color: 'white', padding: 10, borderRadius: 8 }}><h2>เฉลี่ย : {stats.avg}</h2></div>
@@ -131,12 +131,10 @@ export default function Home() {
         </div>
       </div>
   
-  <div style={{ marginTop: 20 }}>
-
+  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, marginTop: 20 }}>
           <h3>แผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
-          <div style={{ height: '30vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes}  onUsgsLoaded={setUsgsQuakes} /></div>  
-          <h3>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3>
-          <LatestQuakes usgsQuakes={usgsQuakes} tmdQuakes={tmdQuakes} /> 
+          <div style={{ height: '30vh', width: '47vw'}}><Map latest={dataPoint} tmdQuakes={tmdQuakes}  onUsgsLoaded={setUsgsQuakes} /></div>  
+          <div style={{ height: '30vh', width: '47vw'}}><h3>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3><LatestQuakes usgsQuakes={usgsQuakes} tmdQuakes={tmdQuakes} /></div>
   </div>
   
       <div style={{ marginTop: 20 }}>
