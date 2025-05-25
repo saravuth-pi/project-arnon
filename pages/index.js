@@ -118,7 +118,7 @@ export default function Home() {
      <div>
         <div>
           <h3>แรงสั่นสะเทือนในพื้นที่ กทท. (Real-time)</h3>
-          <div style={{ height: '30vh' }}><MapPATOnly latest={dataPoint} /></div>
+          <div style={{ height: '30vh', width: '50vw' }}><MapPATOnly latest={dataPoint} /></div>
         </div>
   
         <div>
