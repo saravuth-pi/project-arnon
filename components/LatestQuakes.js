@@ -57,7 +57,7 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
 
   
   quakes.sort((a, b) => new Date(b.time) - new Date(a.time));
-  const last10 = quakes.slice(0, 5);
+  const last10 = quakes.slice(0, 10);
 
   return (
     <div>
