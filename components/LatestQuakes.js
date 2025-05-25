@@ -37,23 +37,29 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
     }
   });
 
-tmdQuakes.forEach((q) => {
-  const quakeTime = new Date(q.timestamp);
-  const age = now - quakeTime.getTime();
-  const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
-  console.log('[TMD]', { mag: q.mag,timestamp: q.timestamp, quakeTime, age, ageHour: age / (1000 * 3600), distance, });
-  if (distance <= 3000 && q.mag >= 2 && age <= 24 * 3600 * 1000) {
-    quakes.push({
-      source: 'TMD',
-      mag: q.mag,
-      place: q.title,
-      time: new Intl.DateTimeFormat('th-TH', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Bangkok' }).format(quakeTime),
-      distance,
-    });
-  }
-});
+  tmdQuakes.forEach(q => {
+    let ts = q.timestamp;
+    if (!ts.includes('T')) {
+      const [d, h] = ts.split(' ');
+      ts = `${d}T${h}`;
+    }
+    const quakeTime = new Date(ts);
+    const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
+    const age = now - quakeTime.getTime();
 
+    if (distance <= 3000 && q.mag >= 2 && age <= 24 * 3600 * 1000) {
+      quakes.push({
+        source: 'TMD',
+        mag: q.mag,
+        place: q.title,
+        time: quakeTime.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Bangkok', }),
+        distance,
+      });
+    }
+  });
 
+ // console.log('[TMD]', { mag: q.mag,timestamp: q.timestamp, quakeTime, age, ageHour: age / (1000 * 3600), distance, });
+  
   quakes.sort((a, b) => new Date(b.time) - new Date(a.time));
   const last10 = quakes.slice(0, 5);
 
