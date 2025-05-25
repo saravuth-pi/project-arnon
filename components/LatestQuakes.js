@@ -39,10 +39,12 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
 
   tmdQuakes.forEach(q => {
     let ts = q.timestamp;
+    console.log('[TMD] - ',ts);
     if (!ts.includes('T')) {
       const [d, h] = ts.split(' ');
       ts = `${d}T${h}`;
     }
+    console.log(ts);
     const quakeTime = new Date(ts);
     const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
     const age = now - quakeTime.getTime();
