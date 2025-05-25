@@ -132,8 +132,10 @@ export default function Home() {
       </div>
   
   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, marginTop: 20 }}>
-          <h3>แผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
-          <div style={{ height: '30vh', width: '47vw'}}><Map latest={dataPoint} tmdQuakes={tmdQuakes}  onUsgsLoaded={setUsgsQuakes} /></div>  
+          <div  style={{ height: '30vh', width: '47vw'}}>
+              <h3>แผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
+              <div><Map latest={dataPoint} tmdQuakes={tmdQuakes}  onUsgsLoaded={setUsgsQuakes} /></div>  
+          </div>
           <div style={{ height: '30vh', width: '47vw'}}><h3>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3><LatestQuakes usgsQuakes={usgsQuakes} tmdQuakes={tmdQuakes} /></div>
   </div>
   
