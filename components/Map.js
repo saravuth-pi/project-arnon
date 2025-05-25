@@ -127,7 +127,7 @@ export default function Map({ latest, tmdQuakes = [], onUsgsLoaded = () => {} })
   }, [latest]);
 
   return (
-    <MapContainer center={[PAT1_LAT, PAT1_LNG]} zoom={3} style={{ height: '100%', width: '100%' }}>
+    <MapContainer center={[PAT1_LAT, PAT1_LNG]} zoom={4} style={{ height: '100%', width: '100%' }}>
       <TileLayer
         attribution='&copy; OpenStreetMap contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
