@@ -38,11 +38,11 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
   });
 
   tmdQuakes.forEach(q => {
-        let ts = q.timestamp;
-        if (!ts.includes('T')) {
-          const [d, h] = ts.split(' ');
-          ts = `${d}T${h}`;
-        }
+   //     let ts = q.timestamp;
+    //    if (!ts.includes('T')) {
+    //      const [d, h] = ts.split(' ');
+     //     ts = `${d}T${h}`;
+     //   }
     const quakeTime = new Date(ts);
     const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
     const age = now - quakeTime.getTime();
@@ -54,8 +54,8 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
         source: 'TMD',
         mag: q.mag,
         place: q.title,
-        time: quakeTime.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Bangkok', }),
-        //time: timeInBangkok,
+        //time: quakeTime.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Bangkok', }),
+        time: timeInBangkok.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Bangkok', }),
         distance,
       });
     }
