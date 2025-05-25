@@ -123,19 +123,20 @@ export default function Home() {
   
         <div>
           <h3>แรงสั่นสะเทือนย้อนหลัง 10 นาที</h3>
+               <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 1 }}>
+                  <div style={{ backgroundColor: getColor(+stats.avg), color: 'white', padding: 10, borderRadius: 8 }}><h2>เฉลี่ย : {stats.avg}</h2></div>
+                  <div style={{ backgroundColor: getColor(+stats.max), color: 'white', padding: 10, borderRadius: 8 }}><h2>สูงสุด : {stats.max}</h2></div>
+                </div> 
           <LiveSensorChart dataPoint={dataPoint} initialData={initialData} newData={dataPoint} onStatsChange={setStats} />
-              <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 1 }}>
-                <div style={{ backgroundColor: getColor(+stats.avg), color: 'white', padding: 10, borderRadius: 8 }}><h2>เฉลี่ย : {stats.avg}</h2></div>
-                <div style={{ backgroundColor: getColor(+stats.max), color: 'white', padding: 10, borderRadius: 8 }}><h2>สูงสุด : {stats.max}</h2></div>
-              </div>
         </div>
       </div>
   
   <div style={{ marginTop: 20 }}>
-          <h3>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3>
-          <LatestQuakes usgsQuakes={usgsQuakes} tmdQuakes={tmdQuakes} /> 
+
           <h3>แผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
           <div style={{ height: '30vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes}  onUsgsLoaded={setUsgsQuakes} /></div>  
+          <h3>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3>
+          <LatestQuakes usgsQuakes={usgsQuakes} tmdQuakes={tmdQuakes} /> 
   </div>
   
       <div style={{ marginTop: 20 }}>
