@@ -103,8 +103,8 @@ const LiveSensorChart = ({ initialData, newData, onStatsChange }) => {
       },
       y: {
         min: 0,
-        max: 9,
-        title: { display: true, text: 'Magnitude (Delta g)' },
+        //max: 9,
+        title: { display: true, text: 'Magnitude (Δ)' },
       },
     },
     plugins: {
