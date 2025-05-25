@@ -54,8 +54,8 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
         source: 'TMD',
         mag: q.mag,
         place: q.title,
-        //time: quakeTime.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Bangkok', }),
-        time: timeInBangkok.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Bangkok', }),
+        time: quakeTime.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Bangkok', }),
+        //time: timeInBangkok.toLocaleString('th-TH', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Bangkok', }),
         distance,
       });
     }
