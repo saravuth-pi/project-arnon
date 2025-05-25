@@ -38,6 +38,7 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
   });
 
   tmdQuakes.forEach((q) => {
+        console.log(q.timestamp);    
     const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
     //const age = now - new Date(q.timestamp).getTime();
     const age = now - new Date(q.timestamp.replace(' ', 'T') + '+07:00').getTime();
@@ -46,7 +47,6 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
         source: 'TMD',
         mag: q.mag,
         place: q.title,
-        console.log(q.timestamp);
         //time: new Intl.DateTimeFormat('th-TH', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Bangkok'}).format(new Date(q.timestamp)),
         time: new Intl.DateTimeFormat('th-TH', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Bangkok'}).format(new Date(q.timestamp.replace(' ', 'T') + '+07:00')),
         distance,
