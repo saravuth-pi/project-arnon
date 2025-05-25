@@ -105,7 +105,7 @@ export default function Home() {
           <h3>แรงสั่นสะเทือนในพื้นที่ กทท. (Real-time)</h3>
           <div style={{ height: '30vh' }}><MapPATOnly latest={dataPoint} /></div>
           <h3>แผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
-          <div style={{ height: '30vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes} /></div>
+          <div style={{ height: '30vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes}  onUsgsLoaded={setUsgsQuakes} /></div>
         </div>
 
         <div>
