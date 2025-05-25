@@ -46,7 +46,6 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
         mag: q.mag,
         place: q.place || q.title,
         //time: new Date(q.timestamp).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }),
-        time ,
         distance,
       });
     }
