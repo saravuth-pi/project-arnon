@@ -108,33 +108,32 @@ export default function Home() {
   return (
     <div style={{ fontFamily: 'sans-serif', padding: 10 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }}>
-        <img src="https://arnon.dgbkp.in.th/logo.jpg" height="120" style={{ verticalAlign: 'middle' }} /> <h1 style={{margin: 0, textAlign: 'left' }}> Project Ar-non: dashboard</h1>
+        <img src="https://arnon.dgbkp.in.th/logo.jpg" height="150" style={{ verticalAlign: 'middle' }} /> <h1 style={{margin: 0, textAlign: 'left' }}> Project Ar-non: dashboard</h1>
         <div style={{ margin: 20 ,background: '#bde6ee', textAlign: 'right', padding: 20, borderRadius: 8 }}>
           <div>{now.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
           <div style={{ fontSize: 36 }}>{now.toLocaleTimeString('th-TH')}</div>
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
+     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 10 }}>
         <div>
           <h3>แรงสั่นสะเทือนในพื้นที่ กทท. (Real-time)</h3>
           <div style={{ height: '30vh' }}><MapPATOnly latest={dataPoint} /></div>
-          <h3>แผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
-          <div style={{ height: '30vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes}  onUsgsLoaded={setUsgsQuakes} /></div>
         </div>
-
+  
         <div>
           <h3>แรงสั่นสะเทือนย้อนหลัง 10 นาที</h3>
           <LiveSensorChart dataPoint={dataPoint} initialData={initialData} newData={dataPoint} onStatsChange={setStats} />
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 1 }}>
-  
-            <div style={{ backgroundColor: getColor(+stats.avg), color: 'white', padding: 10, borderRadius: 8 }}><h2>เฉลี่ย : {stats.avg}</h2></div>
-            <div style={{ backgroundColor: getColor(+stats.max), color: 'white', padding: 10, borderRadius: 8 }}><h2>สูงสุด : {stats.max}</h2></div>
-          </div>
-  
+              <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 1 }}>
+                <div style={{ backgroundColor: getColor(+stats.avg), color: 'white', padding: 10, borderRadius: 8 }}><h2>เฉลี่ย : {stats.avg}</h2></div>
+                <div style={{ backgroundColor: getColor(+stats.max), color: 'white', padding: 10, borderRadius: 8 }}><h2>สูงสุด : {stats.max}</h2></div>
+              </div>
           <h3>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3>
-          <LatestQuakes usgsQuakes={usgsQuakes} tmdQuakes={tmdQuakes} />
+          <LatestQuakes usgsQuakes={usgsQuakes} tmdQuakes={tmdQuakes} /> 
+          <h3>แผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
+          <div style={{ height: '30vh' }}><Map latest={dataPoint} tmdQuakes={tmdQuakes}  onUsgsLoaded={setUsgsQuakes} /></div>  
         </div>
+  
       </div>
 
       <div style={{ marginTop: 20 }}>
