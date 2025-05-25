@@ -31,8 +31,8 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
         source: 'USGS',
         mag: q.mag,
         place: q.place,
-        //time: new Date(q.time).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }),
-        time: q.time,
+        time: new Date(q.time).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }),
+        //time: q.time,
         distance,
       });
     }
@@ -46,8 +46,8 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
         source: 'TMD',
         mag: q.mag,
         place: q.place || q.title,
-        //time: new Date(q.timestamp).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }),
-        time: q.timestamp,
+        time: new Date(q.timestamp).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }),
+        //time: q.timestamp,
         distance,
       });
     }
