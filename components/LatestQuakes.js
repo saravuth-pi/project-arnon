@@ -39,12 +39,12 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
 
   tmdQuakes.forEach(q => {
     
-     //   let ts = q.timestamp;
+        let ts = q.timestamp;
     //    if (!ts.includes('T')) {
     //      const [d, h] = ts.split(' ');
      //     ts = `${d}T${h}`;
      //   }
-    // const quakeTime = new Date(ts);
+     const quakeTime = new Date(ts);
     //const quakeTime = new Date(q.timestamp);
     
     
