@@ -127,8 +127,8 @@ export default function Home() {
           <h3>แรงสั่นสะเทือนย้อนหลัง 10 นาที</h3>
           <LiveSensorChart dataPoint={dataPoint} initialData={initialData} newData={dataPoint} onStatsChange={setStats} />
           <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 10 }}>
-            <div style={{ backgroundColor: 'green', color: 'white', padding: 10, borderRadius: 8 }}><h2>เฉลี่ย : {stats.avg}</h2></div>
-            <div style={{ backgroundColor: 'orange', color: 'white', padding: 10, borderRadius: 8 }}><h2>สูงสุด : {stats.max}</h2></div>
+            <div style={{ backgroundColor: getColor(+stats.max), color: 'white', padding: 10, borderRadius: 8 }}><h2>เฉลี่ย : {stats.avg}</h2></div>
+            <div style={{ backgroundColor: getColor(+stats.max), color: 'white', padding: 10, borderRadius: 8 }}><h2>สูงสุด : {stats.max}</h2></div>
           </div>
   
           <h3>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3>
