@@ -26,8 +26,6 @@ export default function AQIPanel() {
     const interval = setInterval(fetchAQI, 5 * 60 * 1000); // refresh every 5 min
     return () => clearInterval(interval);
   }, []);
-
-  console.log = (aqi);
   
   function getAqiStatus(val) {
     if (val <= 50) return 'Good';
