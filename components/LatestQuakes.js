@@ -44,7 +44,7 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
      //     ts = `${d}T${h}`;
      //   }
     //const quakeTime = new Date(ts);
-    //const quakeTime = new Date(q.timestamp);
+    const quakeTime = new Date(q.timestamp);
     const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
     const age = now - quakeTime.getTime();
     const timeInBangkok = new Date(new Date(q.timestamp).getTime() + 7 * 60 * 60 * 1000);
