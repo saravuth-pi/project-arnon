@@ -116,9 +116,9 @@ export default function Home() {
       </div>
 
   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, marginTop: 1 }}>
-        <div style={{ height: '30vh', width: '50vw' }}>
+        <div>
           <h3>แรงสั่นสะเทือนในพื้นที่ กทท. (Real-time)</h3>
-          <div><MapPATOnly latest={dataPoint} /></div>
+          <div style={{ height: '40vh', width: '50vw' }}><MapPATOnly latest={dataPoint} /></div>
         </div>
   
         <div style={{ height: '30vh', width: '50vw' }}>
