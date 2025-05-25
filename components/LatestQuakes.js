@@ -45,7 +45,11 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
         source: 'TMD',
         mag: q.mag,
         place: q.title,
-        time: new Date(q.timestamp).toLocaleString('th-TH'),
+        time: new Intl.DateTimeFormat('th-TH', {
+          dateStyle: 'short',
+          timeStyle: 'medium',
+          timeZone: 'Asia/Bangkok'
+        }).format(new Date(q.timestamp)),
         distance,
       });
     }
