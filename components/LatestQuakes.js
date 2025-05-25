@@ -45,14 +45,15 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
         source: 'TMD',
         mag: q.mag,
         place: q.place || q.title,
-        time: new Date(q.timestamp).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }),
+        //time: new Date(q.timestamp).toLocaleString('th-TH', { timeZone: 'Asia/Bangkok' }),
+        time: new Date(q.timestamp) }),
         distance,
       });
     }
   });
 
   quakes.sort((a, b) => new Date(b.time) - new Date(a.time));
-  const last10 = quakes.slice(0, 10);
+  const last10 = quakes.slice(0, 5);
 
   return (
     <div>
