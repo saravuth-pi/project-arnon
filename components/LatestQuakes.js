@@ -38,13 +38,15 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
   });
 
   tmdQuakes.forEach(q => {
+    
+ /console.log('[TMD]', { mag: q.mag,timestamp: q.timestamp, quakeTime, age, ageHour: age / (1000 * 3600), distance, });   
+  
     let ts = q.timestamp;
-    console.log('[TMD] - ',ts);
     if (!ts.includes('T')) {
       const [d, h] = ts.split(' ');
       ts = `${d}T${h}`;
     }
-    console.log(ts);
+
     const quakeTime = new Date(ts);
     const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
     const age = now - quakeTime.getTime();
@@ -60,7 +62,6 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
     }
   });
 
- // console.log('[TMD]', { mag: q.mag,timestamp: q.timestamp, quakeTime, age, ageHour: age / (1000 * 3600), distance, });
   
   quakes.sort((a, b) => new Date(b.time) - new Date(a.time));
   const last10 = quakes.slice(0, 5);
