@@ -27,6 +27,8 @@ export default function AQIPanel() {
     return () => clearInterval(interval);
   }, []);
 
+  console.log = (aqi);
+  
   function getAqiStatus(val) {
     if (val <= 50) return 'Good';
     if (val <= 100) return 'Moderate';
