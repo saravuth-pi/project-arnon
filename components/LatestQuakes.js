@@ -38,27 +38,25 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
   });
 
 tmdQuakes.forEach((q) => {
-  const timestamp = q.timestamp.includes('T')
-    ? q.timestamp
-    : q.timestamp.replace(' ', 'T') + '+07:00';
-
- 
-  const quakeTime = new Date(timestamp);
+  const quakeTime = new Date(q.timestamp);
   const age = now - quakeTime.getTime();
   const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
-
-    console.log('[TMD]', { mag: q.mag, timestamp: q.timestamp, quakeTime, age, ageHour: age / (1000 * 3600), distance, });
-
+  console.log('[TMD]', { mag: q.mag,timestamp: q.timestamp, quakeTime, age, ageHour: age / (1000 * 3600), distance, });
   if (distance <= 3000 && q.mag >= 2 && age <= 24 * 3600 * 1000) {
     quakes.push({
       source: 'TMD',
       mag: q.mag,
       place: q.title,
-      time: new Intl.DateTimeFormat('th-TH', { dateStyle: 'short', timeStyle: 'medium', timeZone: 'Asia/Bangkok' }).format(quakeTime),
+      time: new Intl.DateTimeFormat('th-TH', {
+        dateStyle: 'short',
+        timeStyle: 'medium',
+        timeZone: 'Asia/Bangkok'
+      }).format(quakeTime),
       distance,
     });
   }
 });
+
 
   quakes.sort((a, b) => new Date(b.time) - new Date(a.time));
   const last10 = quakes.slice(0, 5);
