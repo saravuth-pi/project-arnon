@@ -38,7 +38,9 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
   });
 
   tmdQuakes.forEach(q => {
-console.log(q);
+    
+console.log('[TMD]', { mag: q.mag,timestamp: q.timestamp, quakeTime, age, ageHour: age / (1000 * 3600), distance, });
+    
     let ts = q.timestamp;
 
     if (!ts.includes('T')) {
