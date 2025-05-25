@@ -1,5 +1,5 @@
 // components/Map.js
-// V0.8604 - Add save_quake.php POST for new TMD events
+// V0.8605 - Add onUsgsLoaded callback to expose USGS data to parent
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -39,7 +39,7 @@ function toBangkokTimeString(dateInput) {
   }).replace('T', ' ');
 }
 
-export default function Map({ latest, tmdQuakes = [] }) {
+export default function Map({ latest, tmdQuakes = [], onUsgsLoaded = () => {} }) {
   const [quakes, setQuakes] = useState([]);
   const prev = useRef(null);
   const history = useRef([]);
@@ -82,6 +82,7 @@ export default function Map({ latest, tmdQuakes = [] }) {
         });
 
         setQuakes(filtered);
+        onUsgsLoaded(filtered); // <--- Notify parent with USGS list
       });
   }, []);
 
