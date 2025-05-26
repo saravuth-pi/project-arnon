@@ -96,22 +96,22 @@ const LiveSensorChart = ({ initialData, newData, onStatsChange }) => {
   const options = {
     responsive: true,
     scales: {
-      x: {
-        type: 'time',
-        time: { unit: 'minute', displayFormats: { minute: 'HH:mm' } },
-        title: { display: true, text: 'Time (HH:MM)' },
-        ticks : {maxRotation: 45, minRotation: 45},
-      },
-      y: {
-        min: 0,
-        max: 8,
-        title: { display: true, text: 'Magnitude (Δ)' },
-      },
-    },
-    plugins: {
-      legend: { display: false },
-    },
-  };
+            x: {
+              type: 'time',
+              time: { unit: 'minute', displayFormats: { minute: 'HH:mm' } },
+              title: { display: false, text: 'Time (HH:MM)' },
+              ticks : {maxRotation: 45, minRotation: 45},
+            },
+            y: {
+              min: 0,
+              max: 8,
+              title: { display: true, text: 'Magnitude (Δ)' },
+            },
+          },
+          plugins: {
+            legend: { display: false },
+          },
+        };
 
   return (
     <div>
