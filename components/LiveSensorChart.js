@@ -100,6 +100,7 @@ const LiveSensorChart = ({ initialData, newData, onStatsChange }) => {
         type: 'time',
         time: { unit: 'minute', displayFormats: { minute: 'HH:mm' } },
         title: { display: true, text: 'Time (HH:MM)' },
+        ticks : {maxRotation: 45, minRotation: 45},
       },
       y: {
         min: 0,
