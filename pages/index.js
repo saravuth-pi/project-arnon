@@ -122,7 +122,7 @@ export default function Home() {
   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, marginTop: 20 }}>
     <div style={{ height: '20vh', width: '20vw' }}>
           <h3>แรงสั่นสะเทือน</h3>
-               <div style={{ backgroundColor: #eeeeee, display: 'flex', justifyContent: 'center', gap: 10, marginTop: 1 }}>
+               <div style={{ backgroundColor: '#eeeeee', display: 'flex', justifyContent: 'center', gap: 10, marginTop: 1 }}>
                   <div style={{ backgroundColor: getColor(+stats.avg), color: 'white', padding: 4, borderRadius: 4 }}>เฉลี่ย : {stats.avg}</div>
                   <div style={{ backgroundColor: getColor(+stats.max), color: 'white', padding: 4, borderRadius: 4 }}>สูงสุด : {stats.max}</div>
                 </div> 
