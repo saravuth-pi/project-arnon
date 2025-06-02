@@ -6,6 +6,9 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useRef, useState } from 'react';
 
+const CENTER_LAT = 13.70479;
+const CENTER_LNG = 100.57489;
+
 const PAT1_LAT = 13.713306;
 const PAT1_LNG = 100.563899;
 
@@ -47,7 +50,7 @@ export default function MapPATOnly({ latest }) {
   }, [latest]);
 
   return (
-    <MapContainer center={[PAT1_LAT, PAT1_LNG]} zoom={14} style={{ height: '100%', width: '100%' }}>
+    <MapContainer center={[CENTER_LAT, CENTER_LNG]} zoom={14} style={{ height: '100%', width: '100%' }}>
       <TileLayer
         attribution='&copy; OpenStreetMap contributors'
         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
