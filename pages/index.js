@@ -88,11 +88,7 @@ export default function Home() {
     return () => channel.unsubscribe();
   }, []);
 
- useEffect(() => {
-    const onUsgsLoaded = (list) => setUsgsQuakes(list);
-    // pass callback to Map component
-    return onUsgsLoaded;
-  }, []);
+
 
   useEffect(() => {
     async function fetchTMD() {
@@ -129,12 +125,8 @@ export default function Home() {
           <LiveSensorChart dataPoint={dataPoint} initialData={initialData} newData={dataPoint} onStatsChange={setStats} />
     </div>
   </div>  
-  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, marginTop: 20 }}>
-          <div>
-              <h3>แผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
-              <div style={{ height: '30vh', width: '47vw'}}><Map latest={dataPoint} tmdQuakes={tmdQuakes}  onUsgsLoaded={setUsgsQuakes} /></div>  
-          </div>
-          <div style={{ height: '30vh', width: '47vw'}}><h3>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3><LatestQuakes usgsQuakes={usgsQuakes} tmdQuakes={tmdQuakes} /></div>
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }}>
+    <div style={{ height: '20vh', width: '100vw'}}><h3>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3><LatestQuakes usgsQuakes={usgsQuakes} tmdQuakes={tmdQuakes} /></div>
   </div>
   
       <div style={{ marginTop: 20 }}>
@@ -144,3 +136,18 @@ export default function Home() {
     </div>
   );
 }
+/* 
+useEffect(() => {
+    const onUsgsLoaded = (list) => setUsgsQuakes(list);
+    // pass callback to Map component
+    return onUsgsLoaded;
+  }, []);
+  
+  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, marginTop: 20 }}>
+          <div>
+              <h3>แผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
+              <div style={{ height: '30vh', width: '47vw'}}><Map latest={dataPoint} tmdQuakes={tmdQuakes}  onUsgsLoaded={setUsgsQuakes} /></div>  
+          </div>
+          <div style={{ height: '30vh', width: '47vw'}}><h3>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3><LatestQuakes usgsQuakes={usgsQuakes} tmdQuakes={tmdQuakes} /></div>
+  </div>
+*/
