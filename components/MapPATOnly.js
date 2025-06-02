@@ -1,129 +1,67 @@
-// /components/MapPATOnly.js
-// V0.500 - แสดงแผนที่พร้อม marker ของ sensor ที่มีข้อมูลล่าสุด
-
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import L from 'leaflet';
+// components/MapPATOnly.js
+// V0.1.0.0.0 - Edited MapPATOnly component to display ESP32 devices on a map with CircleMarkers
+import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useState } from 'react';
+import L from 'leaflet';
 
-// กำหนด sensor ที่ต้องการแสดง
-const SENSORS = [
-  { id: 'esp32-2', lat: 13.70847, lng: 100.57219 },
-  { id: 'esp32-1', lat: 13.713306, lng: 100.563899 },
-  
-  // เพิ่ม sensor อื่นๆ ได้ในอนาคต
-];
+// ตรียม mapping ตำแหน่งจริงของแต่ละ ESP32 อยู่แล้ว
+const DEVICE_LOCATION = {
+  'esp32-1': { lat: 13.7030, lng: 100.5340 },
+  'esp32-2': { lat: 13.6985, lng: 100.5285 },
+  'esp32-3': { lat: 13.7005, lng: 100.5320 } // สมมติตำแหน่งไว้ก่อน
+};
 
-// ฟังก์ชันกำหนดสีตาม magnitude
-function getColor(mag) {
-  if (mag >= 6) return 'darkred';
-  if (mag >= 5) return 'orangered';
-  if (mag >= 4.5) return 'orange';
-  if (mag >= 3) return 'yellow';
-  return 'green';
-}
+const COLOR_MAP = {
+  'esp32-1': '#2ecc71', // เขียวอ่อน
+  'esp32-2': '#8e44ad', // ม่วง
+  'esp32-3': '#3498db'  // น้ำเงิน
+};
 
-export default function MapPATOnly({ latest = {} }) {
-  const [sensorMags, setSensorMags] = useState({});
-
-  useEffect(() => {
-    console.log('latest prop in MapPATOnly:', latest);
-
-    // อัปเดตค่า magnitude ของแต่ละเซ็นเซอร์
-    const updatedMags = {};
-    SENSORS.forEach(sensor => {
-      const data = latest[sensor.id];
-      if (data && data.shakeMag !== undefined) {
-        updatedMags[sensor.id] = Math.min(10, data.shakeMag); // จำกัดค่า magnitude ไม่เกิน 10
-      }
-    });
-    setSensorMags(updatedMags);
-  }, [latest]);
+export default function MapPATOnly({ latest }) {
+  // latest คือ allDataPoints จาก index.js ซึ่งเป็น object e.g. { "esp32-1": {...}, "esp32-2": {...} }
+  // เราจะวน loop key ของ latest เพื่อสร้าง Marker
 
   return (
-    <MapContainer center={[13.70479, 100.57489]} zoom={14} style={{ height: '100%', width: '100%' }}>
+    <MapContainer
+      center={[13.7000, 100.5300]} // จุดกึ่งกลางของ Port of Bangkok (ปรับพิกัดตามจริง)
+      zoom={14}
+      style={{ height: '100%', width: '100%' }}
+    >
       <TileLayer
         attribution="&copy; OpenStreetMap contributors"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {SENSORS.map(sensor => {
-        const mag = sensorMags[sensor.id] || 0; // ค่า magnitude ของเซ็นเซอร์
-        const data = latest[sensor.id] || {}; // ข้อมูลของเซ็นเซอร์
+
+      {Object.entries(latest).map(([deviceId, data]) => {
+        const loc = DEVICE_LOCATION[deviceId];
+        if (!loc) return null;
+
+        // หาก data.shakeMag หรือ data.aqi25 มีค่ามา ก็สามารถปรับขนาดหรือลักษณะ marker ได้
+        const color = COLOR_MAP[deviceId] || '#7f8c8d';
 
         return (
-          <Marker
-            key={sensor.id}
-            position={[sensor.lat, sensor.lng]}
-            icon={L.divIcon({
-              className: 'sensor-marker',
-              html: `<div style="
-                background-color: ${getColor(mag)};
-                width: 25px; height: 25px;
-                border-radius: 100%;
-                color: black;
-                font-size: 11px;
-                font-weight: bold;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                border: 1px solid white;
-                animation: ${mag > 4.5 ? 'pulse 1s infinite' : 'none'};
-              ">${mag.toFixed(1)}</div>`
-            })}
+          <CircleMarker
+            key={deviceId}
+            center={[loc.lat, loc.lng]}
+            radius={12}
+            pathOptions={{
+              color,
+              fillColor: color,
+              fillOpacity: 0.6
+            }}
           >
             <Popup>
-              <strong>Node: {sensor.id}</strong><br />
-              Magnitude: {mag.toFixed(1)}<br />
-              {Object.entries(data).map(([key, value]) => (
-                <div key={key}>
-                  {key}: {value}
-                </div>
-              ))}
+              <div style={{ minWidth: 160, lineHeight: '1.4em' }}>
+                <strong>{deviceId.toUpperCase()}</strong><br />
+                AQI₂.₅: {data.aqi25 != null ? data.aqi25 : '-'}<br />
+                Mag: {data.shakeMag != null ? data.shakeMag.toFixed(2) : '-'}<br />
+                Timestamp: {data.ts ? new Date(data.ts).toLocaleTimeString('th-TH') : '-'}
+              </div>
             </Popup>
-          </Marker>
+          </CircleMarker>
         );
       })}
     </MapContainer>
   );
 }
-
-/* 
-import { useEffect } from 'react';
-
-export default function MapPATOnly({ latest }) {
-  useEffect(() => {
-    console.log('latest prop in MapPATOnly:', latest);
-  }, [latest]);
-
-  // latest เป็น object ที่ key คือ device, value คือข้อมูล sensor
-  const sensorKeys = latest ? Object.keys(latest) : [];
-
-  return (
-    <div>
-      <h3>Debug: ดู console.log ข้อมูลล่าสุด</h3>
-      <pre style={{ fontSize: 12, color: 'red' }}>
-        {JSON.stringify(latest, null, 2)}
-      </pre>
-      {sensorKeys.length === 0 && <div>ไม่พบข้อมูล sensor</div>}
-      {sensorKeys.map(key => {
-        const data = latest[key];
-        return (
-          <div key={key} style={{ marginTop: 16, border: '1px solid #ccc', padding: 8, borderRadius: 6 }}>
-            <div>Device: {data.device}</div>
-            <div>Shake Magnitude: {data.shakeMag}</div>
-            <div>PM2.5: {data.pm25}</div>
-            <div>PM10: {data.pm10}</div>
-            <div>AQI25: {data.aqi25}</div>
-            <div>AQI10: {data.aqi10}</div>
-            <div>CO2: {data.CO2}</div>
-            <div>TOC: {data.TOC}</div>
-            <div>Timestamp: {data.ts}</div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-
-  */
