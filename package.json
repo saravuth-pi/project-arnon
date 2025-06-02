@@ -1,5 +1,5 @@
 {
-  "name": "arnon-dashboard",
+  "name": "project-arnon",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -8,16 +8,13 @@
     "start": "next start"
   },
   "dependencies": {
-    "ably": "^2.6.5",
-    "chart.js": "^4.4.1",
-    "chartjs-adapter-date-fns": "^3.0.0",
-    "fast-xml-parser": "^5.2.1",
-    "leaflet": "^1.9.4",
-    "next": "13.4.12",
+    "next": "13.5.7",
     "react": "18.2.0",
-    "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
+    "ably": "^1.4.8",
     "react-leaflet": "^4.2.1",
-    "recharts": "^2.15.2"
+    "leaflet": "^1.9.3",
+    "recharts": "^2.5.0",
+    "fast-xml-parser": "^4.0.12"
   }
 }
