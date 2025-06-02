@@ -1,0 +1,26 @@
+{
+  "..\\components\\MapPATOnly.js -> leaflet": {
+    "id": "..\\components\\MapPATOnly.js -> leaflet",
+    "files": [
+      "static/chunks/node_modules_leaflet_dist_leaflet-src_js.js"
+    ]
+  },
+  "..\\components\\MapPATOnly.js -> leaflet/dist/leaflet.css": {
+    "id": "..\\components\\MapPATOnly.js -> leaflet/dist/leaflet.css",
+    "files": [
+      "static/chunks/node_modules_leaflet_dist_leaflet_css.js"
+    ]
+  },
+  "..\\components\\MapPATOnly.js -> react-leaflet": {
+    "id": "..\\components\\MapPATOnly.js -> react-leaflet",
+    "files": [
+      "static/chunks/node_modules_react-leaflet_lib_index_js.js"
+    ]
+  },
+  "index.js -> ../components/MapPATOnly": {
+    "id": "index.js -> ../components/MapPATOnly",
+    "files": [
+      "static/chunks/components_MapPATOnly_js.js"
+    ]
+  }
+}
