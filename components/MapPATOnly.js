@@ -1,3 +1,21 @@
+import { useEffect } from 'react';
+
+export default function MapPATOnly({ latest }) {
+  useEffect(() => {
+    console.log('latest prop in MapPATOnly:', latest);
+  }, [latest]);
+
+  return (
+    <div>
+      <h3>Debug: ดู console.log ข้อมูลล่าสุด</h3>
+      <pre style={{ fontSize: 12, color: 'red' }}>
+        {JSON.stringify(latest, null, 2)}
+      </pre>
+    </div>
+  );
+}
+
+/* 
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -88,7 +106,9 @@ export default function MapPATOnly({ latest = {} }) {
               Magnitude: {mag.toFixed(1)}<br />
               {data.pm25 !== undefined && <>PM2.5: {data.pm25}<br /></>}
               {data.co2 !== undefined && <>CO2: {data.co2}<br /></>}
-              {/* เพิ่มข้อมูลอื่นๆ ได้ */}
+              {
+              // เพิ่มข้อมูลอื่นๆ ได้ 
+            }
             </Popup>
           </Marker>
         );
@@ -96,3 +116,4 @@ export default function MapPATOnly({ latest = {} }) {
     </MapContainer>
   );
 }
+  */

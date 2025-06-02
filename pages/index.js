@@ -58,9 +58,6 @@ export default function Home() {
       const raw = typeof msg.data === 'string' ? msg.data : new TextDecoder().decode(msg.data);
       const data = JSON.parse(raw);
 
-    // เพิ่มบรรทัดนี้เพื่อดูข้อมูลที่เข้ามา
-    console.log('Realtime data:', data);
-
       const nowBangkok = new Date(Date.now() + 7 * 3600 * 1000);
       data.dateObj = nowBangkok;
       data.ts = Math.floor(nowBangkok.getTime() / 1000);
