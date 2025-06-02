@@ -89,7 +89,11 @@ export default function Home() {
   }, []);
 
 
-
+  useEffect(() => {
+      const onUsgsLoaded = (list) => setUsgsQuakes(list);
+      // pass callback to Map component
+      return onUsgsLoaded;
+    }, []);
   useEffect(() => {
     async function fetchTMD() {
       const res = await fetch('/api/fetch-tmd');
@@ -117,10 +121,10 @@ export default function Home() {
   </div>
   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, marginTop: 20 }}>
     <div style={{ height: '20vh', width: '20vw' }}>
-          <h3>แรงสั่นสะเทือนย้อนหลัง 10 นาที</h3>
-               <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 1 }}>
-                  <div style={{ backgroundColor: getColor(+stats.avg), color: 'white', padding: 10, borderRadius: 8 }}><h2>เฉลี่ย : {stats.avg}</h2></div>
-                  <div style={{ backgroundColor: getColor(+stats.max), color: 'white', padding: 10, borderRadius: 8 }}><h2>สูงสุด : {stats.max}</h2></div>
+          <h3>แรงสั่นสะเทือน</h3>
+               <div style={{ backgroundColor: #eeeeee, display: 'flex', justifyContent: 'center', gap: 10, marginTop: 1 }}>
+                  <div style={{ backgroundColor: getColor(+stats.avg), color: 'white', padding: 4, borderRadius: 4 }}>เฉลี่ย : {stats.avg}</div>
+                  <div style={{ backgroundColor: getColor(+stats.max), color: 'white', padding: 4, borderRadius: 4 }}>สูงสุด : {stats.max}</div>
                 </div> 
           <LiveSensorChart dataPoint={dataPoint} initialData={initialData} newData={dataPoint} onStatsChange={setStats} />
     </div>
@@ -137,12 +141,8 @@ export default function Home() {
   );
 }
 /* 
-useEffect(() => {
-    const onUsgsLoaded = (list) => setUsgsQuakes(list);
-    // pass callback to Map component
-    return onUsgsLoaded;
-  }, []);
-  
+
+
   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, marginTop: 20 }}>
           <div>
               <h3>แผ่นดินไหวในภูมิภาค (ย้อนหลัง 24 ชั่วโมง)</h3>
