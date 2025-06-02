@@ -121,7 +121,7 @@ export default function Home() {
           <div style={{ height: '30vh', width: '47vw' }}><MapPATOnly latest={dataPoint} /></div>
         </div>
   
-        <div style={{ height: '30vh', width: '20vw' }}>
+        <div style={{ height: '20vh', width: '20vw' }}>
           <h3>แรงสั่นสะเทือนย้อนหลัง 10 นาที</h3>
                <div style={{ display: 'flex', justifyContent: 'center', gap: 10, marginTop: 1 }}>
                   <div style={{ backgroundColor: getColor(+stats.avg), color: 'white', padding: 10, borderRadius: 8 }}><h2>เฉลี่ย : {stats.avg}</h2></div>
