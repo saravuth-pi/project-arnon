@@ -46,7 +46,7 @@ export default function MapPATOnly({ latest }) {
   return (
     <div style={{ height: '100%', width: '100%' }}>
       <MapContainer
-        center={[13.7000, 100.5300]}
+        center={[13.705771, 100.572794]}
         zoom={14}
         style={{ height: '100%', width: '100%' }}
       >
