@@ -5,12 +5,28 @@ export default function MapPATOnly({ latest }) {
     console.log('latest prop in MapPATOnly:', latest);
   }, [latest]);
 
+  // กรณี latest เป็น object ของ sensor เดียว
+  const data = latest && latest.device ? latest : null;
+
   return (
     <div>
       <h3>Debug: ดู console.log ข้อมูลล่าสุด</h3>
       <pre style={{ fontSize: 12, color: 'red' }}>
         {JSON.stringify(latest, null, 2)}
       </pre>
+      {data && (
+        <div style={{ marginTop: 16 }}>
+          <div>Device: {data.device}</div>
+          <div>Shake Magnitude: {data.shakeMag}</div>
+          <div>PM2.5: {data.pm25}</div>
+          <div>PM10: {data.pm10}</div>
+          <div>AQI25: {data.aqi25}</div>
+          <div>AQI10: {data.aqi10}</div>
+          <div>CO2: {data.CO2}</div>
+          <div>TOC: {data.TOC}</div>
+          <div>Timestamp: {data.ts}</div>
+        </div>
+      )}
     </div>
   );
 }
