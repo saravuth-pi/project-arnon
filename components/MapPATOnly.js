@@ -5,8 +5,8 @@ export default function MapPATOnly({ latest }) {
     console.log('latest prop in MapPATOnly:', latest);
   }, [latest]);
 
-  // กรณี latest เป็น object ของ sensor เดียว
-  const data = latest && latest.device ? latest : null;
+  // latest เป็น object ที่ key คือ device, value คือข้อมูล sensor
+  const sensorKeys = latest ? Object.keys(latest) : [];
 
   return (
     <div>
@@ -14,19 +14,23 @@ export default function MapPATOnly({ latest }) {
       <pre style={{ fontSize: 12, color: 'red' }}>
         {JSON.stringify(latest, null, 2)}
       </pre>
-      {data && (
-        <div style={{ marginTop: 16 }}>
-          <div>Device: {data.device}</div>
-          <div>Shake Magnitude: {data.shakeMag}</div>
-          <div>PM2.5: {data.pm25}</div>
-          <div>PM10: {data.pm10}</div>
-          <div>AQI25: {data.aqi25}</div>
-          <div>AQI10: {data.aqi10}</div>
-          <div>CO2: {data.CO2}</div>
-          <div>TOC: {data.TOC}</div>
-          <div>Timestamp: {data.ts}</div>
-        </div>
-      )}
+      {sensorKeys.length === 0 && <div>ไม่พบข้อมูล sensor</div>}
+      {sensorKeys.map(key => {
+        const data = latest[key];
+        return (
+          <div key={key} style={{ marginTop: 16, border: '1px solid #ccc', padding: 8, borderRadius: 6 }}>
+            <div>Device: {data.device}</div>
+            <div>Shake Magnitude: {data.shakeMag}</div>
+            <div>PM2.5: {data.pm25}</div>
+            <div>PM10: {data.pm10}</div>
+            <div>AQI25: {data.aqi25}</div>
+            <div>AQI10: {data.aqi10}</div>
+            <div>CO2: {data.CO2}</div>
+            <div>TOC: {data.TOC}</div>
+            <div>Timestamp: {data.ts}</div>
+          </div>
+        );
+      })}
     </div>
   );
 }

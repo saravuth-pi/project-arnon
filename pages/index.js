@@ -1,7 +1,7 @@
 // pages/index.js
 // V1.001 - Full Dashboard Template with Dynamic Box Colors -debug
 import dynamic from 'next/dynamic';
-import { useEffect, useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Ably from 'ably';
 import LiveSensorChart from '../components/LiveSensorChart';
 import LatestQuakes from '../components/LatestQuakes';
@@ -20,7 +20,7 @@ function getColor(mag) {
 }
 
 export default function Home() {
-  const [dataPoint, setDataPoint] = useState(null);
+  const [allDataPoints, setAllDataPoints] = useState({});
   const [initialData, setInitialData] = useState([]);
   const [tmdQuakes, setTmdQuakes] = useState([]);
   const [usgsQuakes, setUsgsQuakes] = useState([]);
@@ -37,7 +37,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchInitialData() {
       const res = await fetch('https://arnon.dgbkp.in.th/api/pat1_last_10min.php');
-      const json = await res.json();
+      const json = await res.json();      
       if (Array.isArray(json)) {
         json.forEach((d) => {
           if (!d.ts && d.timestamp) d.ts = Math.floor(new Date(d.timestamp.replace(' ', 'T')).getTime() / 1000);
@@ -57,35 +57,12 @@ export default function Home() {
     channel.subscribe((msg) => {
       const raw = typeof msg.data === 'string' ? msg.data : new TextDecoder().decode(msg.data);
       const data = JSON.parse(raw);
-
-      const nowBangkok = new Date(Date.now() + 7 * 3600 * 1000);
-      data.dateObj = nowBangkok;
-      data.ts = Math.floor(nowBangkok.getTime() / 1000);
-      data.timestamp = nowBangkok.toISOString().replace('T', ' ').substring(0, 19);
-
-      if (typeof data.x === 'number' && typeof data.y === 'number' && typeof data.z === 'number') {
-        const existingIndex = dataRef.current.findIndex(d => d.ts === data.ts);
-        if (existingIndex !== -1) {
-          dataRef.current[existingIndex] = data;
-        } else {
-          if (lastDataPoint.current) {
-            const dx = data.x - lastDataPoint.current.x;
-            const dy = data.y - lastDataPoint.current.y;
-            const dz = data.z - lastDataPoint.current.z;
-            const delta = Math.sqrt(dx * dx + dy * dy + dz * dz);
-            data.magnitude = Math.min(10, delta * 5);
-          } else {
-            data.magnitude = 0;
-          }
-          lastDataPoint.current = data;
-          dataRef.current.push(data);
-          if (dataRef.current.length > 300) dataRef.current.shift();
-        }
-        setDataPoint(data);
-        setInitialData([...dataRef.current]);
-      }
+      setAllDataPoints(prev => ({
+              ...prev,
+        [data.device]: data
+      }));
     });
-    return () => channel.unsubscribe();
+  return () => channel.unsubscribe();
   }, []);
 
   useEffect(() => {
@@ -110,7 +87,7 @@ export default function Home() {
   </div>
   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }}>
     <div>
-      <div style={{ height: '30vh', width: '100vw' }}><MapPATOnly latest={dataPoint} /></div>
+      <div style={{ height: '30vh', width: '100vw' }}><MapPATOnly latest={alldataPoint} /></div>
     </div>
   </div>
   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, marginTop: 20 }}>
