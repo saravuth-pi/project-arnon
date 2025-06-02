@@ -88,6 +88,12 @@ export default function Home() {
     return () => channel.unsubscribe();
   }, []);
 
+const latest = {
+  PAT1: { x: 1.2, y: 2.3, z: 0.9, pm25: 18, co2: 420, ts: 1717300000 },
+  PAT2: { x: 1.1, y: 2.1, z: 1.0, pm25: 22, co2: 410, ts: 1717300001 },
+  PAT3: { x: 1.0, y: 2.0, z: 1.2, pm25: 25, co2: 430, ts: 1717300002 },
+  // เพิ่ม sensor อื่นๆ ได้ตามต้องการ
+};
 
 
   useEffect(() => {
