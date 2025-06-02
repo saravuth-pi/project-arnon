@@ -29,9 +29,9 @@ export default function MapPATOnly({ latest }) {
 
   // กำหนดตำแหน่งของแต่ละ device ตามจริง
   const DEVICE_LOCATION = {
-    'esp32-1': { lat: 13.7030, lng: 100.5340 },
-    'esp32-2': { lat: 13.6985, lng: 100.5285 },
-    'esp32-3': { lat: 13.7005, lng: 100.5320 }
+    'esp32-1': { lat: 13.71321, lng: 100.56407 },
+    'esp32-2': { lat: 13.70830, lng: 100.57225 },
+    'esp32-3': { lat: 13.69775, lng: 100.58752 }
   };
   const COLOR_MAP = {
     'esp32-1': '#2ecc71',
@@ -64,15 +64,15 @@ export default function MapPATOnly({ latest }) {
     return L.divIcon({
       html,
       className: 'sensor-div-icon',
-      iconSize: [80, 60],
-      iconAnchor: [40, 60]
+      iconSize: [70, 60],
+      iconAnchor: [35, 70]
     });
   };
 
   return (
     <div style={{ height: '100%', width: '100%' }}>
       <MapContainer
-        center={[13.7000, 100.5300]}
+        center={[13.70516, 100.57292]} // ตำแหน่งกลางของแผนที่
         zoom={14}
         style={{ height: '100%', width: '100%' }}
       >
@@ -100,7 +100,7 @@ export default function MapPATOnly({ latest }) {
 
       <style jsx>{`
         .sensor-div-icon {
-          background: transparent;
+          background: currentColor;
           border: none;
         }
         .sensor-label-box {
@@ -133,7 +133,7 @@ export default function MapPATOnly({ latest }) {
           border-top: 6px solid inherit;
         }
         .sensor-label-box {
-          color: transparent;
+          color: currentColor;
         }
         .sensor-label-triangle {
           border-top-color: inherit;
