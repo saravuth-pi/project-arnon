@@ -8,8 +8,9 @@ import { useEffect, useState } from 'react';
 
 // กำหนด sensor ที่ต้องการแสดง
 const SENSORS = [
-  { id: 'esp32-1', lat: 13.713306, lng: 100.563899 },
   { id: 'esp32-2', lat: 13.70847, lng: 100.57219 },
+  { id: 'esp32-1', lat: 13.713306, lng: 100.563899 },
+  
   // เพิ่ม sensor อื่นๆ ได้ในอนาคต
 ];
 
