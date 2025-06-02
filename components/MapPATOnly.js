@@ -1,9 +1,10 @@
 // /components/MapPATOnly.js
 // V0.500 - แสดงแผนที่พร้อม marker ของ sensor ที่มีข้อมูลล่าสุด
+
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // กำหนด sensor ที่ต้องการแสดง
 const SENSORS = [
@@ -22,37 +23,20 @@ function getColor(mag) {
 }
 
 export default function MapPATOnly({ latest = {} }) {
-  const prev = useRef({});
-  const history = useRef({});
   const [sensorMags, setSensorMags] = useState({});
 
   useEffect(() => {
     console.log('latest prop in MapPATOnly:', latest);
-  }, [latest]);
 
-  useEffect(() => {
+    // อัปเดตค่า magnitude ของแต่ละเซ็นเซอร์
+    const updatedMags = {};
     SENSORS.forEach(sensor => {
       const data = latest[sensor.id];
-      if (!data) return;
-
-      if (!history.current[sensor.id]) history.current[sensor.id] = [];
-      if (prev.current[sensor.id]) {
-        // ใช้ shakeMag แทนการคำนวณจาก x, y, z
-        const magnitude = Math.min(10, data.shakeMag || 0);
-
-        const now = Date.now();
-        history.current[sensor.id].push({ mag: magnitude, ts: now });
-        history.current[sensor.id] = history.current[sensor.id].filter(d => now - d.ts <= 5000);
-
-        const values = history.current[sensor.id].map(d => d.mag);
-        const maxMag = Math.max(...values);
-        setSensorMags(mags => ({
-          ...mags,
-          [sensor.id]: parseFloat(maxMag.toFixed(1))
-        }));
+      if (data && data.shakeMag !== undefined) {
+        updatedMags[sensor.id] = Math.min(10, data.shakeMag); // จำกัดค่า magnitude ไม่เกิน 10
       }
-      prev.current[sensor.id] = data;
     });
+    setSensorMags(updatedMags);
   }, [latest]);
 
   return (
@@ -62,8 +46,9 @@ export default function MapPATOnly({ latest = {} }) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {SENSORS.map(sensor => {
-        const mag = sensorMags[sensor.id] || 0;
-        const data = latest[sensor.id] || {};
+        const mag = sensorMags[sensor.id] || 0; // ค่า magnitude ของเซ็นเซอร์
+        const data = latest[sensor.id] || {}; // ข้อมูลของเซ็นเซอร์
+
         return (
           <Marker
             key={sensor.id}
@@ -86,8 +71,7 @@ export default function MapPATOnly({ latest = {} }) {
             })}
           >
             <Popup>
-              <strong>Sensor Node: {sensor.id}</strong><br />
-              Lat: {sensor.lat}, Lng: {sensor.lng}<br />
+              <strong>Node: {sensor.id}</strong><br />
               Magnitude: {mag.toFixed(1)}<br />
               {Object.entries(data).map(([key, value]) => (
                 <div key={key}>
