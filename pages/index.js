@@ -108,7 +108,7 @@ export default function Home() {
   return (
     <div style={{ fontFamily: 'sans-serif', padding: 10 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }}>
-        <img src="https://arnon.dgbkp.in.th/logo.jpg" height="150" style={{ verticalAlign: 'middle' }} /> <h1 style={{margin: 0, textAlign: 'left' }}> Project Ar-non: dashboard</h1>
+        <img src="https://arnon.dgbkp.in.th/logo.jpg" height="130" style={{ verticalAlign: 'middle' }} /> <h1 style={{margin: 0, textAlign: 'left' }}> Project Ar-non: dashboard</h1>
         <div style={{ margin: 20 ,background: '#bde6ee', textAlign: 'right', padding: 20, borderRadius: 8 }}>
           <div>{now.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
           <div style={{ fontSize: 36 }}>{now.toLocaleTimeString('th-TH')}</div>
