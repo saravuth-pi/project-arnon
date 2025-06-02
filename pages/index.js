@@ -87,7 +87,7 @@ export default function Home() {
   </div>
   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 0 }}>
     <div>
-      <div style={{ height: '30vh', width: '100vw' }}><MapPATOnly latest={alldataPoint} /></div>
+      <div style={{ height: '30vh', width: '100vw' }}><MapPATOnly latest={allDataPoint} /></div>
     </div>
   </div>
   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, marginTop: 20 }}>
