@@ -51,21 +51,23 @@ export default function MapPATOnly({ latest }) {
     const bgColor = COLOR_MAP[deviceId] || '#7f8c8d';
     const aqiValue = data && data.aqi25 != null ? data.aqi25 : '-';
     const magValue = data && data.shakeMag != null ? data.shakeMag.toFixed(2) : '-';
-
     const html = `
       <div class="sensor-label-box" style="background:${bgColor};">
         <div class="sensor-label-title">${deviceId.toUpperCase()}</div>
         <div class="sensor-label-line">AQI : ${aqiValue}</div>
         <div class="sensor-label-line">Mag : ${magValue}</div>
-        <div class="sensor-label-triangle"></div>
+        <div
+          class="sensor-label-triangle"
+          style="border-top-color: ${bgColor};"
+        ></div>
       </div>
     `;
 
     return L.divIcon({
       html,
       className: 'sensor-div-icon',
-      iconSize: [70, 60],
-      iconAnchor: [35, 70]
+      iconSize: [80, 60],
+      iconAnchor: [40, 60]
     });
   };
 
@@ -100,7 +102,7 @@ export default function MapPATOnly({ latest }) {
 
       <style jsx>{`
         .sensor-div-icon {
-          background: currentColor;
+          background: transparent;
           border: none;
         }
         .sensor-label-box {
@@ -108,7 +110,7 @@ export default function MapPATOnly({ latest }) {
           display: inline-block;
           padding: 4px 6px;
           border-radius: 4px;
-          color: white;
+          color: white;          /* กำหนดสีตัวอักษร */
           font-size: 0.85rem;
           text-align: left;
           white-space: nowrap;
@@ -123,20 +125,14 @@ export default function MapPATOnly({ latest }) {
         }
         .sensor-label-triangle {
           position: absolute;
-          bottom: -6px;
+          bottom: -6px;           /* เลื่อนลูกศรลงมานิดเดียวใต้กล่อง */
           left: 50%;
           transform: translateX(-50%);
           width: 0;
           height: 0;
           border-left: 6px solid transparent;
           border-right: 6px solid transparent;
-          border-top: 6px solid inherit;
-        }
-        .sensor-label-box {
-          color: currentColor;
-        }
-        .sensor-label-triangle {
-          border-top-color: inherit;
+          border-top: 6px solid;  /* สีจะถูกกำหนดด้วย inline style -->
         }
       `}</style>
     </div>
