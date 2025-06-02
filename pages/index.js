@@ -89,11 +89,7 @@ export default function Home() {
   }, []);
 
 
-  useEffect(() => {
-      const onUsgsLoaded = (list) => setUsgsQuakes(list);
-      // pass callback to Map component
-      return onUsgsLoaded;
-    }, []);
+
   useEffect(() => {
     async function fetchTMD() {
       const res = await fetch('/api/fetch-tmd');
@@ -141,7 +137,11 @@ export default function Home() {
   );
 }
 /* 
-
+  useEffect(() => {
+      const onUsgsLoaded = (list) => setUsgsQuakes(list);
+      // pass callback to Map component
+      return onUsgsLoaded;
+    }, []);
 
   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, marginTop: 20 }}>
           <div>
