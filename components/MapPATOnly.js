@@ -1,73 +1,46 @@
 // components/MapPATOnly.js
-// V0.1.0.0.0 - Edited MapPATOnly component to display ESP32 devices on a map with CircleMarkers
-
+// V0.1.0.0.0 - Edited MapPATOnly component to display ESP32 devices on a map with tooltips box
 import React, { useEffect, useState } from 'react';
 
+// (1) เราจะโหลด Leaflet/React-Leaflet แบบ dynamic แทน import ตรง ๆ
 export default function MapPATOnly({ latest }) {
-  const [LeafletComponents, setLeafletComponents] = useState(null);
+  const [LeafletModules, setLeafletModules] = useState(null);
 
   useEffect(() => {
-    // โหลดเฉพาะฝั่ง client (browser) เท่านั้น
+    // โหลดเฉพาะฝั่ง client (browser) ทีละโมดูล
     Promise.all([
       import('leaflet/dist/leaflet.css'),
-      import('leaflet'),
-      import('react-leaflet')
+      import('react-leaflet'),
+      import('leaflet')
     ])
-      .then(([leafletCSS, L, ReactLeaflet]) => {
-        const { MapContainer, TileLayer, Marker } = ReactLeaflet;
-        setLeafletComponents({
+      .then(([leafletCSS, ReactLeaflet, L]) => {
+        const { MapContainer, TileLayer, CircleMarker, Tooltip } = ReactLeaflet;
+        setLeafletModules({
           L: L.default,
           MapContainer,
           TileLayer,
-          Marker
+          CircleMarker,
+          Tooltip
         });
       })
-      .catch((err) => console.error('Error loading Leaflet:', err));
+      .catch((err) => console.error('Error loading Leaflet modules:', err));
   }, []);
 
-  // หากยังไม่โหลดเสร็จ (หรือกำลัง SSR) ให้ return null ไม่ต้องแสดงอะไร
-  if (!LeafletComponents) {
-    return null;
-  }
+  // (2) ถ้ายังไม่โหลดเสร็จ ให้ return null
+  if (!LeafletModules) return null;
 
-  const { L, MapContainer, TileLayer, Marker } = LeafletComponents;
+  const { L, MapContainer, TileLayer, CircleMarker, Tooltip } = LeafletModules;
 
-  // ระบุตำแหน่ง (lat, lng) ของแต่ละ ESP32
+  // (3) พิกัดและสีของแต่ละ Device
   const DEVICE_LOCATION = {
     'esp32-1': { lat: 13.71321, lng: 100.56407 },
     'esp32-2': { lat: 13.70830, lng: 100.57225 },
     'esp32-3': { lat: 13.69775, lng: 100.58752 }
   };
-
-  // ระบุสีพื้นของแต่ละกล่อง label
   const COLOR_MAP = {
     'esp32-1': '#2ecc71', // เขียวอ่อน
     'esp32-2': '#8e44ad', // ม่วง
     'esp32-3': '#3498db'  // น้ำเงิน
-  };
-
-  // ฟังก์ชันสร้าง DivIcon สำหรับแต่ละ device
-  const createLabelIcon = (deviceId, data) => {
-    const bgColor = COLOR_MAP[deviceId] || '#7f8c8d';
-    const aqiValue = data && data.aqi25 != null ? data.aqi25 : '-';
-    const magValue = data && data.shakeMag != null ? data.shakeMag.toFixed(2) : '-';
-
-    // html ของกล่องข้อความ พร้อม inline style กำหนด border-top-color ให้ลูกศร
-    const html = `
-      <div class="sensor-label-box" style="background: ${bgColor};">
-        <div class="sensor-label-title">${deviceId.toUpperCase()}</div>
-        <div class="sensor-label-line">AQI : ${aqiValue}</div>
-        <div class="sensor-label-line">Mag : ${magValue}</div>
-        <div class="sensor-label-triangle" style="border-top-color: ${bgColor};"></div>
-      </div>
-    `;
-
-    return L.divIcon({
-      html,
-      className: 'sensor-div-icon',
-      iconSize: [80, 60],      // กว้างประมาณ 80px สูงประมาณ 60px (กล่อง + ลูกศร)
-      iconAnchor: [40, 60]     // ให้จุดเชื่อมต่อเป็นกึ่งกลางล่าง (width/2, height)
-    });
   };
 
   return (
@@ -86,52 +59,74 @@ export default function MapPATOnly({ latest }) {
           const loc = DEVICE_LOCATION[deviceId];
           if (!loc) return null;
 
-          const labelIcon = createLabelIcon(deviceId, data);
+          const bgColor = COLOR_MAP[deviceId] || '#7f8c8d';
+          // ค่าที่จะแสดง (เว้นว่างถ้า null)
+          const aqiValue = data && data.aqi25 != null ? data.aqi25 : '-';
+          const magValue = data && data.shakeMag != null ? data.shakeMag.toFixed(2) : '-';
 
           return (
-            <Marker
+            <CircleMarker
               key={deviceId}
-              position={[loc.lat, loc.lng]}
-              icon={labelIcon}
-              interactive={false}
-            />
+              center={[loc.lat, loc.lng]}
+              radius={4}
+              pathOptions={{
+                color: bgColor,
+                fillColor: bgColor,
+                fillOpacity: 0.85
+              }}
+            >
+              {/* (4) ใช้ Tooltip permanent: จะวาดกล่อง+arrow ให้อัตโนมัติ */}
+              <Tooltip
+                permanent
+                direction="top"
+                offset={[0, -10]} // เลื่อนกล่องขึ้นเล็กน้อยเหนือจุด
+                className="sensor-tooltip"
+              >
+                <div className="sensor-label" style={{ backgroundColor: bgColor }}>
+                  <div className="sensor-label-title">{deviceId.toUpperCase()}</div>
+                  <div className="sensor-label-line">AQI : {aqiValue}</div>
+                  <div className="sensor-label-line">Mag : {magValue}</div>
+                </div>
+              </Tooltip>
+            </CircleMarker>
           );
         })}
       </MapContainer>
 
+      {/* (5) CSS สำหรับ styling Tooltip ให้เป็นกล่องสีพร้อม arrow เดิม ๆ ของ Leaflet */}
       <style jsx>{`
-        .sensor-div-icon {
-          background: transparent;
+        /* .sensor-tooltip จะถูก applied ไปที่ <div class="leaflet-tooltip ..."> ที่ Leaflet สร้างให้ */
+        .sensor-tooltip .leaflet-tooltip-content {
+          background: transparent; /* เราจะเอา background จาก .sensor-label แทน */
+          padding: 0;
           border: none;
         }
-        .sensor-label-box {
-          position: relative;
-          display: inline-block;
-          padding: 4px 6px;
+        .sensor-tooltip .leaflet-tooltip-arrow {
+          /* ให้ arrow ของ tooltip ใช้สีเดียวกับ background ของ .sensor-label */
+          color: transparent; /* ปิดการใช้ currentColor ให้ arrow ใส่สีแบบ custom */
+        }
+
+        .sensor-label {
+          /* กล่องสี่เหลี่ยม (ตัดมาจาก <Tooltip>) */
           border-radius: 4px;
           color: white;
+          padding: 2px 4px;
           font-size: 0.85rem;
           text-align: left;
           white-space: nowrap;
         }
         .sensor-label-title {
           font-weight: bold;
-          margin-bottom: 2px;
+          margin-bottom: 1px;
         }
         .sensor-label-line {
           margin: 0;
-          line-height: 1.2em;
+          line-height: 1.0em;
         }
-        .sensor-label-triangle {
-          position: absolute;
-          bottom: -6px;           
-          left: 50%;              
-          transform: translateX(-50%);
-          width: 0;
-          height: 0;
-          border-left: 6px solid transparent;
-          border-right: 6px solid transparent;
-          border-top: 6px solid; 
+
+        /* กำหนด arrow ให้ใช้สีพื้นตัวเอง (bgColor) เพราะ Leaflet arrow เป็น pseudo-element */
+        .sensor-tooltip.leaflet-tooltip-top .leaflet-tooltip-arrow::before {
+          border-bottom-color: inherit; /* ให้ arrow ใช้สีจาก .sensor-label (แล้ว override ด้วย inherit) */
         }
       `}</style>
     </div>
