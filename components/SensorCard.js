@@ -67,7 +67,7 @@ export default function SensorCard({ deviceId, data }) {
         </div>
           <div>
             <strong>AQI current:</strong> {/* ถ้ามี callback จาก LiveSensorChart เรื่อง AQI ก็ใส่ตรงนี้ */} - 
-          </div
+          </div>
           <div>
             <strong>Avg AQI:</strong> {/* ถ้ามี callback จาก LiveSensorChart เรื่อง AQI ก็ใส่ตรงนี้ */} - 
           </div>
