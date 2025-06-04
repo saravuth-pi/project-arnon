@@ -77,17 +77,17 @@ export default function Home() {
   const deviceList = ['esp32-1', 'esp32-2', 'esp32-3'];
 
   return (
-    <div style={{ fontFamily: 'sans-serif', padding: 10, background: '#f5f5f5' }}>
+    <div style={{ fontFamily: 'sans-serif', padding: 0, background: '#ffffff' }}>
       {/* HEADER */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 0 }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <img
             src="https://arnon.dgbkp.in.th/logo.jpg"
-            height="130"
+            height="90"
             style={{ marginRight: 12, verticalAlign: 'middle' }}
             alt="Project Ar-non Logo"
           />
-          <h1 style={{ margin: 0, fontSize: '2rem' }}>Project Ar-non: dashboard</h1>
+          <h1 style={{ margin: 0, fontSize: '1.7rem' }}>Project Ar-non: dashboard</h1>
         </div>
         <div style={{ background: '#bde6ee', textAlign: 'right', padding: '12px 20px', borderRadius: 8 }}>
           <div style={{ fontSize: '1rem' }}>
@@ -100,7 +100,7 @@ export default function Home() {
       </div>
 
       {/* MAP (เฉพาะฝั่งไคลเอ็นต์) */}
-      <div style={{ height: '30vh', width: '95vw', marginBottom: 20 }}>
+      <div style={{ height: '40vh', width: '96vw', marginBottom: 20 }}>
         <MapWithNoSSR latest={allDataPoints} />
       </div>
 
