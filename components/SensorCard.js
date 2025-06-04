@@ -1,5 +1,5 @@
 // components/SensorCard.js
-// V0.2.0.0.2 – กำหนด height ให้กราฟ ไม่ใช้ flex:1
+// V0.2.0.0.3 – กำหนด height ให้กราฟ ไม่ใช้ flex:1
 
 import LiveSensorChart from './LiveSensorChart'; 
 
@@ -30,28 +30,28 @@ export default function SensorCard({ deviceId, data }) {
         padding: '6px 10px',
         fontWeight: 'bold',
         fontSize: '1.1rem',
-        textAlign: 'center'
+        textAlign: 'left'
       }}>
         {deviceId.toUpperCase()}
       </div>
 
       {/* เนื้อหาในการ์ด */}
       <div style={{
-        padding: '10px',
+        padding: '5px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '8px'      /* เว้นระยะระหว่างบล็อก */
+        gap: '4px'      /* เว้นระยะระหว่างบล็อก */
       }}>
 
         {/* --- กราฟ AQI --- */}
         <div style={{
-          height: '140px',          // กำหนดความสูงตายตัว (ปรับได้ตามต้องการ)
+          height: '50px',          // กำหนดความสูงตายตัว (ปรับได้ตามต้องการ)
           border: '1px solid #eee',
           borderRadius: 6,
           padding: '4px'
         }}>
           <div style={{
-            fontSize: '0.9rem',
+            fontSize: '0.5rem',
             fontWeight: 'bold',
             marginBottom: '4px'
           }}>
@@ -66,9 +66,9 @@ export default function SensorCard({ deviceId, data }) {
 
         {/* --- สรุปค่า AQI --- */}
         <div style={{
-          fontSize: '0.9rem',
+          fontSize: '0.5rem',
           color: '#555',
-          lineHeight: 1.4
+          lineHeight: 0.9
         }}>
           <div><strong>Current AQI:</strong> - </div>
           <div><strong>Avg AQI:</strong>    - </div>
@@ -77,8 +77,8 @@ export default function SensorCard({ deviceId, data }) {
 
         {/* --- ข้อมูล Sensor Fields --- */}
         <div style={{
-          fontSize: '0.95rem',
-          lineHeight: 1.5,
+          fontSize: '0.7rem',
+          lineHeight: 1.0,
           color: '#333'
         }}>
           <div>
@@ -106,13 +106,13 @@ export default function SensorCard({ deviceId, data }) {
 
         {/* --- กราฟ Magnitude --- */}
         <div style={{
-          height: '140px',          // กำหนดความสูงเท่ากับกราฟ AQI (หรือปรับตามชอบ)
+          height: '50px',          // กำหนดความสูงเท่ากับกราฟ AQI (หรือปรับตามชอบ)
           border: '1px solid #eee',
           borderRadius: 6,
           padding: '4px'
         }}>
           <div style={{
-            fontSize: '0.9rem',
+            fontSize: '0.5rem',
             fontWeight: 'bold',
             marginBottom: '4px'
           }}>
@@ -129,9 +129,9 @@ export default function SensorCard({ deviceId, data }) {
         <div style={{
           borderTop: '1px solid #ddd',
           paddingTop: '6px',
-          fontSize: '0.9rem',
+          fontSize: '0.7rem',
           color: '#555',
-          lineHeight: 1.4
+          lineHeight: 1.0
         }}>
           <div><strong>Current Magnitude:</strong> - </div>
           <div><strong>Avg Magnitude:</strong>     - </div>
