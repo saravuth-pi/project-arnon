@@ -1,5 +1,5 @@
 // components/MapPATOnly.js
-// V0.1.0.0.0 - Edited MapPATOnly component to display ESP32 devices on a map with tooltips box
+// V0.1.0.0.1 - Edited MapPATOnly component to display ESP32 devices on a map with tooltips box - rotate map
 import React, { useEffect, useState } from 'react';
 
 // (1) เราจะโหลด Leaflet/React-Leaflet แบบ dynamic แทน import ตรง ๆ
@@ -46,6 +46,7 @@ export default function MapPATOnly({ latest }) {
   return (
     <div style={{ height: '100%', width: '100%' }}>
       <MapContainer
+        className="rotated-map"
         center={[13.705771, 100.572794]}
         zoom={14}
         style={{ height: '100%', width: '100%' }}
@@ -95,6 +96,12 @@ export default function MapPATOnly({ latest }) {
 
       {/* (5) CSS สำหรับ styling Tooltip ให้เป็นกล่องสีพร้อม arrow เดิม ๆ ของ Leaflet */}
       <style jsx>{`
+      
+        .rotated-map .leaflet-map-pane {
+          transform: rotate(-30deg);
+          transform-origin: center center;
+        }
+        
         /* .sensor-tooltip จะถูก applied ไปที่ <div class="leaflet-tooltip ..."> ที่ Leaflet สร้างให้ */
         .sensor-tooltip .leaflet-tooltip-content {
           background: transparent; /* เราจะเอา background จาก .sensor-label แทน */
