@@ -1,5 +1,5 @@
 // components/SensorCard.js
-// V0.1.0.0.0 - added SensorCard component to display sensor data in a card format
+// V0.2.0.0.0 - เพิ่มกราฟ AQI และ Magnitude ในการ์ดเดียวกัน
 
 import { useState, useEffect } from 'react';
 import LiveSensorChart from './LiveSensorChart'; 
@@ -15,10 +15,6 @@ export default function SensorCard({ deviceId, data }) {
   // data คือ object เช่น { device: "esp32-2", pm25: 11, pm10: 14, aqi25: 46, aqi10:13, CO2:0, TOC:0, temp:29, RH:65, shakeMag:0.07, ts:"..." }
   // หรืออาจเป็น null (ถ้ายังไม่มีข้อมูลจาก Ably)
   const color = COLOR_MAP[deviceId] || '#7f8c8d'; // gray ถ้าไม่มีใน map
-
-  // เราต้องการส่งข้อมูล "data.shakeMag" ไปให้ LiveSensorChart วาดกราฟ
-  // สมมติว่า LiveSensorChart รับ props ว่า { deviceId, newData } เพื่อนำไป plot
-  // (อาจต้องแก้ไข LiveSensorChart เล็กน้อยให้รองรับ device-specific data)
 
   return (
     <div style={{
@@ -45,17 +41,43 @@ export default function SensorCard({ deviceId, data }) {
 
       {/* ======= ส่วนเนื้อหาด้านใน ======= */}
       <div style={{ padding: '10px', flex: 1, display: 'flex', flexDirection: 'column' }}>
-        {/* 1) กราฟ “Magnitude” */}
-        <div style={{ flex: 1, minHeight: '100px', marginBottom: '8px' }}>
-          {/* LiveSensorChart ต้องถูกดัดแปลงให้รับ props deviceId, data.shakeMag, timestamp */}
+
+        {/*
+          1) กราฟ “AQI”
+             – ใช้ข้อมูล data.aqi25
+             – ปรับขนาด (height) ให้เหมาะกับพื้นที่ภายในการ์ด
+        */}
+        <div style={{
+          flex: 1,
+          minHeight: '100px',
+          marginBottom: '8px',
+          border: '1px solid #eee',
+          borderRadius: 6,
+          padding: '4px'
+        }}>
+          <div style={{ fontSize: '0.9rem', fontWeight: 'bold', marginBottom: '4px' }}>
+            AQI Trend
+          </div>
+          {/* LiveSensorChart จะรับ props เหมือนเดิม แต่เราส่ง `data.aqi25` เข้าไป */}
           <LiveSensorChart
-            deviceId={deviceId}
-            newData={data ? data.shakeMag : null}
+            deviceId={`${deviceId}-aqi`}
+            newData={data && data.aqi25 != null ? data.aqi25 : null}
             timestamp={data ? data.ts : null}
           />
         </div>
-
-        {/* 2) ค่าตัวเลขของแต่ละ Field */}
+          <div>
+            <strong>AQI current:</strong> {/* ถ้ามี callback จาก LiveSensorChart เรื่อง AQI ก็ใส่ตรงนี้ */} - 
+          </div
+          <div>
+            <strong>Avg AQI:</strong> {/* ถ้ามี callback จาก LiveSensorChart เรื่อง AQI ก็ใส่ตรงนี้ */} - 
+          </div>
+          <div>
+            <strong>Max AQI:</strong> {/* ถ้ามี callback */} - 
+          </div>
+        {/*
+          2) ค่าตัวเลขต่าง ๆ
+             – แสดงรายละเอียด sensor field เหมือนเดิม
+        */}
         <div style={{ fontSize: '0.95rem', lineHeight: 1.5, marginBottom: '8px' }}>
           <div>
             <strong>AQI₂.₅:</strong> {data && data.aqi25 != null ? data.aqi25 : '-'}
@@ -80,15 +102,50 @@ export default function SensorCard({ deviceId, data }) {
           </div>
         </div>
 
-        {/* 3) สรุปค่าเฉลี่ยและค่าสูงสุดของ Shake Magnitude (สมมติให้ LiveSensorChart ส่ง callback คืนค่าได้) */}
+
+        {/*
+          3) กราฟ “Magnitude”
+             – ใช้ข้อมูล data.shakeMag
+             – ปรับขนาด (height) ให้เหมาะกับพื้นที่ภายในการ์ด
+        */}
+        <div style={{
+          flex: 1,
+          minHeight: '100px',
+          marginBottom: '8px',
+          border: '1px solid #eee',
+          borderRadius: 6,
+          padding: '4px'
+        }}>
+          <div style={{ fontSize: '0.9rem', fontWeight: 'bold', marginBottom: '4px' }}>
+            Magnitude Trend
+          </div>
+          <LiveSensorChart
+            deviceId={`${deviceId}-mag`}
+            newData={data ? data.shakeMag : null}
+            timestamp={data ? data.ts : null}
+          />
+        </div>
+
+        {/*
+          4) สรุปค่าเฉลี่ยและค่าสูงสุด (สมมติให้ LiveSensorChart ส่ง callback คืนค่า avg/max ได้ในอนาคต)
+             – ปล. ถ้ายังไม่ได้ implement callback ใน LiveSensorChart ให้แก้ทีหลัง
+        */}
         <div style={{
           borderTop: '1px solid #ddd',
           paddingTop: '6px',
           fontSize: '0.9rem',
           color: '#555'
         }}>
-          <div><strong>Avg Magnitude:</strong> {/* สมมติ LiveSensorChart ส่ง callback ให้ได้ avg */} - </div>
-          <div><strong>Max Magnitude:</strong> {/* สมมติ LiveSensorChart ส่ง callback ให้ได้ max */} - </div>
+          
+          <div>
+            <strong>Current Magnitude:</strong> {/* ถ้ามี callback จาก LiveSensorChart เรื่อง Magnitude */} - 
+          </div>
+          <div>
+            <strong>Avg Magnitude:</strong> {/* ถ้ามี callback จาก LiveSensorChart เรื่อง Magnitude */} - 
+          </div>
+          <div>
+            <strong>Max Magnitude:</strong> {/* ถ้ามี callback */} - 
+          </div>
         </div>
       </div>
     </div>
