@@ -1,5 +1,5 @@
 // pages/index.js
-// V1.0.1.0.0 - แก้ไขให้แสดง SensorCard ใหม่ทั้งหมด
+// V1.0.1.0.1 - แก้ไขให้แสดง SensorCard ใหม่ทั้งหมด
 
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
@@ -117,11 +117,12 @@ export default function Home() {
         <LatestQuakes tmdQuakes={tmdQuakes} usgsQuakes={usgsQuakes} />
       </div>
 
-      {/* AQI Panel */}
+      {/* AQI Panel 
       <div style={{ background: 'white', padding: 12, borderRadius: 8, marginBottom: 40 }}>
         <h3 style={{ margin: '8px 0' }}>คุณภาพอากาศที่ท่าเรือกรุงเทพ (BETA)</h3>
         <AQIPanel />
       </div>
     </div>
+    */}
   );
 }
