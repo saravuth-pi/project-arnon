@@ -1,5 +1,5 @@
 // pages/index.js
-// V1.0.1.0.3 - แก้ไขให้แสดง SensorCard ใหม่ทั้งหมด
+// V1.0.1.0.4 - แก้ไขให้แสดง SensorCard ใหม่ทั้งหมด
 
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
@@ -79,7 +79,7 @@ export default function Home() {
   return (
     <div style={{ fontFamily: 'sans-serif', padding: 0, background: '#ffffff' }}>
       {/* HEADER */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 0 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 3 }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <img
             src="https://arnon.dgbkp.in.th/logo.jpg"
@@ -89,7 +89,7 @@ export default function Home() {
           />
           <h1 style={{ margin: 0, fontSize: '1.7rem' }}>Project Ar-non: dashboard</h1>
         </div>
-        <div style={{ background: '#bde6ee', textAlign: 'right', padding: '12px 20px', borderRadius: 8 }}>
+        <div style={{ background: '#bde6ee', textAlign: 'right', padding: '10px 20px', borderRadius: 8 }}>
           <div style={{ fontSize: '1rem' }}>
             {now.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' })}
           </div>
@@ -100,19 +100,19 @@ export default function Home() {
       </div>
 
       {/* MAP (เฉพาะฝั่งไคลเอ็นต์) */}
-      <div style={{ height: '40vh', width: '96vw', marginBottom: 20 }}>
+      <div style={{ height: '40vh', width: '96vw', marginBottom: 3 }}>
         <MapWithNoSSR latest={allDataPoints} />
       </div>
 
       {/* SENSOR CARDS */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1%', marginBottom: 20 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1%', marginBottom: 3 }}>
         {deviceList.map((deviceId) => (
           <SensorCard key={deviceId} deviceId={deviceId} data={allDataPoints[deviceId] || null} />
         ))}
       </div>
 
       {/* รายงานเหตุแผ่นดินไหว */}
-      <div style={{ background: 'white', padding: 12, borderRadius: 8, marginBottom: 20 }}>
+      <div style={{ background: 'white', padding: 12, borderRadius: 8, marginBottom: 3 }}>
         <h3 style={{ margin: '8px 0' }}>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3>
         <LatestQuakes tmdQuakes={tmdQuakes} usgsQuakes={usgsQuakes} />
       </div>
