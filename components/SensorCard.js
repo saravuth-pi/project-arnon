@@ -1,5 +1,5 @@
 // components/SensorCard.js
-// V0.2.0.1.1 – ปรับให้สรุปค่า Current/Avg/Max แสดงเป็นจำนวนเต็ม
+// V0.2.0.2.1 – ปรับให้สรุปค่า Magnitude แสดงเป็นทศนิยม 2 ตำแหน่ง
 
 import { useState, useEffect } from 'react';
 import LiveSensorChart from './LiveSensorChart';
@@ -55,29 +55,43 @@ export default function SensorCard({ deviceId, data }) {
     });
   }, [deviceId, data?.shakeMag, data?.ts]);
 
-  // ฟังก์ชันคำนวณสถิติ (Current / Avg / Max) แล้วปัดเป็นจำนวนเต็ม
-  const calcStats = (historyArray) => {
+  // ฟังก์ชันคำนวณสถิติสำหรับ AQI (แสดงเป็นจำนวนเต็ม)
+  const calcAqiStats = (historyArray) => {
     if (!historyArray || historyArray.length === 0) {
       return { current: '-', avg: '-', max: '-' };
     }
-    // Current = ค่าล่าสุดใน array แล้วปัด
     const lastVal = historyArray[historyArray.length - 1].value;
     const current = Math.round(lastVal);
 
-    // Avg = ผลรวมของ value ทั้งหมด หารด้วยจำนวน แล้วปัด
     const sum = historyArray.reduce((acc, item) => acc + item.value, 0);
     const avg = Math.round(sum / historyArray.length);
 
-    // Max = ค่ามากสุด แล้วปัด
     const maxRaw = Math.max(...historyArray.map(item => item.value));
     const max = Math.round(maxRaw);
 
     return { current, avg, max };
   };
 
-  // ดึงสถิติของ AQI และ Magnitude จาก history
-  const { current: currentAqi, avg: avgAqi, max: maxAqi } = calcStats(aqiHistory);
-  const { current: currentMag, avg: avgMag, max: maxMag } = calcStats(magHistory);
+  // ฟังก์ชันคำนวณสถิติสำหรับ Magnitude (แสดงเป็นทศนิยม 2 ตำแหน่ง)
+  const calcMagStats = (historyArray) => {
+    if (!historyArray || historyArray.length === 0) {
+      return { current: '-', avg: '-', max: '-' };
+    }
+    const lastVal = historyArray[historyArray.length - 1].value;
+    const current = lastVal.toFixed(2);
+
+    const sum = historyArray.reduce((acc, item) => acc + item.value, 0);
+    const avg = (sum / historyArray.length).toFixed(2);
+
+    const maxRaw = Math.max(...historyArray.map(item => item.value));
+    const max = maxRaw.toFixed(2);
+
+    return { current, avg, max };
+  };
+
+  // คำนวณสถิติ AQI และ Magnitude จากประวัติ
+  const { current: currentAqi, avg: avgAqi, max: maxAqi } = calcAqiStats(aqiHistory);
+  const { current: currentMag, avg: avgMag, max: maxMag } = calcMagStats(magHistory);
 
   return (
     <div style={{
@@ -146,8 +160,8 @@ export default function SensorCard({ deviceId, data }) {
 
         {/* --- ข้อมูล Sensor Fields --- */}
         <div style={{
-          fontSize: '1.0rem',
-          lineHeight: 1.0,
+          fontSize: '0.8rem',
+          lineHeight: 0.9,
           color: '#333'
         }}>
           <div>
@@ -195,7 +209,7 @@ export default function SensorCard({ deviceId, data }) {
           />
         </div>
 
-        {/* --- สรุปค่า Magnitude (แสดงเป็นจำนวนเต็ม) --- */}
+        {/* --- สรุปค่า Magnitude (แสดงเป็นทศนิยม 2 ตำแหน่ง) --- */}
         <div style={{
           borderTop: '1px solid #ddd',
           paddingTop: '6px',
@@ -207,6 +221,7 @@ export default function SensorCard({ deviceId, data }) {
           <div><strong>Avg Magnitude:</strong>     {avgMag} </div>
           <div><strong>Max Magnitude:</strong>     {maxMag} </div>
         </div>
+
       </div>
     </div>
   );
