@@ -1,5 +1,5 @@
 // components/SensorCard.js
-// V0.2.0.0.3 – กำหนด height ให้กราฟ ไม่ใช้ flex:1
+// V0.2.0.0.4 – กำหนด height ให้กราฟ ไม่ใช้ flex:1
 
 import LiveSensorChart from './LiveSensorChart'; 
 
@@ -66,9 +66,9 @@ export default function SensorCard({ deviceId, data }) {
 
         {/* --- สรุปค่า AQI --- */}
         <div style={{
-          fontSize: '0.5rem',
+          fontSize: '0.7rem',
           color: '#555',
-          lineHeight: 0.9
+          lineHeight: 1.0
         }}>
           <div><strong>Current AQI:</strong> - </div>
           <div><strong>Avg AQI:</strong>    - </div>
@@ -77,30 +77,30 @@ export default function SensorCard({ deviceId, data }) {
 
         {/* --- ข้อมูล Sensor Fields --- */}
         <div style={{
-          fontSize: '0.7rem',
+          fontSize: '1.0rem',
           lineHeight: 1.0,
           color: '#333'
         }}>
           <div>
-            <strong>AQI₂.₅:</strong> {data && data.aqi25 != null ? data.aqi25 : '-'}
+            <strong>AQI₂.₅    :</strong> {data && data.aqi25 != null ? data.aqi25 : '-'}
           </div>
           <div>
-            <strong>PM₂.₅:</strong> {data && data.pm25 != null ? data.pm25 + ' µg/m³' : '-'}
+            <strong>PM₂.₅     :</strong> {data && data.pm25 != null ? data.pm25 + ' µg/m³' : '-'}
           </div>
           <div>
-            <strong>PM₁₀:</strong> {data && data.pm10 != null ? data.pm10 + ' µg/m³' : '-'}
+            <strong>PM₁₀      :</strong> {data && data.pm10 != null ? data.pm10 + ' µg/m³' : '-'}
           </div>
           <div>
-            <strong>CO₂:</strong> {data && data.CO2 != null ? data.CO2 + ' ppm' : '-'}
+            <strong>CO₂       :</strong> {data && data.CO2 != null ? data.CO2 + ' ppm' : '-'}
           </div>
           <div>
-            <strong>TVOC:</strong> {data && data.TOC != null ? data.TOC + ' µg/m³' : '-'}
+            <strong>TVOC      :</strong> {data && data.TOC != null ? data.TOC + ' ppb' : '-'}
           </div>
           <div>
-            <strong>Temp:</strong> {data && data.temp != null ? data.temp + ' °C' : '-'}
+            <strong>Temp      :</strong> {data && data.temp != null ? data.temp + ' °C' : '-'}
           </div>
           <div>
-            <strong>RH:</strong> {data && data.RH != null ? data.RH + ' %' : '-'}
+            <strong>RH        :</strong> {data && data.RH != null ? data.RH + ' %' : '-'}
           </div>
         </div>
 
