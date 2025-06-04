@@ -1,5 +1,5 @@
 // components/LatestQuakes.js
-// V0.1.0.0.1 - Show latest combined earthquakes from USGS + TMD
+// V0.1.0.0.2 - Show latest combined earthquakes from USGS + TMD
 
 import React from 'react';
 
@@ -26,7 +26,7 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
   usgsQuakes.forEach((q) => {
     const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
     const age = now - new Date(q.time).getTime();
-    if (distance <= 5000 && q.mag >= 5 && age <= 24 * 3600 * 1000) {
+    if (distance <= 5000 && q.mag >= 4.5 && age <= 24 * 3600 * 1000) {
       quakes.push({
         source: 'USGS',
         mag: q.mag,
@@ -60,11 +60,11 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
   const last10 = quakes.slice(0, 10);
 
   return (
-    <div style={{fontSize: '0.6rem'}}>
+    <div style={{fontSize: '0.8rem'}}>
       <ul>
         {last10.map((q, i) => (
           <li key={i}>
-            [{q.distance.toFixed(0)} km  - {q.time} - M{q.mag.toFixed(1)} - {q.place} - {q.source}]
+            {q.distance.toFixed(0)} km  - {q.time} - M{q.mag.toFixed(1)} - {q.place}  [{q.source}]
           </li>
         ))}
       </ul>
