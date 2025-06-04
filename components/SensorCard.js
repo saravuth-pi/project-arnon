@@ -1,5 +1,5 @@
 // components/SensorCard.js
-// V0.2.0.0.6 – กำหนด height ให้กราฟ ไม่ใช้ flex:1
+// V0.2.0.0.7 – กำหนด height ให้กราฟ ไม่ใช้ flex:1
 
 import LiveSensorChart from './LiveSensorChart'; 
 
@@ -53,7 +53,8 @@ export default function SensorCard({ deviceId, data }) {
           <div style={{
             fontSize: '0.6rem',
             fontWeight: 'bold',
-            marginBottom: '0px'
+            marginBottom: '0px',
+            color: '#777'
           }}>
             AQI Trend
           </div>
@@ -113,9 +114,10 @@ export default function SensorCard({ deviceId, data }) {
           padding: '4px'
         }}>
           <div style={{
-            fontSize: '0.5rem',
+            fontSize: '0.6rem',
             fontWeight: 'bold',
-            marginBottom: '8px'
+            marginBottom: '8px',
+            color: '#777'
           }}>
             Magnitude Trend
           </div>
