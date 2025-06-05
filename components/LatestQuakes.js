@@ -63,7 +63,7 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
     <div style={{fontSize: '0.8rem', color: '#eee'}}>
         {last10.map((q, i) => (
           <div style={{fontSize: '0.8rem', color: '#eee'}}>
-            key={i}\) {q.distance.toFixed(0)} km  - {q.time} - M{q.mag.toFixed(1)} - {q.place}  [{q.source}]
+            {i+1}) {q.distance.toFixed(0)} km  - {q.time} - M{q.mag.toFixed(1)} - {q.place}  [{q.source}]
           </div>
         ))}
     </div>
