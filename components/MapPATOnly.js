@@ -46,8 +46,8 @@ export default function MapPATOnly({ latest }) {
   return (
     <div style={{ height: '100%', width: '100%' }}>
       <MapContainer
-        center={[13.705771, 100.572794]}
-        zoom={14}
+        center={[13.710387, 100.574588]}
+        zoom={15}
         style={{ height: '100%', width: '100%' }}
       >
         <TileLayer
