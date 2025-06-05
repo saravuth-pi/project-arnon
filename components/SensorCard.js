@@ -1,5 +1,5 @@
 // components/SensorCard.js
-// V0.2.0.5.0 – แก้ useEffect ให้ timeout เตือนค้าง 2 นาที หลังค่ากลับไปปกติ
+// V0.2.0.6.0 – เตือนค้างไว้จนกว่า maxAqi และ maxMag จะกลับสู่ค่าปกติ
 
 import { useState, useEffect, useRef } from 'react';
 import LiveSensorChart from './LiveSensorChart';
@@ -22,12 +22,10 @@ export default function SensorCard({ deviceId, data }) {
   const [aqiHistory, setAqiHistory] = useState([]);
   const [magHistory, setMagHistory] = useState([]);
 
-  // สถานะและข้อความ Alert (empty แปลว่าปกติ)
-  const [alertText, setAlertText] = useState('');
   // Flag ว่าเคยส่ง LINE Notify ไปแล้วหรือยัง
   const notifiedRef = useRef({ aqi: false, mag: false });
 
-  // --- อัปเดต history ของ AQI ---
+  // อัปเดต aqiHistory เมื่อมี data.aqi25 ใหม่
   useEffect(() => {
     if (!deviceId || data?.aqi25 == null || !data.ts) return;
     setAqiHistory(prev => {
@@ -37,7 +35,7 @@ export default function SensorCard({ deviceId, data }) {
     });
   }, [deviceId, data?.aqi25, data?.ts]);
 
-  // --- อัปเดต history ของ Magnitude ---
+  // อัปเดต magHistory เมื่อมี data.shakeMag ใหม่
   useEffect(() => {
     if (!deviceId || data?.shakeMag == null || !data.ts) return;
     setMagHistory(prev => {
@@ -47,7 +45,7 @@ export default function SensorCard({ deviceId, data }) {
     });
   }, [deviceId, data?.shakeMag, data?.ts]);
 
-  // --- ฟังก์ชันคำนวณสถิติ AQI (จำนวนเต็ม) ---
+  // สถิติ AQI (จำนวนเต็ม)
   const calcAqiStats = historyArray => {
     if (!historyArray || historyArray.length === 0) {
       return { current: '-', avg: '-', max: '-' };
@@ -61,7 +59,7 @@ export default function SensorCard({ deviceId, data }) {
     return { current, avg, max };
   };
 
-  // --- ฟังก์ชันคำนวณสถิติ Magnitude (ทศนิยม 2 ตำแหน่ง) ---
+  // สถิติ Magnitude (ทศนิยม 2 ตำแหน่ง)
   const calcMagStats = historyArray => {
     if (!historyArray || historyArray.length === 0) {
       return { current: '-', avg: '-', max: '-' };
@@ -75,97 +73,59 @@ export default function SensorCard({ deviceId, data }) {
     return { current, avg, max };
   };
 
-  // --- ดึงสถิติ AQI และ Magnitude ---
+  // ดึงสถิติ AQI และ Magnitude
   const { current: currentAqi, avg: avgAqi, max: maxAqi } = calcAqiStats(aqiHistory);
   const { current: currentMag, avg: avgMag, max: maxMag } = calcMagStats(magHistory);
 
-  // แปลง currentMag ให้เป็นตัวเลข เพื่อตรวจ threshold
-  const currentMagNum = typeof currentMag === 'string' ? parseFloat(currentMag) : null;
+  // แปลง maxMag ให้เป็นตัวเลขเพื่อเทียบ threshold
+  const maxMagNum = typeof maxMag === 'string' ? parseFloat(maxMag) : null;
 
-  // ตรวจเช็คว่าค่าเกิน Threshold หรือไม่
-  const isAqiDanger = typeof currentAqi === 'number' && currentAqi >= AQI_THRESHOLD;
-  const isMagDanger = typeof currentMagNum === 'number' && currentMagNum >= MAGNITUDE_THRESHOLD;
-  const isRawAlert = isAqiDanger || isMagDanger;
+  // เช็คว่า maxAQI หรือ maxMagnitude เกินระดับอันตรายหรือไม่
+  const isAqiMaxDanger = typeof maxAqi === 'number' && maxAqi >= AQI_THRESHOLD;
+  const isMagMaxDanger = typeof maxMagNum === 'number' && maxMagNum >= MAGNITUDE_THRESHOLD;
+  // เตือนต่อเนื่องจนกว่า max ทั้งสองจะกลับสู่ปกติ
+  const isAlert = isAqiMaxDanger || isMagMaxDanger;
 
-  // สร้างข้อความ headerText ถ้าเกิด Alert
+  // ใช้ข้อความเตือนตามค่าว่า max ตอนนี้เกิน threshold อะไร
   let headerText = deviceId.toUpperCase();
-  if (isRawAlert) {
-    if (isAqiDanger && isMagDanger) {
-      headerText = `AQI ${currentAqi}, Mag ${currentMag}`;
-    } else if (isAqiDanger) {
-      headerText = `AQI ${currentAqi}`;
-    } else if (isMagDanger) {
-      headerText = `Magnitude ${currentMag}`;
-    }
+  if (isAqiMaxDanger && isMagMaxDanger) {
+    headerText = `AQI ${maxAqi}, Mag ${maxMag}`;
+  } else if (isAqiMaxDanger) {
+    headerText = `AQI ${maxAqi}`;
+  } else if (isMagMaxDanger) {
+    headerText = `Magnitude ${maxMag}`;
   }
 
-  // useEffect สำหรับจัดการ alertText, LINE Notify และ timeout
+  // ส่ง LINE Notify เมื่อ max เกินระดับเป็นครั้งแรก (และไม่ส่งซ้ำจนกว่าจะกลับปกติ)
   useEffect(() => {
-    let timerId;
-
-    // ถ้าเพิ่งเข้าสู่ Alert (isRawAlert true ขณะที่ alertText ยังว่าง)
-    if (isRawAlert && !alertText) {
-      setAlertText(headerText);
-
-      // ส่ง LINE Notify สำหรับ AQI
-      if (isAqiDanger && !notifiedRef.current.aqi) {
-        fetch('/api/notify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message: `[Alert] ${deviceId.toUpperCase()} AQI = ${currentAqi}`
-          })
-        }).catch(err => console.error('LINE Notify AQI error:', err));
-        notifiedRef.current.aqi = true;
-      }
-      // ส่ง LINE Notify สำหรับ Magnitude
-      if (isMagDanger && !notifiedRef.current.mag) {
-        fetch('/api/notify', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            message: `[Alert] ${deviceId.toUpperCase()} Magnitude = ${currentMag}`
-          })
-        }).catch(err => console.error('LINE Notify Mag error:', err));
-        notifiedRef.current.mag = true;
-      }
+    if (isAqiMaxDanger && !notifiedRef.current.aqi) {
+      fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: `[Alert] ${deviceId.toUpperCase()} maxAQI = ${maxAqi}`
+        })
+      }).catch(err => console.error('LINE Notify AQI error:', err));
+      notifiedRef.current.aqi = true;
     }
-
-    // ถ้าอยู่ใน Alert ต่อเนื่อง (isRawAlert true และ alertText ไม่ว่าง)
-    // ให้อัปเดตข้อความตาม headerText แต่ไม่แตะ timeout
-    if (isRawAlert && alertText) {
-      setAlertText(headerText);
-    }
-
-    // ถ้าเพิ่งเปลี่ยนจาก Alert → ปกติ (isRawAlert false แต่ alertText ยังไม่ว่าง)
-    if (!isRawAlert && alertText) {
-      // รีเซ็ต flag LINE Notify เพื่อพร้อมส่งรอบหน้า
+    if (!isAqiMaxDanger) {
       notifiedRef.current.aqi = false;
-      notifiedRef.current.mag = false;
-
-      // ตั้ง timer 2 นาที เพื่อล้าง alertText
-      timerId = setTimeout(() => {
-        setAlertText('');
-      }, 2 * 60 * 1000);
     }
 
-    return () => {
-      if (timerId) clearTimeout(timerId);
-    };
-  }, [
-    isRawAlert,
-    headerText,
-    isAqiDanger,
-    isMagDanger,
-    currentAqi,
-    currentMag,
-    alertText,
-    deviceId
-  ]);
-
-  // สุดท้าย: isAlert = Boolean(alertText)
-  const isAlert = Boolean(alertText);
-  const displayHeader = isAlert ? alertText : deviceId.toUpperCase();
+    if (isMagMaxDanger && !notifiedRef.current.mag) {
+      fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: `[Alert] ${deviceId.toUpperCase()} maxMag = ${maxMag}`
+        })
+      }).catch(err => console.error('LINE Notify Mag error:', err));
+      notifiedRef.current.mag = true;
+    }
+    if (!isMagMaxDanger) {
+      notifiedRef.current.mag = false;
+    }
+  }, [isAqiMaxDanger, isMagMaxDanger, maxAqi, maxMag, deviceId]);
 
   return (
     <div
@@ -193,7 +153,7 @@ export default function SensorCard({ deviceId, data }) {
           textAlign: 'left'
         }}
       >
-        {displayHeader}
+        {headerText}
       </div>
 
       {/* เนื้อหาในการ์ด */}
