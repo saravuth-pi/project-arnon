@@ -161,7 +161,7 @@ export default function SensorCard({ deviceId, data }) {
         {/* --- ข้อมูล Sensor Fields --- */}
         <div style={{
           fontSize: '0.8rem',
-          lineHeight: 1.0,
+          lineHeight: 1.2,
           color: '#fff',
           background: color,
         }}>
