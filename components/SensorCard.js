@@ -166,13 +166,13 @@ export default function SensorCard({ deviceId, data }) {
           
         }}>
           <div style={{display: 'flex'}}>
-            <div style={{flex: 50%}}>AQI₂.₅ </div><div style={{flex: 10%}}> : </div><div style={{flex: 40%}}><strong>{data && data.aqi25 != null ? data.aqi25 : '-'}</strong></div> 
+            <div style={{flex: 5}}>AQI₂.₅ </div><div style={{flex: 1}}> : </div><div style={{flex: 4}}><strong>{data && data.aqi25 != null ? data.aqi25 : '-'}</strong></div> 
           </div>
           <div>
             PM₂.₅     : <strong>{data && data.pm25 != null ? data.pm25 + ' µg/m³' : '-'}</strong>
           </div>
           <div>
-            PM₁₀      : {<strong>data && data.pm10 != null ? data.pm10 + ' µg/m³' : '-'}</strong>
+            PM₁₀      : <strong>{data && data.pm10 != null ? data.pm10 + ' µg/m³' : '-'}</strong>
           </div>
           <div>
             CO₂       : <strong>{data && data.CO2 != null ? data.CO2 + ' ppm' : '-'}</strong>
