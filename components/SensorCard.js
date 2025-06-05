@@ -1,5 +1,5 @@
 // components/SensorCard.js
-// V0.2.0.2.1 – ปรับให้สรุปค่า Magnitude แสดงเป็นทศนิยม 2 ตำแหน่ง
+// V0.2.0.2.2 – ปรับให้สรุปค่า Magnitude แสดงเป็นทศนิยม 2 ตำแหน่ง
 
 import { useState, useEffect } from 'react';
 import LiveSensorChart from './LiveSensorChart';
@@ -162,28 +162,29 @@ export default function SensorCard({ deviceId, data }) {
         <div style={{
           fontSize: '0.8rem',
           lineHeight: 0.9,
-          color: '#333'
+          color: '#333',
+          
         }}>
-          <div>
-            <strong>AQI₂.₅    :</strong> {data && data.aqi25 != null ? data.aqi25 : '-'}
+          <div style={{display: 'flex'}}>
+            <div style={{flex: '50%'}}>AQI₂.₅ </div><div style={{flex: '10%'}}> : </div><div style={{flex: '40%'}}><strong>{data && data.aqi25 != null ? data.aqi25 : '-'}</strong></div> 
           </div>
           <div>
-            <strong>PM₂.₅     :</strong> {data && data.pm25 != null ? data.pm25 + ' µg/m³' : '-'}
+            PM₂.₅     : <strong>{data && data.pm25 != null ? data.pm25 + ' µg/m³' : '-'}</strong>
           </div>
           <div>
-            <strong>PM₁₀      :</strong> {data && data.pm10 != null ? data.pm10 + ' µg/m³' : '-'}
+            PM₁₀      : {<strong>data && data.pm10 != null ? data.pm10 + ' µg/m³' : '-'}</strong>
           </div>
           <div>
-            <strong>CO₂       :</strong> {data && data.CO2 != null ? data.CO2 + ' ppm' : '-'}
+            CO₂       : <strong>{data && data.CO2 != null ? data.CO2 + ' ppm' : '-'}</strong>
           </div>
           <div>
-            <strong>TVOC      :</strong> {data && data.TOC != null ? data.TOC + ' ppb' : '-'}
+            TVOC      : <strong>{data && data.TOC != null ? data.TOC + ' ppb' : '-'}</strong>
           </div>
           <div>
-            <strong>Temp      :</strong> {data && data.temp != null ? data.temp + ' °C' : '-'}
+            Temp      : <strong>{data && data.temp != null ? data.temp + ' °C' : '-'}</strong>
           </div>
           <div>
-            <strong>RH        :</strong> {data && data.RH != null ? data.RH + ' %' : '-'}
+            RH        : <strong>{data && data.RH != null ? data.RH + ' %' : '-'}</strong>
           </div>
         </div>
 
