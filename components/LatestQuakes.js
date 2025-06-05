@@ -26,7 +26,7 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
   usgsQuakes.forEach((q) => {
     const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
     const age = now - new Date(q.time).getTime();
-    if (distance <= 5000 && q.mag >= 4.5 && age <= 24 * 3600 * 1000) {
+    if (distance <= 8000 && q.mag >= 3.5 && age <= 24 * 3600 * 1000) {
       quakes.push({
         source: 'USGS',
         mag: q.mag,
@@ -62,7 +62,7 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
   return (
     <div style={{fontSize: '0.8rem', color: '#eee'}}>
         {last10.map((q, i) => (
-          <div style={{fontSize: '0.8rem', color: '#eee', padding: '0x 20px'}}>
+          <div style={{fontSize: '0.8rem', color: '#eee', padding: '20x 0px'}}>
             {i+1}) {q.distance.toFixed(0)} km  - {q.time} - M{q.mag.toFixed(1)} - {q.place}  [{q.source}]
           </div>
         ))}
