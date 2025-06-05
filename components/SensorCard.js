@@ -161,30 +161,30 @@ export default function SensorCard({ deviceId, data }) {
         {/* --- ข้อมูล Sensor Fields --- */}
         <div style={{
           fontSize: '0.8rem',
-          lineHeight: 0.9,
-          color: '#333',
-          
+          lineHeight: 1.0,
+          color: '#fff',
+          background: color,
         }}>
-          <div style={{display: 'flex', background: color,}}>
+          <div style={{display: 'flex'}}>
             <div style={{flex: 3}}>AQI₂.₅ </div><div style={{flex: 1}}> : </div><div style={{flex: 6}}><strong>{data && data.aqi25 != null ? data.aqi25 : '-'}</strong></div> 
           </div>
-          <div>
-            PM₂.₅     : <strong>{data && data.pm25 != null ? data.pm25 + ' µg/m³' : '-'}</strong>
+          <div style={{display: 'flex'}}>
+            <div style={{flex: 3}}>PM₂.₅ </div><div style={{flex: 1}}> : </div><div style={{flex: 6}}><strong>{data && data.pm25 != null ? data.pm25 + ' µg/m³' : '-'}</strong></div> 
           </div>
-          <div>
-            PM₁₀      : <strong>{data && data.pm10 != null ? data.pm10 + ' µg/m³' : '-'}</strong>
+          <div style={{display: 'flex'}}>
+            <div style={{flex: 3}}>PM₁₀ </div><div style={{flex: 1}}> : </div><div style={{flex: 6}}><strong>{data && data.pm10 != null ? data.pm10 + ' µg/m³' : '-'}</strong></div> 
           </div>
-          <div>
-            CO₂       : <strong>{data && data.CO2 != null ? data.CO2 + ' ppm' : '-'}</strong>
+          <div style={{display: 'flex'}}>
+            <div style={{flex: 3}}>CO₂ </div><div style={{flex: 1}}> : </div><div style={{flex: 6}}><strong>{data && data.CO2 != null ? data.CO2 + ' ppm' : '-'}</strong></div> 
           </div>
-          <div>
-            TVOC      : <strong>{data && data.TOC != null ? data.TOC + ' ppb' : '-'}</strong>
+          <div style={{display: 'flex'}}>
+            <div style={{flex: 3}}>TVOC </div><div style={{flex: 1}}> : </div><div style={{flex: 6}}><strong>{data && data.TOC != null ? data.TOC + ' ppb' : '-'}</strong></div> 
           </div>
-          <div>
-            Temp      : <strong>{data && data.temp != null ? data.temp + ' °C' : '-'}</strong>
+          <div style={{display: 'flex'}}>
+            <div style={{flex: 3}}>Temp </div><div style={{flex: 1}}> : </div><div style={{flex: 6}}><strong>{data && data.temp != null ? data.temp + ' °C' : '-'}</strong></div> 
           </div>
-          <div>
-            RH        : <strong>{data && data.RH != null ? data.RH + ' %' : '-'}</strong>
+          <div style={{display: 'flex'}}>
+            <div style={{flex: 3}}>RH </div><div style={{flex: 1}}> : </div><div style={{flex: 6}}><strong>{data && data.RH != null ? data.RH + ' %' : '-'}</strong></div> 
           </div>
         </div>
 
