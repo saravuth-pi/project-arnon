@@ -60,7 +60,7 @@ export default function LatestQuakes({ usgsQuakes = [], tmdQuakes = [] }) {
   const last10 = quakes.slice(0, 10);
 
   return (
-    <div style={{fontSize: '0.8rem'}}>
+    <div style={{fontSize: '0.8rem', color: '#eee'}}>
       <ul>
         {last10.map((q, i) => (
           <li key={i}>
