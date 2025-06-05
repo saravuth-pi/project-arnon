@@ -1,5 +1,5 @@
 // pages/index.js
-// V1.0.1.0.4 - แก้ไขให้แสดง SensorCard ใหม่ทั้งหมด
+// V1.0.1.0.5 - แก้ไขให้แสดง SensorCard ใหม่ทั้งหมด
 
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
@@ -112,7 +112,7 @@ export default function Home() {
       </div>
 
       {/* รายงานเหตุแผ่นดินไหว */}
-      <div style={{ background: '#666', padding: 12, borderRadius: 8, marginBottom: 3 }}>
+      <div style={{background: '#666', padding: 3, borderRadius: 8, marginBottom: 3 }}>
         <h3 style={{ margin: '0px 0', color: 'white' }}>รายงานเหตุแผ่นดินไหวในภูมิภาค</h3>
         <LatestQuakes tmdQuakes={tmdQuakes} usgsQuakes={usgsQuakes} />
       </div>
