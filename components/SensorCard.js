@@ -109,7 +109,7 @@ export default function SensorCard({ deviceId, data }) {
 
     // 1) ถ้าเพิ่งเปลี่ยนจากปกติ → Alert (false → true)
     if (!prevRaw && isRawAlert) {
-      // ล้าง timeout เก่าถ้ามี (ต่อให้ไม่มีก็เผื่อไว้)
+      // ถ้ามี timeout ค้างอยู่ ให้เคลียร์ (เพราะกำลังเข้าสู่ Alert ใหม่)
       if (clearTimeoutRef.current) {
         clearTimeout(clearTimeoutRef.current);
         clearTimeoutRef.current = null;
@@ -154,19 +154,17 @@ export default function SensorCard({ deviceId, data }) {
       }, 2 * 60 * 1000);
     }
 
-    // 3) ถ้าอยู่ในสถานะ Alert จากที่แล้ว (prevRaw === true && isRawAlert === true)
-    //    ให้ล้าง timeout ใด ๆ ที่อาจตั้งไว้ (ไม่ต้องรอ 2 นาที เพราะยังใช้งาน alert อยู่)
-    if (isRawAlert) {
-      if (clearTimeoutRef.current) {
-        clearTimeout(clearTimeoutRef.current);
-        clearTimeoutRef.current = null;
-      }
+    // 3) ถ้ายังอยู่ในสถานะ Alert (prevRaw === true && isRawAlert === true)
+    //    ให้เคลียร์ timeout เก่าออก (ไม่ต้องล้าง alertText ตอนนี้)
+    if (isRawAlert && clearTimeoutRef.current) {
+      clearTimeout(clearTimeoutRef.current);
+      clearTimeoutRef.current = null;
     }
 
-    // จัดเก็บ isRawAlert สำหรับรอบถัดไป
+    // อัปเดต prevRawAlertRef สำหรับรอบถัดไป
     prevRawAlertRef.current = isRawAlert;
 
-    // เมื่อ component unmount ให้เคลียร์ timeout ที่ค้างอยู่
+    // ล้าง timeout เมื่อ component unmount
     return () => {
       if (clearTimeoutRef.current) {
         clearTimeout(clearTimeoutRef.current);
