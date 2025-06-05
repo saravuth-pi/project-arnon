@@ -1,5 +1,5 @@
 // components/SensorCard.js
-// V0.2.0.4.1 – แก้ useEffect ให้ timeout เตือนค้าง 2 นาที หลังค่ากลับไปปกติ
+// V0.2.0.5.0 – แก้ useEffect ให้ timeout เตือนค้าง 2 นาที หลังค่ากลับไปปกติ
 
 import { useState, useEffect, useRef } from 'react';
 import LiveSensorChart from './LiveSensorChart';
@@ -24,10 +24,6 @@ export default function SensorCard({ deviceId, data }) {
 
   // สถานะและข้อความ Alert (empty แปลว่าปกติ)
   const [alertText, setAlertText] = useState('');
-  // ref เก็บ timeout ID เพื่อเคลียร์ได้
-  const clearTimeoutRef = useRef(null);
-  // เก็บสถานะ isRawAlert ของรอบก่อนหน้า
-  const prevRawAlertRef = useRef(false);
   // Flag ว่าเคยส่ง LINE Notify ไปแล้วหรือยัง
   const notifiedRef = useRef({ aqi: false, mag: false });
 
@@ -103,21 +99,15 @@ export default function SensorCard({ deviceId, data }) {
     }
   }
 
-  // --- useEffect หลัก: จัดการ Alert state + LINE Notify + Timeout ล้าง ---
+  // useEffect สำหรับจัดการ alertText, LINE Notify และ timeout
   useEffect(() => {
-    const prevRaw = prevRawAlertRef.current;
+    let timerId;
 
-    // 1) ถ้าเพิ่งเปลี่ยนจากปกติ → Alert (false → true)
-    if (!prevRaw && isRawAlert) {
-      // ถ้ามี timeout ค้างอยู่ ให้เคลียร์ (เพราะกำลังเข้าสู่ Alert ใหม่)
-      if (clearTimeoutRef.current) {
-        clearTimeout(clearTimeoutRef.current);
-        clearTimeoutRef.current = null;
-      }
-      // ตั้ง alertText ให้เท่ากับ headerText
+    // ถ้าเพิ่งเข้าสู่ Alert (isRawAlert true ขณะที่ alertText ยังว่าง)
+    if (isRawAlert && !alertText) {
       setAlertText(headerText);
 
-      // ส่ง LINE Notify สำหรับ AQI (ถ้ายังไม่เคยส่ง)
+      // ส่ง LINE Notify สำหรับ AQI
       if (isAqiDanger && !notifiedRef.current.aqi) {
         fetch('/api/notify', {
           method: 'POST',
@@ -128,7 +118,7 @@ export default function SensorCard({ deviceId, data }) {
         }).catch(err => console.error('LINE Notify AQI error:', err));
         notifiedRef.current.aqi = true;
       }
-      // ส่ง LINE Notify สำหรับ Magnitude (ถ้ายังไม่เคยส่ง)
+      // ส่ง LINE Notify สำหรับ Magnitude
       if (isMagDanger && !notifiedRef.current.mag) {
         fetch('/api/notify', {
           method: 'POST',
@@ -141,34 +131,26 @@ export default function SensorCard({ deviceId, data }) {
       }
     }
 
-    // 2) ถ้าเพิ่งเปลี่ยนจาก Alert → ปกติ (true → false)
-    if (prevRaw && !isRawAlert) {
-      // รีเซ็ต flag ของการส่ง LINE Notify
+    // ถ้าอยู่ใน Alert ต่อเนื่อง (isRawAlert true และ alertText ไม่ว่าง)
+    // ให้อัปเดตข้อความตาม headerText แต่ไม่แตะ timeout
+    if (isRawAlert && alertText) {
+      setAlertText(headerText);
+    }
+
+    // ถ้าเพิ่งเปลี่ยนจาก Alert → ปกติ (isRawAlert false แต่ alertText ยังไม่ว่าง)
+    if (!isRawAlert && alertText) {
+      // รีเซ็ต flag LINE Notify เพื่อพร้อมส่งรอบหน้า
       notifiedRef.current.aqi = false;
       notifiedRef.current.mag = false;
 
-      // ตั้ง timeout ให้ล้าง alertText ภายใน 2 นาที (120,000 ms)
-      clearTimeoutRef.current = setTimeout(() => {
+      // ตั้ง timer 2 นาที เพื่อล้าง alertText
+      timerId = setTimeout(() => {
         setAlertText('');
-        clearTimeoutRef.current = null;
       }, 2 * 60 * 1000);
     }
 
-    // 3) ถ้ายังอยู่ในสถานะ Alert (prevRaw === true && isRawAlert === true)
-    //    ให้เคลียร์ timeout เก่าออก (ไม่ต้องล้าง alertText ตอนนี้)
-    if (isRawAlert && clearTimeoutRef.current) {
-      clearTimeout(clearTimeoutRef.current);
-      clearTimeoutRef.current = null;
-    }
-
-    // อัปเดต prevRawAlertRef สำหรับรอบถัดไป
-    prevRawAlertRef.current = isRawAlert;
-
-    // ล้าง timeout เมื่อ component unmount
     return () => {
-      if (clearTimeoutRef.current) {
-        clearTimeout(clearTimeoutRef.current);
-      }
+      if (timerId) clearTimeout(timerId);
     };
   }, [
     isRawAlert,
@@ -177,12 +159,12 @@ export default function SensorCard({ deviceId, data }) {
     isMagDanger,
     currentAqi,
     currentMag,
+    alertText,
     deviceId
   ]);
 
-  // สุดท้าย: isAlert = Boolean(alertText) (ถ้า alertText ไม่ว่าง ก็ถือเป็น alert)
+  // สุดท้าย: isAlert = Boolean(alertText)
   const isAlert = Boolean(alertText);
-  // ข้อความ header ที่จะแสดง (ถ้า isAlert เวลานี้ ให้แสดง alertText เสมอ)
   const displayHeader = isAlert ? alertText : deviceId.toUpperCase();
 
   return (
