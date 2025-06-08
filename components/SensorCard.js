@@ -16,9 +16,9 @@ const MAGNITUDE_THRESHOLD = 2.0;
 
 export default function SensorCard({ deviceId, data }) {
   const color = COLOR_MAP[deviceId] || '#7f8c8d';
-  const TEN_MINUTES_MS = 5 * 60 * 1000;
+  const TEN_MINUTES_MS = 10 * 60 * 1000;
 
-  // เก็บประวัติ 5 นาทีของ AQI และ Magnitude
+  // เก็บประวัติ 10 นาทีของ AQI และ Magnitude
   const [aqiHistory, setAqiHistory] = useState([]);
   const [magHistory, setMagHistory] = useState([]);
 
