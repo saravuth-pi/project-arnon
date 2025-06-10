@@ -117,6 +117,11 @@ export default function Home() {
         <LatestQuakes tmdQuakes={tmdQuakes} usgsQuakes={usgsQuakes} />
       </div>
 
+      {/* MAP */}
+      <div style={{ height: '40vh', width: '100vw', marginBottom: 3 }}>
+        <Map latest={allDataPoints} />
+      </div>
+
       {/* AQI Panel <AQIPanel /> */}
     </div>
     
