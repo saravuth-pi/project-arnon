@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Ably from 'ably';
 
-const Map = dynamic(() => import('../components/Map'), { ssr: false });
 const MapWithNoSSR = dynamic(() => import('../components/MapPATOnly'), {
   ssr: false
 });
