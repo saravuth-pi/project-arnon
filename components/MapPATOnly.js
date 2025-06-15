@@ -39,7 +39,7 @@ export default function MapPATOnly({ latest }) {
   };
   const COLOR_MAP = {
     'esp32-1': '#2ecc71', // เขียวอ่อน
-    'esp32-2': '#8e44ad', // ม่วง
+    'DG-warehouse': '#8e44ad', // ม่วง
     'esp32-3': '#3498db'  // น้ำเงิน
   };
 

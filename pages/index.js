@@ -12,7 +12,6 @@ const MapWithNoSSR = dynamic(() => import('../components/MapPATOnly'), {
 // คอมโพเนนต์อื่น ๆ
 import SensorCard from '../components/SensorCard';
 import LatestQuakes from '../components/LatestQuakes';
-import AQIPanel from '../components/AQIPanel';
 
 export default function Home() {
   const [allDataPoints, setAllDataPoints] = useState({});
@@ -117,13 +116,6 @@ export default function Home() {
         <LatestQuakes tmdQuakes={tmdQuakes} usgsQuakes={usgsQuakes} />
       </div>
 
-      {/* MAP */}
-      <div style={{ height: '40vh', width: '100vw', marginBottom: 3 }}>
-        <Map latest={allDataPoints} />
-      </div>
-
-      
-      {/* AQI Panel <AQIPanel /> */}
     </div>
     
   );
