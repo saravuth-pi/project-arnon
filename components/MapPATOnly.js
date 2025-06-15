@@ -34,7 +34,7 @@ export default function MapPATOnly({ latest }) {
   // (3) พิกัดและสีของแต่ละ Device
   const DEVICE_LOCATION = {
     'esp32-1': { lat: 13.71321, lng: 100.56407 },
-    'esp32-2': { lat: 13.70830, lng: 100.57225 },
+    'DG-warehouse': { lat: 13.70830, lng: 100.57225 },
     'esp32-3': { lat: 13.69775, lng: 100.58752 }
   };
   const COLOR_MAP = {
