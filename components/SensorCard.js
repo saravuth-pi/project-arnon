@@ -179,7 +179,7 @@ export default function SensorCard({ deviceId, data }) {
               fontSize: '0.6rem',
               fontWeight: 'bold',
               marginBottom: '0px',
-              color: '#777'
+              color: '#000'
             }}
           >
             AQI Trend
@@ -201,8 +201,8 @@ export default function SensorCard({ deviceId, data }) {
           }}
         >
           <div>
-            <strong>Current AQI₂.₅&nbsp;: {currentAqi} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>  
-            Avg :<strong>{avgAqi}</strong> 
+            <strong>Current AQI₂.₅&nbsp;: {currentAqi} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>  
+            Avg :<strong>{avgAqi}</strong>&nbsp;&nbsp;
             Max :<strong> {maxAqi}</strong>
           </div>
         </div>
@@ -297,7 +297,7 @@ export default function SensorCard({ deviceId, data }) {
               fontSize: '0.6rem',
               fontWeight: 'bold',
               marginBottom: '0px',
-              color: '#777'
+              color: '#000'
             }}
           >
             Magnitude Trend
@@ -320,13 +320,9 @@ export default function SensorCard({ deviceId, data }) {
           }}
         >
           <div>
-            <strong>Current Magnitude:</strong> {currentMag}
-          </div>
-          <div>
-            <strong>Avg Magnitude:</strong> {avgMag}
-          </div>
-          <div>
-            <strong>Max Magnitude:</strong> {maxMag}
+            <strong>Current Magnitude : {currentMag}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+            Avg :<strong>{avgMag}</strong> &nbsp;&nbsp;
+            Max :<strong>{maxMag}</strong> 
           </div>
         </div>
       </div>
