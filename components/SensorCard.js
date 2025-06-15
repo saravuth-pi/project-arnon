@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import LiveSensorChart from './LiveSensorChart';
 
 const COLOR_MAP = {
-  'esp32-1': '#2ecc71',
+  'PAT-Building-A': '#2ecc71',
   'DG-warehouse': '#8e44ad',
   'esp32-3': '#3498db'
 };
