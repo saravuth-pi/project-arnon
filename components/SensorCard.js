@@ -186,7 +186,7 @@ export default function SensorCard({ deviceId, data }) {
           </div>
           <LiveSensorChart
             deviceId={`${deviceId}-aqi`}
-            newData={data && data.aqi25 != null ? data.aqi25 : null}
+            newData={data && data.aqi25 != null && data.aqi25 !== 0 ? data.aqi25 : null}
             timestamp={data ? data.ts : null}
           />
         </div>
@@ -218,15 +218,6 @@ export default function SensorCard({ deviceId, data }) {
             borderRadius: 4
           }}
         >
-          { /*<div style={{ display: 'flex' }}>
-            <div style={{ flex: 3 }}>AQI₂.₅&nbsp;</div>
-            <div style={{ flex: 1 }}>:</div>
-            <div style={{ flex: 6 }}>
-              <strong>
-                {data && data.aqi25 != null ? data.aqi25 : '-'}
-              </strong>
-            </div>
-          </div> */ }
           <div style={{ display: 'flex' }}>
             <div style={{ flex: 3 }}>PM₂.₅&nbsp;</div>
             <div style={{ flex: 1 }}>:</div>
