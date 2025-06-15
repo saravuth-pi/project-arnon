@@ -201,13 +201,9 @@ export default function SensorCard({ deviceId, data }) {
           }}
         >
           <div>
-            <strong>Current AQI:</strong> {currentAqi}
-          </div>
-          <div>
-            <strong>Avg AQI:</strong> {avgAqi}
-          </div>
-          <div>
-            <strong>Max AQI:</strong> {maxAqi}
+            <strong>Current AQI₂.₅&nbsp;: {currentAqi} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>  
+            Avg :<strong>{avgAqi}</strong> 
+            Max :<strong> {maxAqi}</strong>
           </div>
         </div>
 
@@ -222,7 +218,7 @@ export default function SensorCard({ deviceId, data }) {
             borderRadius: 4
           }}
         >
-          <div style={{ display: 'flex' }}>
+          { /*<div style={{ display: 'flex' }}>
             <div style={{ flex: 3 }}>AQI₂.₅&nbsp;</div>
             <div style={{ flex: 1 }}>:</div>
             <div style={{ flex: 6 }}>
@@ -230,7 +226,7 @@ export default function SensorCard({ deviceId, data }) {
                 {data && data.aqi25 != null ? data.aqi25 : '-'}
               </strong>
             </div>
-          </div>
+          </div> */ }
           <div style={{ display: 'flex' }}>
             <div style={{ flex: 3 }}>PM₂.₅&nbsp;</div>
             <div style={{ flex: 1 }}>:</div>
