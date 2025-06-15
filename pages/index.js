@@ -116,6 +116,11 @@ export default function Home() {
         <LatestQuakes tmdQuakes={tmdQuakes} usgsQuakes={usgsQuakes} />
       </div>
 
+<<<<<<< HEAD
+=======
+
+      {/* AQI Panel <AQIPanel /> */}
+>>>>>>> 4f9c8b90d7d383d2f96adaa93ddc87d24cab1b01
     </div>
     
   );
