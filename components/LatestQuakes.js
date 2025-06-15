@@ -50,23 +50,6 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
   const now = Date.now();
   const quakes = [];
 
-  // 2) กรอง USGS
-  usgsQuakes.forEach((q) => {
-    const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
-    const age = now - q.time;
-    if (distance <= 5500 && q.mag >= 3.5 && age <= 24 * 3600 * 1000) {
-      quakes.push({
-        source: 'USGS',
-        mag: q.mag,
-        place: q.place,
-        time: new Date(q.time).toLocaleString('th-TH', {
-          timeZone: 'Asia/Bangkok',
-        }),
-        distance,
-      });
-    }
-  });
-
   // 3) กรอง TMD (เดิม)
   tmdQuakes.forEach((q) => {
     const quakeTime = new Date(q.timestamp);
@@ -82,6 +65,23 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
         time: bangkokTime.toLocaleString('th-TH', {
           dateStyle: 'short',
           timeStyle: 'medium',
+          timeZone: 'Asia/Bangkok',
+        }),
+        distance,
+      });
+    }
+  });
+
+  // 2) กรอง USGS
+  usgsQuakes.forEach((q) => {
+    const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
+    const age = now - q.time;
+    if (distance <= 5500 && q.mag >= 3.5 && age <= 24 * 3600 * 1000) {
+      quakes.push({
+        source: 'USGS',
+        mag: q.mag,
+        place: q.place,
+        time: new Date(q.time).toLocaleString('th-TH', {
           timeZone: 'Asia/Bangkok',
         }),
         distance,

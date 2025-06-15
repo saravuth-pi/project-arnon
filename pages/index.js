@@ -73,7 +73,7 @@ export default function Home() {
     };
   }, []);
 
-  const deviceList = ['esp32-1', 'esp32-2', 'esp32-3'];
+  const deviceList = ['esp32-1', 'DG-warehouse', 'esp32-3'];
 
   return (
     <div style={{ fontFamily: 'sans-serif', padding: 0, background: '#ffffff' }}>
