@@ -202,7 +202,7 @@ export default function SensorCard({ deviceId, data }) {
         >
           <div>
             <strong>Current AQI₂.₅&nbsp;: {currentAqi}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>  
-            Avg :<strong>{avgAqi}</strong>&nbsp;&nbsp;
+            Avg :<strong> {avgAqi}</strong>&nbsp;&nbsp;
             Max :<strong> {maxAqi}</strong>
           </div>
         </div>
@@ -321,8 +321,8 @@ export default function SensorCard({ deviceId, data }) {
         >
           <div>
             <strong>Current Magnitude : {currentMag}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
-            Avg :<strong>{avgMag}</strong>&nbsp;&nbsp;
-            Max :<strong>{maxMag}</strong> 
+            Avg :<strong> {avgMag}</strong>&nbsp;&nbsp;
+            Max :<strong> {maxMag}</strong> 
           </div>
         </div>
       </div>
