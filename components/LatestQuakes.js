@@ -54,7 +54,7 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
   usgsQuakes.forEach((q) => {
     const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon);
     const age = now - q.time;
-    if (distance <= 8000 && q.mag >= 3.5 && age <= 24 * 3600 * 1000) {
+    if (distance <= 5500 && q.mag >= 3.5 && age <= 24 * 3600 * 1000) {
       quakes.push({
         source: 'USGS',
         mag: q.mag,
