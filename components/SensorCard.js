@@ -196,7 +196,8 @@ export default function SensorCard({ deviceId, data }) {
         <div
           style={{
             borderTop: '1px solid #ddd',
-            paddingTop: '6px',
+            paddingTop: '2px',
+            paddingBottom: '2px', 
             fontSize: '0.7rem',
             color: '#555',
             lineHeight: 1.0
@@ -309,7 +310,7 @@ export default function SensorCard({ deviceId, data }) {
             fontSize: '0.7rem',
             color: '#555',
             lineHeight: 1.0,
-            marginTop: '5px'
+            marginTop: '2px'
           }}
         >
           <div>

@@ -84,8 +84,8 @@ export default function MapPATOnly({ latest }) {
               >
                 <div className="sensor-label" style={{ backgroundColor: bgColor }}>
                   <div className="sensor-label-title">{deviceId.toUpperCase()}</div>
-                  <div className="sensor-label-line">AQI : {aqiValue}</div>
                   <div className="sensor-label-line">Mag : {magValue}</div>
+                  <div className="sensor-label-line">AQI : {aqiValue}</div>
                 </div>
               </Tooltip>
             </CircleMarker>
