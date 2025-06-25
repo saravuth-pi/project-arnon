@@ -165,7 +165,8 @@ export default function SensorCard({ deviceId, data }) {
           gap: '4px'
         }}
       >
-        {/* --- กราฟ AQI --- */}
+
+        {/* --- กราฟ Magnitude --- */}
         <div
           style={{
             height: '50px',
@@ -182,28 +183,29 @@ export default function SensorCard({ deviceId, data }) {
               color: '#000'
             }}
           >
-            AQI Trend
+            Magnitude Trend
           </div>
           <LiveSensorChart
-            deviceId={`${deviceId}-aqi`}
-            newData={data && data.aqi25 != null && data.aqi25 !== 0 ? data.aqi25 : null}
+            deviceId={`${deviceId}-mag`}
+            newData={data ? data.shakeMag : null}
             timestamp={data ? data.ts : null}
           />
         </div>
 
-        {/* --- สรุปค่า AQI (จำนวนเต็ม) --- */}
+        {/* --- สรุปค่า Magnitude (ทศนิยม 2 ตำแหน่ง) --- */}
         <div
           style={{
+            borderTop: '1px solid #ddd',
+            paddingTop: '6px',
             fontSize: '0.7rem',
             color: '#555',
-            lineHeight: 1.0,
-            marginTop: '5px'
+            lineHeight: 1.0
           }}
         >
           <div>
-            <strong>Current AQI₂.₅&nbsp;: {currentAqi}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>  
-            Avg :<strong> {avgAqi}</strong>&nbsp;&nbsp;
-            Max :<strong> {maxAqi}</strong>
+            <strong>Magnitude : {currentMag}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+            Avg :<strong> {avgMag}</strong>&nbsp;&nbsp;
+            Max :<strong> {maxMag}</strong> 
           </div>
         </div>
 
@@ -273,8 +275,8 @@ export default function SensorCard({ deviceId, data }) {
             </div>
           </div>
         </div>
-
-        {/* --- กราฟ Magnitude --- */}
+        
+        {/* --- กราฟ AQI --- */}
         <div
           style={{
             height: '50px',
@@ -291,31 +293,32 @@ export default function SensorCard({ deviceId, data }) {
               color: '#000'
             }}
           >
-            Magnitude Trend
+            AQI Trend
           </div>
           <LiveSensorChart
-            deviceId={`${deviceId}-mag`}
-            newData={data ? data.shakeMag : null}
+            deviceId={`${deviceId}-aqi`}
+            newData={data && data.aqi25 != null && data.aqi25 !== 0 ? data.aqi25 : null}
             timestamp={data ? data.ts : null}
           />
         </div>
 
-        {/* --- สรุปค่า Magnitude (ทศนิยม 2 ตำแหน่ง) --- */}
+
+        {/* --- สรุปค่า AQI (จำนวนเต็ม) --- */}
         <div
           style={{
-            borderTop: '1px solid #ddd',
-            paddingTop: '6px',
             fontSize: '0.7rem',
             color: '#555',
-            lineHeight: 1.0
+            lineHeight: 1.0,
+            marginTop: '5px'
           }}
         >
           <div>
-            <strong>Current Magnitude : {currentMag}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>
-            Avg :<strong> {avgMag}</strong>&nbsp;&nbsp;
-            Max :<strong> {maxMag}</strong> 
+            <strong>AQI₂.₅&nbsp;: {currentAqi}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong>  
+            Avg :<strong> {avgAqi}</strong>&nbsp;&nbsp;
+            Max :<strong> {maxAqi}</strong>
           </div>
         </div>
+
       </div>
 
       {/* สไตล์สำหรับการ์ดกระพริบและหัวข้อกระพริบ */}
