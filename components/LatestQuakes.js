@@ -100,7 +100,7 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
           key={`${q.source}-${i}`}
           style={{ fontSize: '0.8rem', color: '#eee', marginLeft: '30px' }}
         >
-          {i + 1}) {q.distance.toFixed(0)} km – {q.time} – M
+          {i + 1}. ระยะห่าง {q.distance.toFixed(0)} km – {q.time} – ขนาด M
           {q.mag.toFixed(1)} – {q.place} [{q.source}]
         </div>
       ))}
