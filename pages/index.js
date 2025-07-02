@@ -99,7 +99,7 @@ export default function Home() {
       </div>
 
       {/* MAP (เฉพาะฝั่งไคลเอ็นต์) */}
-      <div style={{ height: '40vh', width: '99vw', marginBottom: 3 }}>
+      <div style={{ height: '40vh', width: '98vw', marginBottom: 3 }}>
         <MapWithNoSSR latest={allDataPoints} />
       </div>
 

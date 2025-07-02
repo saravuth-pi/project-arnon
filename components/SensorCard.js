@@ -221,24 +221,7 @@ export default function SensorCard({ deviceId, data }) {
             borderRadius: 4
           }}
         >
-          <div style={{ display: 'flex' }}>
-            <div style={{ flex: 3 }}>PM₂.₅&nbsp;</div>
-            <div style={{ flex: 1 }}>:</div>
-            <div style={{ flex: 6 }}>
-              <strong>
-                {data && data.pm25 != null ? data.pm25 + ' µg/m³' : '-'}
-              </strong>
-            </div>
-          </div>
-          <div style={{ display: 'flex' }}>
-            <div style={{ flex: 3 }}>PM₁₀&nbsp;</div>
-            <div style={{ flex: 1 }}>:</div>
-            <div style={{ flex: 6 }}>
-              <strong>
-                {data && data.pm10 != null ? data.pm10 + ' µg/m³' : '-'}
-              </strong>
-            </div>
-          </div>
+
           <div style={{ display: 'flex' }}>
             <div style={{ flex: 3 }}>CO₂&nbsp;</div>
             <div style={{ flex: 1 }}>:</div>
@@ -275,6 +258,27 @@ export default function SensorCard({ deviceId, data }) {
               </strong>
             </div>
           </div>
+
+          <div style={{ display: 'flex' }}>
+            <div style={{ flex: 3 }}>PM₂.₅&nbsp;</div>
+            <div style={{ flex: 1 }}>:</div>
+            <div style={{ flex: 6 }}>
+              <strong>
+                {data && data.pm25 != null ? data.pm25 + ' µg/m³' : '-'}
+              </strong>
+            </div>
+          </div>
+          <div style={{ display: 'flex' }}>
+            <div style={{ flex: 3 }}>PM₁₀&nbsp;</div>
+            <div style={{ flex: 1 }}>:</div>
+            <div style={{ flex: 6 }}>
+              <strong>
+                {data && data.pm10 != null ? data.pm10 + ' µg/m³' : '-'}
+              </strong>
+            </div>
+          </div>
+
+
         </div>
         
         {/* --- กราฟ AQI --- */}
