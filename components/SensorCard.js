@@ -7,7 +7,7 @@ import LiveSensorChart from './LiveSensorChart';
 const COLOR_MAP = {
   'PAT-Building-A': '#2ecc71',
   'DG-warehouse': '#8e44ad',
-  'esp32-3': '#3498db'
+  'Terminal2': '#3498db'
 };
 
 // กำหนด Threshold

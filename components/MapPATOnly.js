@@ -35,19 +35,19 @@ export default function MapPATOnly({ latest }) {
   const DEVICE_LOCATION = {
     'PAT-Building-A': { lat: 13.71321, lng: 100.56407 },
     'DG-warehouse': { lat: 13.70830, lng: 100.57225 },
-    'esp32-3': { lat: 13.69775, lng: 100.58752 }
+    'Terminal2': { lat: 13.703032, lng: 100.582657 }
   };
   const COLOR_MAP = {
     'PAT-Building-A': '#2ecc71', // เขียวอ่อน
     'DG-warehouse': '#8e44ad', // ม่วง
-    'esp32-3': '#3498db'  // น้ำเงิน
+    'Terminal2': '#3498db'  // น้ำเงิน
   };
 
   return (
     <div style={{ height: '100%', width: '100%' }}>
       <MapContainer
         center={[13.710387, 100.574588]}
-        zoom={15}
+        zoom={14}
         style={{ height: '100%', width: '100%' }}
       >
         <TileLayer

@@ -73,7 +73,7 @@ export default function Home() {
     };
   }, []);
 
-  const deviceList = ['PAT-Building-A', 'DG-warehouse', 'esp32-3'];
+  const deviceList = ['PAT-Building-A', 'DG-warehouse', 'Terminal2'];
 
   return (
     <div style={{ fontFamily: 'sans-serif', padding: 0, background: '#ffffff' }}>
@@ -99,7 +99,7 @@ export default function Home() {
       </div>
 
       {/* MAP (เฉพาะฝั่งไคลเอ็นต์) */}
-      <div style={{ height: '40vh', width: '96vw', marginBottom: 3 }}>
+      <div style={{ height: '40vh', width: '99vw', marginBottom: 3 }}>
         <MapWithNoSSR latest={allDataPoints} />
       </div>
 
