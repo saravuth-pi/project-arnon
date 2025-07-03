@@ -71,14 +71,13 @@ export default function LiveSensorChart({ deviceId, newData, timestamp }) {
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis 
-          dataKey="time" 
-          hide={true} 
+        <XAxis
+          dataKey="time"
           interval="preserveStartEnd"
-          tickFormatter={str => {
-            const [h, m, s] = str.split(':')
-            return `${m}:${s}`
-          }}
+          tickFormatter={str => str.slice(0, 5)} // แสดงเป็น HH:mm
+          tick={{ fontSize: '0.3rem', fill: '#666' }}
+          height={15}
+          // hide={true} // เอาออกเพื่อแสดงเวลาที่แกน X
         />
         <YAxis domain={[0, 'auto']} hide={true} />
         <Tooltip 
