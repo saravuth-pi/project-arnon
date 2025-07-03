@@ -83,7 +83,7 @@ export default function MapPATOnly({ latest }) {
                 className="sensor-tooltip"
               >
                 <div className="sensor-label" style={{ backgroundColor: bgColor }}>
-                  <div className="sensor-label-title">{deviceId.toUpperCase()}</div>
+                  <div className="sensor-label-title">{deviceId}</div>
                   <div className="sensor-label-line">Mag : {magValue}</div>
                   <div className="sensor-label-line">AQI : {aqiValue}</div>
                 </div>

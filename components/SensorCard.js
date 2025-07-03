@@ -87,7 +87,7 @@ export default function SensorCard({ deviceId, data }) {
   const isAlert = isAqiMaxDanger || isMagMaxDanger;
 
   // ใช้ข้อความเตือนตามค่าว่า max ตอนนี้เกิน threshold อะไร
-  let headerText = deviceId.toUpperCase();
+  let headerText = deviceId;
   if (isAqiMaxDanger && isMagMaxDanger) {
     headerText = `AQI ${maxAqi}, Mag ${maxMag}`;
   } else if (isAqiMaxDanger) {
@@ -103,7 +103,7 @@ export default function SensorCard({ deviceId, data }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: `[Alert] ${deviceId.toUpperCase()} maxAQI = ${maxAqi}`
+          message: `[Alert] ${deviceId} maxAQI = ${maxAqi}`
         })
       }).catch(err => console.error('LINE Notify AQI error:', err));
       notifiedRef.current.aqi = true;
@@ -117,7 +117,7 @@ export default function SensorCard({ deviceId, data }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: `[Alert] ${deviceId.toUpperCase()} maxMag = ${maxMag}`
+          message: `[Alert] ${deviceId} maxMag = ${maxMag}`
         })
       }).catch(err => console.error('LINE Notify Mag error:', err));
       notifiedRef.current.mag = true;
