@@ -75,8 +75,8 @@ export default function LiveSensorChart({ deviceId, newData, timestamp }) {
           dataKey="time"
           interval="preserveStartEnd"
           tickFormatter={str => str.slice(0, 5)} // แสดงเป็น HH:mm
-          tick={{ fontSize: '0.3rem', fill: '#666' }}
-          height={15}
+          tick={{ fontSize: '0.4rem', fill: '#333' }}
+          height={10}
           // hide={true} // เอาออกเพื่อแสดงเวลาที่แกน X
         />
         <YAxis domain={[0, 'auto']} hide={true} />
