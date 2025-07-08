@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Ably from 'ably';
+import Head from 'next/head';
 
 const MapWithNoSSR = dynamic(() => import('../components/MapPATOnly'), {
   ssr: false
@@ -77,6 +78,11 @@ export default function Home() {
 
   return (
     <div style={{ fontFamily: 'sans-serif', padding: 0, background: '#ffffff' }}>
+    <Head>
+        <title>Project Ar-non: dashboard</title>
+        <meta name="description" content="Project Ar-non: Real-time pollution and earthquake monitoring dashboard." />
+        <link rel="icon" href="https://arnon.dgbkp.in.th/logo.jpg" />
+    </Head>
       {/* HEADER */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 3 }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
