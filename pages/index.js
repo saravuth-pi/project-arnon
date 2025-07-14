@@ -17,12 +17,9 @@ export default function Home() {
   const [allDataPoints, setAllDataPoints] = useState({});
   const [tmdQuakes, setTmdQuakes] = useState([]);
   const [usgsQuakes, setUsgsQuakes] = useState([]);
-  const [now, setNow] = useState(new Date());
+  const [latestPayloadTime, setLatestPayloadTime] = useState(null);
 
   useEffect(() => {
-    // อัปเดตเวลาทุกวินาที
-    const timer = setInterval(() => setNow(new Date()), 1000);
-
     // เชื่อม Ably
     const realtime = new Ably.Realtime({ key: 'DYt11Q.G9DtiQ:TgnTC0ItL_AzsD4puAdytIVYMeArsFSn-qyAAuHbQLQ' });
     const channel = realtime.channels.get('earthquake:raw');
@@ -32,6 +29,14 @@ export default function Home() {
         const raw = typeof msg.data === 'string' ? msg.data : new TextDecoder().decode(msg.data);
         const data = JSON.parse(raw);
         setAllDataPoints((prev) => ({ ...prev, [data.device]: data }));
+
+        if (data.ts) {
+          const newTimestamp = new Date(data.ts);
+          // อัปเดตเฉพาะเมื่อเวลาใหม่กว่าของเดิม
+          setLatestPayloadTime(prev => 
+            (!prev || newTimestamp > prev) ? newTimestamp : prev
+          );
+        }
       } catch (err) {
         console.error('Error parsing sensor data from Ably:', err);
       }
@@ -67,7 +72,6 @@ export default function Home() {
     fetchQuakes();
 
     return () => {
-      clearInterval(timer);
       channel.unsubscribe();
       realtime.close();
     };
@@ -86,20 +90,26 @@ export default function Home() {
             style={{ marginRight: 12, verticalAlign: 'middle' }}
             alt="Project Ar-non Logo"
           />
-          <h1 style={{ margin: 0, fontSize: '1.7rem' }}>Project Ar-non: dashboard</h1>
+          <h1 style={{ margin: 0, fontSize: '1.5rem' }}>Project Ar-non: dashboard</h1>
         </div>
-        <div style={{ background: '#bde6ee', textAlign: 'right', padding: '10px 20px', borderRadius: 8 }}>
-          <div style={{ fontSize: '1rem' }}>
-            {now.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' })}
-          </div>
-          <div style={{ fontSize: '2.5rem', marginTop: 4 }}>
-            {now.toLocaleTimeString('th-TH')}
-          </div>
+        <div style={{ background: '#bde6ee', textAlign: 'right', padding: '10px 20px', borderRadius: 8, minWidth: '220px' }}>
+          {latestPayloadTime ? (
+            <>
+              <div style={{ fontSize: '1rem' }}>
+                {latestPayloadTime.toLocaleDateString('th-TH', { day: '2-digit', month: 'short', year: 'numeric' })}
+              </div>
+              <div style={{ fontSize: '2.5rem', marginTop: 4 }}>
+                {latestPayloadTime.toLocaleTimeString('th-TH')}
+              </div>
+            </>
+          ) : (
+            <div style={{ fontSize: '1.2rem', color: '#555', paddingTop: '12px' }}>Waiting for data...</div>
+          )}
         </div>
       </div>
 
       {/* MAP (เฉพาะฝั่งไคลเอ็นต์) */}
-      <div style={{ height: '40vh', width: '98vw', marginBottom: 3 }}>
+      <div style={{ height: '40vh', width: '96vw', marginBottom: 3 }}>
         <MapWithNoSSR latest={allDataPoints} />
       </div>
 
