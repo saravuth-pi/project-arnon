@@ -3,18 +3,23 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 3001",
+    "dev:https": "concurrently \"npm:dev\" \"local-ssl-proxy --source 3000 --target 3001\"",
     "build": "next build",
     "start": "next start"
   },
   "dependencies": {
+    "ably": "^2.6.5",
+    "fast-xml-parser": "^4.0.12",
+    "leaflet": "^1.9.3",
     "next": "13.5.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "ably": "*",
     "react-leaflet": "^4.2.1",
-    "leaflet": "^1.9.3",
-    "recharts": "^2.5.0",
-    "fast-xml-parser": "^4.0.12"
+    "recharts": "^2.5.0"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.0",
+    "local-ssl-proxy": "^2.0.5"
   }
 }
