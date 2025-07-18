@@ -127,7 +127,7 @@ export default function Home() {
       </div>
 
       {/* รายงานเหตุแผ่นดินไหว */}
-      <div style={{background: '#666', padding: 0, borderRadius: 8, marginBottom: 3 }}>
+      <div style={{background: '#666', padding: 0, borderRadius: 8, marginBottom: 3,  height: '30vh', width: '96vw', }}>
         <h3 style={{marginLeft: '10px', color: 'white' }}> รายงานเหตุแผ่นดินไหวในภูมิภาค</h3>
         <LatestQuakes tmdQuakes={tmdQuakes} usgsQuakes={usgsQuakes} />
       </div>

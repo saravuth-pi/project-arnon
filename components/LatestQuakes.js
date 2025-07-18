@@ -72,7 +72,7 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
     const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon)
     const age = now - quakeTime.getTime()
     const bangkokTime = new Date(quakeTime.getTime() + 7 * 3600 * 1000)
-    if (distance <= 2000 && q.mag >= 3.0 && age <= 24 * 3600 * 1000) {
+    if (distance <= 5000 && q.mag >= 3.0 && age <= 24 * 3600 * 1000) {
       quakes.push({
         source: 'TMD',
         mag: q.mag,
@@ -93,7 +93,7 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
   usgsQuakes.forEach(q => {
     const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon)
     const age = now - q.time
-    if (distance <= 5000 && q.mag >= 4.5 && age <= 24 * 3600 * 1000) {
+    if (distance <= 5000 && q.mag >= 3.0 && age <= 24 * 3600 * 1000) {
       quakes.push({
         source: 'USGS',
         mag: q.mag,
@@ -116,7 +116,7 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
     <div style={{ height: '300px', width: '100%' }}>
       <MapContainer
         center={[PAT1_LAT, PAT1_LNG]}
-        zoom={5}
+        zoom={3}
         style={{ height: '100%', width: '100%' }}
       >
         <TileLayer
