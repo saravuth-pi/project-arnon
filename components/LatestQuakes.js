@@ -147,7 +147,7 @@ export default function LatestQuakes() {
 
 
   useEffect(() => {
-    import('leaflet').then(mod => setL(mod)); // Load Leaflet
+    import('leaflet').then(mod => setL(mod)); 
   }, []);
   
   return (
@@ -161,7 +161,7 @@ export default function LatestQuakes() {
           attribution='&copy; OpenStreetMap contributors'
           url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
         />
-        <LatestQuakesContent />
+        {L && <LatestQuakesContent L={L} />}
       </MapContainer>
 
       <style jsx>{`
