@@ -1,6 +1,6 @@
 // components/LatestQuakes.js
-// V0.1.0.0.3 – Fetch USGS ภายใน component และรวมกับ TMD
-
+// V0.1.0.0.4 – เปลี่ยนเป็นแผนที่แสดงจุด USGS/TMD (เดิมเป็นตาราง)
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import React, { useState, useEffect } from 'react';
 
 const PAT1_LAT = 13.713306;
@@ -20,7 +20,7 @@ function haversine(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-export default function LatestQuakes({ tmdQuakes = [] }) {
+function LatestQuakesContent({ tmdQuakes = [] }) {
   const [usgsQuakes, setUsgsQuakes] = useState([]);
 
   // 1) fetch USGS feed ทุกครั้งที่ component mount
@@ -89,21 +89,71 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
     }
   });
 
-  // 4) sort & slice
-  quakes.sort((a, b) => new Date(b.time) - new Date(a.time));
-  const last10 = quakes.slice(0, 10);
-
   return (
-    <div style={{ fontSize: '0.8rem', color: '#eee' }}>
-      {last10.map((q, i) => (
-        <div
+    <>
+      {quakes.map((q, i) => (
+        <Marker
           key={`${q.source}-${i}`}
-          style={{ fontSize: '0.8rem', color: '#eee', marginLeft: '30px' }}
+          position={[q.lat, q.lon]}
+          icon={L.divIcon({
+            className: 'custom-quake-marker',
+            html: `<div style="
+              background-color: ${getColor(q.mag)};
+              width: 20px;
+              height: 20px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              font-size: 10px;
+              color: black;
+              font-weight: bold;
+            ">${q.mag.toFixed(1)}</div>`,
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+          })}
         >
-          {i + 1}. ระยะห่าง {q.distance.toFixed(0)} km – {q.time} – ขนาด M
-          {q.mag.toFixed(1)} – {q.place} [{q.source}]
-        </div>
+          <Popup>
+            <strong>Source:</strong> {q.source}<br />
+            <strong>Magnitude:</strong> {q.mag.toFixed(1)}<br />
+            <strong>Place:</strong> {q.place}<br />
+            <strong>Time:</strong> {q.time}<br />
+            <strong>Distance:</strong> {q.distance.toFixed(0)} km
+          </Popup>
+        </Marker>
       ))}
+    </>
+  );
+}
+
+function getColor(mag) {
+  const normalizedMag = Math.min(Math.max(mag, 3.0), 8.0);
+  const fraction = (normalizedMag - 3.0) / 5.0;
+  const hue = (1 - fraction) * 120;
+  return `hsl(${hue}, 100%, 50%)`;
+}
+
+export default function LatestQuakes() {
+  return (
+    <div style={{ height: '300px', width: '100%' }}>
+      <MapContainer
+        center={[PAT1_LAT, PAT1_LNG]}
+        zoom={5}
+        style={{ height: '100%', width: '100%' }}
+      >
+        <TileLayer
+          attribution='&copy; OpenStreetMap contributors'
+          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        />
+        <LatestQuakesContent />
+      </MapContainer>
+
+      <style jsx>{`
+        .custom-quake-marker div {
+          border: 1px solid #333;
+          box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+      `}</style>
     </div>
   );
 }
