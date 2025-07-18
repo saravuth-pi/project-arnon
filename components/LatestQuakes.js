@@ -1,5 +1,5 @@
 // components/LatestQuakes.js
-// V0.1.0.0.5 – แก้ไข window is not defined โดยใช้ dynamic import
+// V0.1.0.0.6 – แก้ไข window is not defined โดยใช้ dynamic import (import L)
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import React, { useState, useEffect } from 'react';
 
@@ -22,7 +22,7 @@ function haversine(lat1, lon1, lat2, lon2) {
 
 function LatestQuakesContent({ tmdQuakes = [] }) {
   const [usgsQuakes, setUsgsQuakes] = useState([]);
-  const [L, setL] = useState(null);
+  const [L, setL] = useState(null); // Leaflet instance
 
   // 1) fetch USGS feed ทุกครั้งที่ component mount
   useEffect(() => {
@@ -32,14 +32,6 @@ function LatestQuakesContent({ tmdQuakes = [] }) {
     fetch(url)
       .then((res) => res.json())
       .then((json) => {
-        // ตรวจสอบว่า L ถูกโหลดมาก่อนที่จะใช้งาน
-        if (!L) {
-          console.warn("L is not loaded yet, skipping USGS data processing.");
-          return;
-        }
-
-
-        // แปลง features → array ของ { lat, lon, mag, place, time }
         const list = (json.features || []).map((f) => ({
           lat: f.geometry.coordinates[1],
           lon: f.geometry.coordinates[0],
@@ -53,7 +45,7 @@ function LatestQuakesContent({ tmdQuakes = [] }) {
         console.error('Failed to fetch USGS quakes:', err);
         setUsgsQuakes([]);
       });
-  }, [L]);
+  }, []);
 
   const now = Date.now();
   const quakes = [];
@@ -104,7 +96,7 @@ function LatestQuakesContent({ tmdQuakes = [] }) {
           key={`${q.source}-${i}`}
           position={[q.lat, q.lon]}
           icon={L.divIcon({
-            className: 'custom-quake-marker',
+            className: "custom-quake-marker",
             html: `<div style="
               background-color: ${getColor(q.mag)};
               width: 20px;
@@ -116,7 +108,7 @@ function LatestQuakesContent({ tmdQuakes = [] }) {
               font-size: 10px;
               color: black;
               font-weight: bold;
-            ">${q.mag.toFixed(1)}</div>`,
+              ">${q.mag.toFixed(1)}</div>`,
             iconSize: [20, 20],
             iconAnchor: [10, 10]
           })}
@@ -154,7 +146,10 @@ export default function LatestQuakes() {
   }
 
 
-
+  useEffect(() => {
+    import('leaflet').then(mod => setL(mod)); // Load Leaflet
+  }, []);
+  
   return (
     <div style={{ height: '300px', width: '100%' }}>
       <MapContainer
