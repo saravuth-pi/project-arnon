@@ -172,8 +172,8 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
 }
 
 function getColor(mag) {
-  const normalizedMag = Math.min(Math.max(mag, 3.0), 8.0)
-  const fraction = (normalizedMag - 3.0) / 5.0
+  const normalizedMag = Math.min(Math.max(mag, 1.0), 8.0)
+  const fraction = (normalizedMag - 1.0) / 5.0
   const hue = (1 - fraction) * 120
   return `hsl(${hue}, 100%, 50%)`
 }
