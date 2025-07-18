@@ -1,5 +1,5 @@
 // components/LatestQuakes.js
-// V0.1.0.0.4 – เปลี่ยนเป็นแผนที่แสดงจุด USGS/TMD (เดิมเป็นตาราง)
+// V0.1.0.0.5 – แก้ไข window is not defined โดยใช้ dynamic import
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import React, { useState, useEffect } from 'react';
 
@@ -22,6 +22,7 @@ function haversine(lat1, lon1, lat2, lon2) {
 
 function LatestQuakesContent({ tmdQuakes = [] }) {
   const [usgsQuakes, setUsgsQuakes] = useState([]);
+  const [L, setL] = useState(null);
 
   // 1) fetch USGS feed ทุกครั้งที่ component mount
   useEffect(() => {
@@ -31,6 +32,13 @@ function LatestQuakesContent({ tmdQuakes = [] }) {
     fetch(url)
       .then((res) => res.json())
       .then((json) => {
+        // ตรวจสอบว่า L ถูกโหลดมาก่อนที่จะใช้งาน
+        if (!L) {
+          console.warn("L is not loaded yet, skipping USGS data processing.");
+          return;
+        }
+
+
         // แปลง features → array ของ { lat, lon, mag, place, time }
         const list = (json.features || []).map((f) => ({
           lat: f.geometry.coordinates[1],
@@ -45,7 +53,7 @@ function LatestQuakesContent({ tmdQuakes = [] }) {
         console.error('Failed to fetch USGS quakes:', err);
         setUsgsQuakes([]);
       });
-  }, []);
+  }, [L]);
 
   const now = Date.now();
   const quakes = [];
@@ -134,6 +142,19 @@ function getColor(mag) {
 }
 
 export default function LatestQuakes() {
+
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null; // หรือ loading state ถ้าต้องการ
+  }
+
+
+
   return (
     <div style={{ height: '300px', width: '100%' }}>
       <MapContainer
