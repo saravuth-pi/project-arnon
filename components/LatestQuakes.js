@@ -93,7 +93,7 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
   usgsQuakes.forEach(q => {
     const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon)
     const age = now - q.time
-    if (distance <= 5000 && q.mag >= 3.0 && age <= 24 * 3600 * 1000) {
+    if (distance <= 20000 && q.mag >= 3.0 && age <= 24 * 3600 * 1000) {
       quakes.push({
         source: 'USGS',
         mag: q.mag,
@@ -110,7 +110,7 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
 
   // 5) sort & slice
   quakes.sort((a, b) => new Date(b.time) - new Date(a.time))
-  const last10 = quakes.slice(0, 10)
+  const last10 = quakes.slice(0, 30)
 
   return (
     <div style={{ height: '300px', width: '100%' }}>
@@ -172,7 +172,7 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
 }
 
 function getColor(mag) {
-  const normalizedMag = Math.min(Math.max(mag, 1.0), 8.0)
+  const normalizedMag = Math.min(Math.max(mag, 1.0), 9.0)
   const fraction = (normalizedMag - 1.0) / 5.0
   const hue = (1 - fraction) * 120
   return `hsl(${hue}, 100%, 50%)`
