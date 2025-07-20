@@ -72,7 +72,7 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
     const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon)
     const age = now - quakeTime.getTime()
     const bangkokTime = new Date(quakeTime.getTime() + 7 * 3600 * 1000)
-    if (distance <= 5000 && q.mag >= 3.0 && age <= 24 * 3600 * 1000) {
+    if (distance <= 5000 && q.mag >= 2.0 && age <= 24 * 3600 * 1000) {
       quakes.push({
         source: 'TMD',
         mag: q.mag,
@@ -93,7 +93,7 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
   usgsQuakes.forEach(q => {
     const distance = haversine(PAT1_LAT, PAT1_LNG, q.lat, q.lon)
     const age = now - q.time
-    if (distance <= 20000 && q.mag >= 3.0 && age <= 24 * 3600 * 1000) {
+    if (distance <= 20000 && q.mag >= 2.0 && age <= 24 * 3600 * 1000) {
       quakes.push({
         source: 'USGS',
         mag: q.mag,
@@ -110,10 +110,10 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
 
   // 5) sort & slice
   quakes.sort((a, b) => new Date(b.time) - new Date(a.time))
-  const last10 = quakes.slice(0, 30)
+  const last10 = quakes.slice(0, 50)
 
   return (
-    <div style={{ height: '300px', width: '100%' }}>
+    <div style={{ height: '100%', width: '100%' }}>
       <MapContainer
         center={[PAT1_LAT, PAT1_LNG]}
         zoom={3}
@@ -147,15 +147,14 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
             })}
           >
             <Popup>
-              <strong>Source:</strong> {q.source}
+
+              Magnitude: <strong>{q.mag.toFixed(1)}</strong>
               <br />
-              <strong>Magnitude:</strong> {q.mag.toFixed(1)}
+              Place:<strong>{q.place}</strong> 
               <br />
-              <strong>Place:</strong> {q.place}
+              Time:<strong>{q.time}</strong> 
               <br />
-              <strong>Time:</strong> {q.time}
-              <br />
-              <strong>Distance:</strong> {q.distance.toFixed(0)} km
+              Distance: <strong>{q.distance.toFixed(0)}</strong> km - {q.source}
             </Popup>
           </Marker>
         ))}
