@@ -110,7 +110,7 @@ export default function LatestQuakes({ tmdQuakes = [] }) {
 
   // 5) sort & slice
   quakes.sort((a, b) => new Date(b.time) - new Date(a.time))
-  const last10 = quakes.slice(0, 50)
+  const last10 = quakes.slice(0, 100)
 
   return (
     <div style={{ height: '100%', width: '100%' }}>
