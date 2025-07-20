@@ -115,7 +115,7 @@ export default function Home() {
       </div>
 
       {/* MAP (เฉพาะฝั่งไคลเอ็นต์) */}
-      <div style={{ height: '30vh', width: '96vw', marginBottom: 3 }}>
+      <div style={{ height: '30vh', width: '100vw', marginBottom: 3 }}>
         <MapWithNoSSR latest={allDataPoints} />
       </div>
 
@@ -127,7 +127,7 @@ export default function Home() {
       </div>
 
       {/* รายงานเหตุแผ่นดินไหว */}
-      <div style={{background: '#666', padding: 0, borderRadius: 8, marginBottom: 3,  height: '25vh', width: '96vw', }}>
+      <div style={{background: '#666', padding: 0, borderRadius: 8, marginBottom: 3,  height: '25vh', width: '100vw', }}>
         <h3 style={{marginLeft: '10px', color: 'white' }}> รายงานเหตุแผ่นดินไหวในภูมิภาค</h3>
         <LatestQuakes tmdQuakes={tmdQuakes} usgsQuakes={usgsQuakes} />
       </div>
