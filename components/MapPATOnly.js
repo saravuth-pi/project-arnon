@@ -108,9 +108,9 @@ export default function MapPATOnly({ latest }) {
 
         .sensor-label {
           /* กล่องสี่เหลี่ยม (ตัดมาจาก <Tooltip>) */
-          border-radius: 2px;
+          border-radius: 4px;
           color: white;
-          padding: 1px 1px;
+          padding: 6px 6px;
           font-size: 0.85rem;
           text-align: left;
           white-space: nowrap;
