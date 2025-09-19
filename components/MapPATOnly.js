@@ -47,7 +47,7 @@ export default function MapPATOnly({ latest }) {
     <div style={{ height: '100%', width: '100%' }}>
       <MapContainer
         center={[13.710387, 100.574588]}
-        zoom={14}
+        zoom={15}
         style={{ height: '100%', width: '100%' }}
       >
         <TileLayer
@@ -83,7 +83,6 @@ export default function MapPATOnly({ latest }) {
                 className="sensor-tooltip"
               >
                 <div className="sensor-label" style={{ backgroundColor: bgColor }}>
-                  <div className="sensor-label-title">{deviceId}</div>
                   <div className="sensor-label-line">Mag : {magValue}</div>
                   <div className="sensor-label-line">AQI : {aqiValue}</div>
                 </div>
