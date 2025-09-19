@@ -78,7 +78,7 @@ export default function Home() {
     };
   }, []);
 
-  const deviceList = ['PAT-Building-A', 'DG-warehouse', 'Terminal2'];
+  const deviceList = ['PAT-Building-A', 'DG-warehouse', 'Stevedore'];
 
   return (
     <div style={{ fontFamily: 'sans-serif', padding: 0, background: '#ffffff' }}>
