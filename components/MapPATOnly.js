@@ -35,7 +35,7 @@ export default function MapPATOnly({ latest }) {
   const DEVICE_LOCATION = {
     'PAT-Building-A': { lat: 13.71321, lng: 100.56407 },
     'DG-warehouse': { lat: 13.70830, lng: 100.57225 },
-    'Stevedore': { lat: 13.703032, lng: 100.582657 }
+    'Stevedore': { lat: 13.705961, lng: 100.572593 }
   };
   const COLOR_MAP = {
     'PAT-Building-A': '#2ecc71', // เขียวอ่อน
