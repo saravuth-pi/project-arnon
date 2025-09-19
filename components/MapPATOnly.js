@@ -98,7 +98,7 @@ export default function MapPATOnly({ latest }) {
         /* .sensor-tooltip จะถูก applied ไปที่ <div class="leaflet-tooltip ..."> ที่ Leaflet สร้างให้ */
         .sensor-tooltip .leaflet-tooltip-content {
           background: transparent; /* เราจะเอา background จาก .sensor-label แทน */
-          padding: 0;
+          padding: 4px;
           border: none;
         }
         .sensor-tooltip .leaflet-tooltip-arrow {
