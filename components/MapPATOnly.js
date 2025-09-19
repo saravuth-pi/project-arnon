@@ -79,7 +79,7 @@ export default function MapPATOnly({ latest }) {
               <Tooltip
                 permanent
                 direction="top"
-                offset={[0, -10]} // เลื่อนกล่องขึ้นเล็กน้อยเหนือจุด
+                offset={[0, -5]} // เลื่อนกล่องขึ้นเล็กน้อยเหนือจุด
                 className="sensor-tooltip"
               >
                 <div className="sensor-label" style={{ backgroundColor: bgColor }}>
@@ -108,9 +108,9 @@ export default function MapPATOnly({ latest }) {
 
         .sensor-label {
           /* กล่องสี่เหลี่ยม (ตัดมาจาก <Tooltip>) */
-          border-radius: 4px;
+          border-radius: 2px;
           color: white;
-          padding: 2px 4px;
+          padding: 1px 1px;
           font-size: 0.85rem;
           text-align: left;
           white-space: nowrap;
