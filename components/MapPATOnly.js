@@ -35,12 +35,12 @@ export default function MapPATOnly({ latest }) {
   const DEVICE_LOCATION = {
     'PAT-Building-A': { lat: 13.71321, lng: 100.56407 },
     'DG-warehouse': { lat: 13.70830, lng: 100.57225 },
-    'Terminal2': { lat: 13.703032, lng: 100.582657 }
+    'Stevedore': { lat: 13.703032, lng: 100.582657 }
   };
   const COLOR_MAP = {
     'PAT-Building-A': '#2ecc71', // เขียวอ่อน
     'DG-warehouse': '#8e44ad', // ม่วง
-    'Terminal2': '#3498db'  // น้ำเงิน
+    'Stevedore': '#3498db'  // น้ำเงิน
   };
 
   return (
